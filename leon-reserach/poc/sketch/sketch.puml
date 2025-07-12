@@ -1,0 +1,66 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+' ==== Interfaces & Core Classes ====
+interface ToolCallback <<provided>> #90EE90 {
+    +String getName()
+    +String getDescription()
+    +ToolOutput call(ToolInput input)
+}
+
+interface ToolCallbackProvider <<provided>> #90EE90 {
+    +List<ToolCallback> getCallbacks()
+}
+
+interface ToolFactory {
+    +List<ToolCallback> createTools(List<ApiToolSpec> specs)
+}
+
+' ==== Records / Models ====
+class ApiToolSpec {
+    -String name
+    -String description
+    -String endpoint
+    -HttpMethod method
+}
+
+class ToolInput <<provided>> #90EE90
+class ToolOutput <<provided>> #90EE90
+
+enum HttpMethod <<provided>> #90EE90 {
+    GET
+    POST
+    PUT
+    DELETE
+}
+
+' ==== Implementierungen ====
+class DefaultToolFactory {
+    +List<ToolCallback> createTools(List<ApiToolSpec> specs)
+}
+
+class GenericToolCallback {
+    -ApiToolSpec spec
+    +getName()
+    +getDescription()
+    +call(ToolInput input)
+}
+
+class ToolProviderConfig {
+    +ToolCallbackProvider dynamicToolProvider()
+    -List<ApiToolSpec> loadSpecs()
+}
+
+' ==== Beziehungen ====
+ToolFactory <|.. DefaultToolFactory
+ToolCallback <|.. GenericToolCallback
+ToolCallbackProvider <|.. ToolProviderConfig
+GenericToolCallback --> ApiToolSpec
+ToolProviderConfig --> DefaultToolFactory
+DefaultToolFactory --> ApiToolSpec
+DefaultToolFactory --> ToolCallback
+GenericToolCallback --> ToolOutput
+GenericToolCallback --> ToolInput
+ApiToolSpec --> HttpMethod
+
+@enduml

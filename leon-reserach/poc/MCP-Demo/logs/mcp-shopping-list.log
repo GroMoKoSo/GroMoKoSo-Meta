@@ -1,0 +1,184 @@
+2025-07-11T02:57:49.268+02:00  INFO 298587 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Starting McpShoppingListApplication v0.0.1-SNAPSHOT using Java 21.0.7 with PID 298587 (/home/leon/IdeaProjects/MCP-Demo/target/MCP-Demo-0.0.1-SNAPSHOT.jar started by leon in /home/leon/IdeaProjects/MCP-Demo)
+2025-07-11T02:57:49.270+02:00  INFO 298587 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-11T02:57:49.784+02:00  INFO 298587 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable tools capabilities, notification: true
+2025-07-11T02:57:49.785+02:00  INFO 298587 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Registered tools: 3
+2025-07-11T02:57:49.785+02:00  INFO 298587 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable resources capabilities, notification: true
+2025-07-11T02:57:49.785+02:00  INFO 298587 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable prompts capabilities, notification: true
+2025-07-11T02:57:49.786+02:00  INFO 298587 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable completions capabilities
+2025-07-11T02:57:49.870+02:00  INFO 298587 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Started McpShoppingListApplication in 0.827 seconds (process running for 1.092)
+2025-07-11T15:45:10.492+02:00  INFO 333231 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Starting McpShoppingListApplication v0.0.1-SNAPSHOT using Java 21.0.7 with PID 333231 (/home/leon/IdeaProjects/MCP-Demo/target/MCP-Demo-0.0.1-SNAPSHOT.jar started by leon in /home/leon/IdeaProjects/MCP-Demo)
+2025-07-11T15:45:10.494+02:00  INFO 333231 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-11T15:45:11.012+02:00  INFO 333231 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable tools capabilities, notification: true
+2025-07-11T15:45:11.013+02:00  INFO 333231 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Registered tools: 3
+2025-07-11T15:45:11.013+02:00  INFO 333231 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable resources capabilities, notification: true
+2025-07-11T15:45:11.013+02:00  INFO 333231 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable prompts capabilities, notification: true
+2025-07-11T15:45:11.013+02:00  INFO 333231 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable completions capabilities
+2025-07-11T15:45:11.094+02:00  INFO 333231 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Started McpShoppingListApplication in 0.932 seconds (process running for 1.38)
+2025-07-11T15:45:37.491+02:00  WARN 333231 --- [mcp-shopping-list] [SpringApplicationShutdownHook] reactor.core.Exceptions                  : throwIfFatal detected a jvm fatal exception, which is thrown and logged below:
+
+java.lang.NoClassDefFoundError: reactor/core/publisher/Operators$CancelledSubscription
+	at reactor.core.publisher.Operators.cancelledSubscription(Operators.java:127) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.LambdaSubscriber.onComplete(LambdaSubscriber.java:126) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxPeek$PeekSubscriber.onComplete(FluxPeek.java:260) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.checkTerminated(FluxFlatMap.java:850) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.drainLoop(FluxFlatMap.java:612) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.drain(FluxFlatMap.java:592) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.onComplete(FluxFlatMap.java:469) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManyUnicast.checkTerminated(SinkManyUnicast.java:390) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManyUnicast.drainRegular(SinkManyUnicast.java:276) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManyUnicast.drain(SinkManyUnicast.java:365) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManyUnicast.tryEmitComplete(SinkManyUnicast.java:205) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManySerialized.tryEmitComplete(SinkManySerialized.java:64) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at io.modelcontextprotocol.server.transport.StdioServerTransportProvider$StdioMcpSessionTransport.lambda$closeGracefully$1(StdioServerTransportProvider.java:172) ~[mcp-0.10.0.jar!/:na]
+	at reactor.core.publisher.MonoRunnable.subscribe(MonoRunnable.java:49) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribeWith(Mono.java:4641) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4403) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at io.modelcontextprotocol.spec.McpServerTransportProvider.close(McpServerTransportProvider.java:56) ~[mcp-0.10.0.jar!/:0.10.0]
+	at io.modelcontextprotocol.server.McpAsyncServer.close(McpAsyncServer.java:251) ~[mcp-0.10.0.jar!/:0.10.0]
+	at io.modelcontextprotocol.server.McpSyncServer.close(McpSyncServer.java:177) ~[mcp-0.10.0.jar!/:0.10.0]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.invokeCustomDestroyMethod(DisposableBeanAdapter.java:316) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:249) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:798) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:748) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1474) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:707) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1467) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1219) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1180) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147) ~[spring-boot-3.5.3.jar!/:3.5.3]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116) ~[spring-boot-3.5.3.jar!/:3.5.3]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.ClassNotFoundException: reactor.core.publisher.Operators$CancelledSubscription
+	... 36 common frames omitted
+
+2025-07-11T15:45:37.495+02:00  WARN 333231 --- [mcp-shopping-list] [SpringApplicationShutdownHook] reactor.core.Exceptions                  : throwIfFatal detected a jvm fatal exception, which is thrown and logged below:
+
+java.lang.NoClassDefFoundError: reactor/core/publisher/Operators$CancelledSubscription
+	at reactor.core.publisher.Operators.cancelledSubscription(Operators.java:127) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.LambdaSubscriber.onComplete(LambdaSubscriber.java:126) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxPeek$PeekSubscriber.onComplete(FluxPeek.java:260) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.checkTerminated(FluxFlatMap.java:850) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.drainLoop(FluxFlatMap.java:612) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.drain(FluxFlatMap.java:592) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.onComplete(FluxFlatMap.java:469) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManyUnicast.checkTerminated(SinkManyUnicast.java:390) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManyUnicast.drainRegular(SinkManyUnicast.java:276) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManyUnicast.drain(SinkManyUnicast.java:365) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManyUnicast.tryEmitComplete(SinkManyUnicast.java:205) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.SinkManySerialized.tryEmitComplete(SinkManySerialized.java:64) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at io.modelcontextprotocol.server.transport.StdioServerTransportProvider$StdioMcpSessionTransport.lambda$closeGracefully$1(StdioServerTransportProvider.java:172) ~[mcp-0.10.0.jar!/:na]
+	at reactor.core.publisher.MonoRunnable.subscribe(MonoRunnable.java:49) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribeWith(Mono.java:4641) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4403) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at io.modelcontextprotocol.spec.McpServerTransportProvider.close(McpServerTransportProvider.java:56) ~[mcp-0.10.0.jar!/:0.10.0]
+	at io.modelcontextprotocol.server.McpAsyncServer.close(McpAsyncServer.java:251) ~[mcp-0.10.0.jar!/:0.10.0]
+	at io.modelcontextprotocol.server.McpSyncServer.close(McpSyncServer.java:177) ~[mcp-0.10.0.jar!/:0.10.0]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.invokeCustomDestroyMethod(DisposableBeanAdapter.java:316) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:249) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:798) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:748) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1474) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:707) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1467) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1219) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1180) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147) ~[spring-boot-3.5.3.jar!/:3.5.3]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116) ~[spring-boot-3.5.3.jar!/:3.5.3]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.ClassNotFoundException: reactor.core.publisher.Operators$CancelledSubscription
+	... 36 common frames omitted
+
+2025-07-11T15:45:37.495+02:00  WARN 333231 --- [mcp-shopping-list] [SpringApplicationShutdownHook] o.s.b.f.support.DisposableBeanAdapter    : Custom destroy method 'close' on bean with name 'mcpSyncServer' propagated an exception: java.lang.NoClassDefFoundError: reactor/core/publisher/Operators$CancelledSubscription
+2025-07-11T15:45:37.495+02:00  WARN 333231 --- [mcp-shopping-list] [SpringApplicationShutdownHook] reactor.core.Exceptions                  : throwIfFatal detected a jvm fatal exception, which is thrown and logged below:
+
+java.lang.NoClassDefFoundError: reactor/core/publisher/Operators$CancelledSubscription
+	at reactor.core.publisher.Operators.cancelledSubscription(Operators.java:127) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.LambdaMonoSubscriber.onComplete(LambdaMonoSubscriber.java:129) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.MonoRunnable.subscribe(MonoRunnable.java:50) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribeWith(Mono.java:4641) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4403) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at io.modelcontextprotocol.spec.McpServerTransportProvider.close(McpServerTransportProvider.java:56) ~[mcp-0.10.0.jar!/:0.10.0]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.invokeCustomDestroyMethod(DisposableBeanAdapter.java:316) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:249) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:798) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:748) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1474) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:707) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1467) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1219) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1180) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147) ~[spring-boot-3.5.3.jar!/:3.5.3]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116) ~[spring-boot-3.5.3.jar!/:3.5.3]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.ClassNotFoundException: reactor.core.publisher.Operators$CancelledSubscription
+	... 23 common frames omitted
+
+2025-07-11T15:45:37.496+02:00  WARN 333231 --- [mcp-shopping-list] [SpringApplicationShutdownHook] reactor.core.Exceptions                  : throwIfFatal detected a jvm fatal exception, which is thrown and logged below:
+
+java.lang.NoClassDefFoundError: reactor/core/publisher/Operators$CancelledSubscription
+	at reactor.core.publisher.Operators.cancelledSubscription(Operators.java:127) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.LambdaMonoSubscriber.onComplete(LambdaMonoSubscriber.java:129) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.MonoRunnable.subscribe(MonoRunnable.java:50) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribeWith(Mono.java:4641) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4403) ~[reactor-core-3.7.7.jar!/:3.7.7]
+	at io.modelcontextprotocol.spec.McpServerTransportProvider.close(McpServerTransportProvider.java:56) ~[mcp-0.10.0.jar!/:0.10.0]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.invokeCustomDestroyMethod(DisposableBeanAdapter.java:316) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:249) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:798) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:748) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1474) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:707) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1467) ~[spring-beans-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1219) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1180) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126) ~[spring-context-6.2.8.jar!/:6.2.8]
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147) ~[spring-boot-3.5.3.jar!/:3.5.3]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116) ~[spring-boot-3.5.3.jar!/:3.5.3]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.ClassNotFoundException: reactor.core.publisher.Operators$CancelledSubscription
+	... 23 common frames omitted
+
+2025-07-11T15:45:37.496+02:00  WARN 333231 --- [mcp-shopping-list] [SpringApplicationShutdownHook] o.s.b.f.support.DisposableBeanAdapter    : Custom destroy method 'close' on bean with name 'stdioServerTransport' propagated an exception: java.lang.NoClassDefFoundError: reactor/core/publisher/Operators$CancelledSubscription
+2025-07-11T15:46:35.291+02:00  INFO 333497 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Starting McpShoppingListApplication using Java 21.0.7 with PID 333497 (/home/leon/IdeaProjects/MCP-Demo/target/classes started by leon in /home/leon/IdeaProjects/MCP-Demo)
+2025-07-11T15:46:35.291+02:00  INFO 333497 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-11T15:46:35.628+02:00  INFO 333497 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable tools capabilities, notification: true
+2025-07-11T15:46:35.629+02:00  INFO 333497 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Registered tools: 3
+2025-07-11T15:46:35.629+02:00  INFO 333497 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable resources capabilities, notification: true
+2025-07-11T15:46:35.629+02:00  INFO 333497 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable prompts capabilities, notification: true
+2025-07-11T15:46:35.630+02:00  INFO 333497 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable completions capabilities
+2025-07-11T15:46:35.697+02:00  INFO 333497 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Started McpShoppingListApplication in 0.591 seconds (process running for 0.803)
+2025-07-11T15:49:46.946+02:00  INFO 334416 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Starting McpShoppingListApplication using Java 21.0.7 with PID 334416 (/home/leon/IdeaProjects/MCP-Demo/target/classes started by leon in /home/leon/IdeaProjects/MCP-Demo)
+2025-07-11T15:49:46.947+02:00  INFO 334416 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-11T15:49:47.296+02:00  INFO 334416 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable tools capabilities, notification: true
+2025-07-11T15:49:47.297+02:00  INFO 334416 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Registered tools: 3
+2025-07-11T15:49:47.297+02:00  INFO 334416 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable resources capabilities, notification: true
+2025-07-11T15:49:47.297+02:00  INFO 334416 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable prompts capabilities, notification: true
+2025-07-11T15:49:47.297+02:00  INFO 334416 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable completions capabilities
+2025-07-11T15:49:47.367+02:00  INFO 334416 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Started McpShoppingListApplication in 0.604 seconds (process running for 0.828)
+2025-07-11T15:50:53.562+02:00  INFO 334568 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Starting McpShoppingListApplication using Java 21.0.7 with PID 334568 (/home/leon/IdeaProjects/MCP-Demo/target/classes started by leon in /home/leon/IdeaProjects/MCP-Demo)
+2025-07-11T15:50:53.563+02:00  INFO 334568 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-11T15:50:53.904+02:00  INFO 334568 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable tools capabilities, notification: true
+2025-07-11T15:50:53.905+02:00  INFO 334568 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Registered tools: 3
+2025-07-11T15:50:53.905+02:00  INFO 334568 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable resources capabilities, notification: true
+2025-07-11T15:50:53.905+02:00  INFO 334568 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable prompts capabilities, notification: true
+2025-07-11T15:50:53.906+02:00  INFO 334568 --- [mcp-shopping-list] [main] o.s.a.m.s.a.McpServerAutoConfiguration   : Enable completions capabilities
+2025-07-11T15:50:53.979+02:00  INFO 334568 --- [mcp-shopping-list] [main] c.e.mcpdemo.McpShoppingListApplication   : Started McpShoppingListApplication in 0.599 seconds (process running for 0.831)
