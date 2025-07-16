@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "pathParameter": {
+      "type": "object",
+        "properties": {
+          "exampleParam": {
+            "type": "integer",
+            "description": "An example integer parameter"
+            }
+        },
+        "required": ["exampleParam"]
+    },
+    "queryParameter": {
+      "type": "object",
+        "properties": {
+          "exampleQuery": {
+            "type": "string",
+            "description": "An example string query parameter"
+            }
+        },
+        "required": ["exampleQuery"]
+    }
+  }
+}
