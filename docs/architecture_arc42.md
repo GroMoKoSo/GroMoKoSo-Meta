@@ -1,5 +1,5 @@
 
-GroßsprachmodellModellKontextProtokollServer 
+# GroßsprachmodellModellKontextProtokollServer 
 
 (Abk.: GroMoKoSo)
 
@@ -22,9 +22,6 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 According to: https://datatracker.ietf.org/doc/rfc2119/
 
 # 1. Introduction and Goals
-
-The Goal is the development of a plattform that allows the integration of
-RESTful APIs
 
 Describes the relevant requirements and the driving forces that software
 architects and development team must consider. These include
@@ -54,7 +51,7 @@ responsive AI systems.
 ### 1.2.1 Core Components
 
 server client architecture:
-- Hosts: LLM applications (Claude, IDEs, etc.), initiate connections
+- Hosts: Contains one or more instance of LLMs which use one or more MCP clients which handle the communication with the MCP Server.
 - Clients: maintain 1:1 connection with a server; inside the host application
 - Servers: provide context, tools, prompts to clients
 
@@ -74,11 +71,11 @@ server client architecture:
 
 ## 1.3 Stakeholder
 
-| Stakeholder    | Role          | Goal                                                   | Expectations             |
-|----------------|---------------|--------------------------------------------------------|--------------------------|
-| M. Münker      | Product Owner | Convert REST-API to MCP-Tool                           | Interesting architecture |
-| Dev Team       | SW Devs       | Granular architecture, easy to maintain and expandable |                          |
-| General Public | User          | Easy to use, intuitive interface                       |                          |
+| Stakeholder    | Role          | Goal                                                                                                          | Expectations             |
+|----------------|---------------|---------------------------------------------------------------------------------------------------------------|--------------------------|
+| M. Münker      | Product Owner | Architecture and software that enables the dynamic and reusable provision of services via MCP for AI agents.  | Interesting architecture |
+| Dev Team       | SW Devs       | Granular architecture, easy to maintain and expandable                                                        |                          |
+| General Public | User          | Easy to use, intuitive interface                                                                              |                          |
 
 ## 1.4. Requirements Overview
 **Requirement-type:**
@@ -126,155 +123,86 @@ Priorities
 
 
 ## 1.4.2 Functional Requirements
-| ID  | Requirement                                                  | Description                                                                                                 |
-|-----|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| M-1 | Parse OpenApi Specs to internal API-representation           | The Software MUST be able to convert any OpenApi specification to a more abstract, internal representation. |
-| M-2 | Create internal API-representation by using a WYSIWYG-editor | The User MUST be able to add a new tool to the MCP Server by adding it's API within the UI.                 |
-| M-3 | Create MCP-Tools from internal API-representation            | The Software MUST be able to create MCP-Tools by using Spring Boot's MCP-Library                            |
-| M-4 | Serve MCP-Tools to MCP-Client                                | Serving MCP-Tools by complying to MCP                                                                       |
-| O-1 | Support RAML Specs                                           | In addition to Open-Api specs, API specs as RAML should also be supported                                   |
+| ID  | Requirement                                                   | Description                                                                                                 |
+|-----|---------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| M-1 | Parse OpenApi Specs to internal API-representation            | The Software MUST be able to convert any OpenApi specification to a more abstract, internal representation. |
+| M-2 | Create internal API-representation by using a WYSIWYG-editor  | The User MUST be able to add a new tool to the MCP Server by adding it's API within the UI.                 |
+| M-3 | Create MCP-Tools from internal API-representation             | The Software MUST be able to create MCP-Tools by using Spring Boot's MCP-Library                            |
+| M-4 | Serve MCP-Tools to MCP-Client                                 | Serving MCP-Tools by complying to MCP                                                                       |
+| M-5 | Authentification against THM oauth2 Server                    | The User of the Software MUST authenticate against the THM oauth2 Server using OpenID Connect.              |
+| O-1 | Support RAML Specs                                            | In addition to Open-Api specs, API specs as RAML should also be supported                                   |
+| O-2 | Support Authentication for MCP Tools                          | The software MAY provide sufficient OAuth2 based Authentication mechanisms for MCP-Tools.                   |
+| O-3 | REST-API secrets should be stored securely                    | The Software MAY store secrets (e.g. API-Keys) securely, e.g. in a vault or encrypted database.             |
 
 # 2. Architecture Constraints
-
-## 2.1 Organizational constraints
-| ID  | Requirement                                                  | Description                                                                                                 |
-|-----|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-
-## 2.2 Technical constraints
-| ID  | Requirement                                                  | Description                                                                                                 |
-|-----|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-
-::: formalpara-title
-**Contents**
-:::
-
 Any requirement that constraints software architects in their freedom of
 design and implementation decisions or decision about the development
 process. These constraints sometimes go beyond individual systems and
 are valid for whole organizations and companies.
 
-::: formalpara-title
-**Motivation**
-:::
 
-Architects should know exactly where they are free in their design
-decisions and where they must adhere to constraints. Constraints must
-always be dealt with; they may be negotiable, though.
+## 2.1 Organizational constraints
 
-::: formalpara-title
-**Form**
-:::
+| ID | Constraint             | Description                                                                                                                                                                                               |
+|----|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1  | Team members are fixed | **Team**: <ul><li>Heimann, Jannik</li><li>Lange-Hermstädt, Benjamin Michael</li><li>Menger, Josia</li><li>Schäfer, Leon</li><li>Wolek, Justin</li></ul>No new team members are expected to join the team. |
+| 2  | Presentation           | Presentation on 09.09.2025                                                                                                                                                                                | 
+| 3  | Deadline               | The projects MUST be finished by 02.10.2025                                                                                                                                                               |
+| 4  | Planning               | Planning MUST be done inside the GitLab issue board.                                                                                                                                                      |
+| 5  | Documentation          | Documentation is done inside the GitLab wiki. According to the [Arc42 Template](https://arc42.de/), All diagrams SHOULD be available as images inside the documentation                                   |                     
 
-Simple tables of constraints with explanations. If needed you can
-subdivide them into technical constraints, organizational and political
-constraints and conventions (e.g. programming or versioning guidelines,
-documentation or naming conventions)
 
-See [Architecture Constraints](https://docs.arc42.org/section-2/) in the
-arc42 documentation.
+## 2.2 Technical constraints
+| ID | Constraint   | Description                                                         |
+|----|--------------|---------------------------------------------------------------------|
+| 1  | Technologies | MUST: Java, Spring Boot, ThymeLeaf                                  |  
+| 2  | Architecture | RESTful API MUST be used.                                           |                                 
+| 3  | Deployment   | Deployment MUST be done within the university server infrastruture. |
 
-# 3. Context and Scope {#section-context-and-scope}
 
-::: formalpara-title
-**Contents**
-:::
+# 2.3 Conventions
 
-Context and scope - as the name suggests - delimits your system (i.e.
-your scope) from all its communication partners (neighboring systems and
-users, i.e. the context of your system). It thereby specifies the
-external interfaces.
+Programming Conventions are documented [here](/home/conventions)
 
-If necessary, differentiate the business context (domain specific inputs
-and outputs) from the technical context (channels, protocols, hardware).
 
-::: formalpara-title
-**Motivation**
-:::
+# 3 Context and Scope
+The context boundary represents the `GroMoKoSo` system in relation to its external interfaces, users, and neighboring systems. The goal of this chapter is to make the system's communication relationships with its environment transparent.
 
-The domain interfaces and technical interfaces to communication partners
-are among your system's most critical aspects. Make sure that you
-completely understand them.
+## 3.1 Business Context
 
-::: formalpara-title
-**Form**
-:::
+![Business context diagram](/docs/diagrams/business_context.svg)
 
-Various options:
+| Element       | Description                                                                                                                            |
+|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| User          | Person who uses an MCP-Host to take advantage of the MCP-Server to fulfill his requests.                                               |
+| Tool Manager  | Person who manages tools and configures new tools using the WebApp. A tool manager is also a user of the system.                       |
+| Administrator | Person who manages user, groups and roles using the WebApp. An Administrator is also a tool manager and a user of the system.          |
+| WebApp        | Web portal through which tools resources and prompts are managed. It is also possible to manage users, groups and roles.               |
+| MCP Server    | Software system that provide MCP capabilities. Provides interface to corresponding REST API. Responses are sent back to the requester. |
+| MCP Host      | Software system that allows a LLM Tool to use a MCP server to fulfill complex requests.                                                |
+| REST APIs     | External software systems, which serve varttri                                                                                         |
 
--   Context diagrams
+## 3.2 Technical Context
 
--   Lists of communication partners and their interfaces.
+![Technical context diagram](/docs/diagrams/technical_context.svg)
 
-See [Context and Scope](https://docs.arc42.org/section-3/) in the arc42
-documentation.
+| Element                  | Interfaces | Description                                                                                                                                                         |
+|--------------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| User                     | html, http | Person who uses an MCP-Host to take advantage of the MCP-Server to fulfill his requests.                                                                            |
+| Tool Manager             | html, http | Person who manages tools and configures new tools using the WebApp. A tool manager is also a user of the system.                                                    |
+| Administrator            | html, http | Person who manages user, groups and roles using the WebApp. An Administrator is also a tool manager and a user of the system.                                       |
+| WebApp                   | html, http | Web-Application which serves as a Graphical-User-Interface for all users to interact with the system and perform user-dedicated configurations and functionalities. |
+| MCP Server               |            |                                                                                                                                                                     |
+| MCP Host                 |            | Container for managing LLMs and MCP clients                                                                                                                         |
+| MCP Client               | http, sse  | Client used by an LLM to communicate with the MCP Server. A client has a 1 to 1 relationship with a server                                                          |
+| LLM                      |            |                                                                                                                                                                     |
+| REST APIs (extern)       |            |                                                                                                                                                                     |
+| REST API (internal)      |            | REST API of the internal System which provides the same functionality as the WebApp, so that it can be used by an external Software.                                |
+| OpenID Identity Provider | http       | Server against which the user and the request MUST be identified.                                                                                                   |
+| Any Software tool        | http       | Placeholder for any software system that may implement the REST API to use GroMoKoSos features.                                                                     |
 
-## 3.1 Business Context {#_business_context}
+# 4. Solution Strategy
 
-::: formalpara-title
-**Contents**
-:::
-
-Specification of **all** communication partners (users, IT-systems, ...)
-with explanations of domain specific inputs and outputs or interfaces.
-Optionally you can add domain specific formats or communication
-protocols.
-
-::: formalpara-title
-**Motivation**
-:::
-
-All stakeholders should understand which data are exchanged with the
-environment of the system.
-
-::: formalpara-title
-**Form**
-:::
-
-All kinds of diagrams that show the system as a black box and specify
-the domain interfaces to communication partners.
-
-Alternatively (or additionally) you can use a table. The title of the
-table is the name of your system, the three columns contain the name of
-the communication partner, the inputs, and the outputs.
-
-**\<Diagram or Table>**
-
-**\<optionally: Explanation of external domain interfaces>**
-
-## 3.2 Technical Context {#_technical_context}
-
-::: formalpara-title
-**Contents**
-:::
-
-Technical interfaces (channels and transmission media) linking your
-system to its environment. In addition a mapping of domain specific
-input/output to the channels, i.e. an explanation which I/O uses which
-channel.
-
-::: formalpara-title
-**Motivation**
-:::
-
-Many stakeholders make architectural decision based on the technical
-interfaces between the system and its context. Especially infrastructure
-or hardware designers decide these technical interfaces.
-
-::: formalpara-title
-**Form**
-:::
-
-E.g. UML deployment diagram describing channels to neighboring systems,
-together with a mapping table showing the relationships between channels
-and input/output.
-
-**\<Diagram or Table>**
-
-**\<optionally: Explanation of technical interfaces>**
-
-**\<Mapping Input/Output to Channels>**
-
-# 4. Solution Strategy {#section-solution-strategy}
 
 ::: formalpara-title
 **Contents**
