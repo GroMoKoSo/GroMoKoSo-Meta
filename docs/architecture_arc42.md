@@ -151,6 +151,65 @@ are valid for whole organizations and companies.
 | 4  | Planning               | Planning MUST be done inside the GitLab issue board.                                                                                                                                                      |
 | 5  | Documentation          | Documentation is done inside the GitLab wiki. According to the [Arc42 Template](https://arc42.de/), All diagrams SHOULD be available as images inside the documentation                                   |                     
 
+### 2.1.1 Evaluation Criteria
+
+* **Architecture and Concepts (33%)**
+
+    * Quality and clarity of the architecture
+    * Use of appropriate modeling
+    * Consideration of alternatives
+    * Flexibility and scalability
+    * Suitable framework
+
+* **Prototyping and Implementation (33%)**
+
+    * Functioning prototype
+    * GUI (10%)
+    * Logic / REST API
+    * Data persistence
+    * Deployment
+    * Code structuring
+
+* **Documentation (Descriptive materials)**
+
+    * Prototype documentation
+    * Architecture documentation
+
+* **Presentation (20%)**
+
+    * Presentation style / structure
+    * Appropriate scope for 20 minutes
+    * Clarity and comprehensibility
+    * Slides / materials
+    * Demo
+
+* **Teamwork and Methodology (Git handling)**
+
+    * Task distribution and communication (e.g., Git Issues)
+    * Working with Git for coding
+
+* **Additional Achievements, Special Technologies, Features (5%)**
+
+    * Use of innovative technologies (MCP / AI)
+    * Significant improvements after the interim presentation
+
+---
+
+**Interim Presentation** *(not graded, 10–20 minutes)*
+
+* Architecture and concepts
+* Component structure / Use case
+* Sequence diagram
+* ER diagram
+* Class diagram
+* Intermediate results of the final product
+
+---
+
+Let me know if you'd like it formatted for a document or presentation.
+
+
+
 
 ## 2.2 Technical constraints
 | ID | Constraint   | Description                                                         |
@@ -165,8 +224,10 @@ are valid for whole organizations and companies.
 Programming Conventions are documented [here](/home/conventions)
 
 
-# 3 Context and Scope
-The context boundary represents the `GroMoKoSo` system in relation to its external interfaces, users, and neighboring systems. The goal of this chapter is to make the system's communication relationships with its environment transparent.
+# 3. Context and Scope
+
+The context boundary represents the `GroMoKoSo` system in relation to its external interfaces, users, and neighboring systems.
+The goal of this chapter is to make the system's communication relationships with its environment transparent.
 
 ## 3.1 Business Context
 
@@ -202,45 +263,20 @@ The context boundary represents the `GroMoKoSo` system in relation to its extern
 | Any Software tool        | http       | Placeholder for any software system that may implement the REST API to use GroMoKoSos features.                                                                     |
 
 # 4. Solution Strategy
+## 4.1 Technology Decisions
+
+Technologies which will be used are **Java** and **Spring Boot** as requested by the stakeholder M. Münker.
+The project goal also requires the implementation of MCP-Tools.
+
+The system will be separated into multiple microservices which will be deployed as Docker containers.
+Each service will be responsible for a specific domain except the UI service.
 
 
-::: formalpara-title
-**Contents**
-:::
+## Organizational Decisions
 
-A short summary and explanation of the fundamental decisions and
-solution strategies, that shape system architecture. It includes
-
--   technology decisions
-
--   decisions about the top-level decomposition of the system, e.g.
-    usage of an architectural pattern or design pattern
-
--   decisions on how to achieve key quality goals
-
--   relevant organizational decisions, e.g. selecting a development
-    process or delegating certain tasks to third parties.
-
-::: formalpara-title
-**Motivation**
-:::
-
-These decisions form the cornerstones for your architecture. They are
-the foundation for many other detailed decisions or implementation
-rules.
-
-::: formalpara-title
-**Form**
-:::
-
-Keep the explanations of such key decisions short.
-
-Motivate what was decided and why it was decided that way, based upon
-problem statement, quality goals and key constraints. Refer to details
-in the following sections.
-
-See [Solution Strategy](https://docs.arc42.org/section-4/) in the arc42
-documentation.
+The necessary work which needs to be done to reach the predefined project-goals should be done entirely within the team.
+To achieve the quality goals, a version control system (GitLab) shall be used to manage the source code and documentation.
+This also includes the commitment to review any code-changes which should be done.
 
 # 5. Building Block View {#section-building-block-view}
 
@@ -712,47 +748,13 @@ documentation.
 
 *\<explanation>*
 
-# 9. Architecture Decisions {#section-design-decisions}
+# 9. Architecture Decisions
 
-::: formalpara-title
-**Contents**
-:::
+Decisions that have been made during the design of the architecture
 
-Important, expensive, large scale or risky architecture decisions
-including rationales. With \"decisions\" we mean selecting one
-alternative based on given criteria.
-
-Please use your judgement to decide whether an architectural decision
-should be documented here in this central section or whether you better
-document it locally (e.g. within the white box template of one building
-block).
-
-Avoid redundancy. Refer to section 4, where you already captured the
-most important decisions of your architecture.
-
-::: formalpara-title
-**Motivation**
-:::
-
-Stakeholders of your system should be able to comprehend and retrace
-your decisions.
-
-::: formalpara-title
-**Form**
-:::
-
-Various options:
-
--   ADR ([Documenting Architecture
-    Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions))
-    for every important decision
-
--   List or table, ordered by importance and consequences or:
-
--   more detailed in form of separate sections per decision
-
-See [Architecture Decisions](https://docs.arc42.org/section-9/) in the
-arc42 documentation. There you will find links and examples about ADR.
+| Decision | Status   | Description                                                                                                                                                                |
+|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ADR-01   | accepted | Modularization Strategy: The architecture is based on a Domain-Driven Design (DDD) approach, with the exception of the UI service, which is treated as a technology layer. |
 
 # Quality Requirements {#section-quality-scenarios}
 
@@ -898,4 +900,4 @@ when discussing the system.
 | Term                  | Definition                                                                                          |
 |-----------------------|-----------------------------------------------------------------------------------------------------|
 | WYSIWYG               | What you see is what you get. Further information: [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) |
-| MCP                   | Model-Context-Plattform. Further information: [MCP](https://modelcontextprotocol.io/introduction)   |
+| MCP                   | Model Context Protocol. Further information: [MCP](https://modelcontextprotocol.io/introduction)    |
