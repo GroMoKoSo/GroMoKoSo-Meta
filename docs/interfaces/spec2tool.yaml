@@ -1,0 +1,166 @@
+openapi: 3.0.4
+info:
+  title: Spec2Tool API 1.0
+  version: 1.0.0
+  description: |-
+    Microservice for converting an OpenAPI 3.0 or RAML specification to a mcp tool definition.
+servers:
+  - url: ??
+paths:
+  /convert:
+    post:
+      summary: Convert API specification to MCP Tool Definition
+      description: Convert OpenAPI or RAML to MCP Tool Definition
+      requestBody:
+        description: Create a new pet in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolDefinition'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      summary: Get supported specification formats
+      description: Retrieve the supported formats for conversion.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupportedFormats"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    ConvertRequest:
+      type: object
+      properties:
+        spec:
+          type: string
+          description: The OpenAPI or RAML specification to convert.
+        format:
+          type: string
+          description: The format of the specification.
+        fileType:
+          type: string
+          description: The file type of the specification.
+      required:
+        - spec
+        - format
+        - fileType
+    ToolDefinition:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the tool.
+        description:
+          type: string
+          description: A brief description of the tool.
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tool'
+    Tool:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the tool.
+        description:
+          type: string
+          description: A brief description of the tool.
+        endpoint:
+          type: string
+          description: The endpoint of the tool.
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parameter'
+      required:
+        - name
+        - description
+        - endpoint
+        - parameters
+    Parameter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the parameter.
+        description:
+          type: string
+          description: A brief description of the parameter.
+        type:
+          type: string
+          description: The type of the parameter (e.g., string, integer).
+        required:
+          type: boolean
+          description: Whether the parameter is required.
+      required:
+        - name
+        - description
+        - required
+    SupportedFormats:
+      type: object
+      properties:
+        formats:
+          type: array
+          description: List of supported specification formats for conversion.
+          items:
+            $ref: "#/components/schemas/Format"
+      required:
+        - formats
+    Format:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the specification format.
+        minVersion:
+          type: string
+          description: Minimum version of the specification format supported.
+        maxVersion:
+            type: string
+            description: Maximum version of the specification format supported.
+        fileTypes:
+          type: array
+          items:
+            type: string
+          description: List of file types supported for the specification format.
+      required:
+        - name
+        - minVersion
+        - maxVersion
+        - fileTypes
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message

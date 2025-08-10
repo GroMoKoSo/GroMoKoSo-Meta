@@ -1,0 +1,124 @@
+openapi: 3.0.4
+info:
+  title: Tool Management API
+  version: 1.0.0
+  description: API for managing tools, including adding new tools and deleting existing ones.
+servers:
+  - url: ??
+paths:
+  /tools:
+    post:
+      summary: Add a new tool
+      description: Create and register a new tool in the system.
+      requestBody:
+        required: true
+        description: Tool definition and associated API ID.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                api_id:
+                  type: string
+                  description: Unique identifier for the API to which the tool belongs.
+                tool_definition:
+                  $ref: "#/components/schemas/ToolDefinition"
+              required:
+                - api_id
+                - tool_definition
+      responses:
+        "201":
+          description: Tool successfully created.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /tools/{id}:
+    delete:
+      summary: Delete a tool
+      description: Removes a tool from the system using its unique identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the tool to delete.
+      responses:
+        "204":
+          description: Tool successfully deleted; no content returned.
+        "404":
+          description: Tool not found.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    ToolDefinition:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the tool.
+        description:
+          type: string
+          description: A brief description of the tool.
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tool'
+    Tool:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the tool.
+        description:
+          type: string
+          description: A brief description of the tool.
+        endpoint:
+          type: string
+          description: The endpoint of the tool.
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parameter'
+      required:
+        - name
+        - description
+        - endpoint
+        - parameters
+    Parameter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the parameter.
+        description:
+          type: string
+          description: A brief description of the parameter.
+        type:
+          type: string
+          description: The type of the parameter (e.g., string, integer).
+        required:
+          type: boolean
+          description: Whether the parameter is required.
+      required:
+        - name
+        - description
+        - required
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
