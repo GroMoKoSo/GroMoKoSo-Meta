@@ -1,0 +1,56 @@
+@startuml "McpManagement class diagram"
+
+class ToolController <<RestController>> {
+    + addTool(tool: ToolSpecification)
+    + deleteTool(id: String)
+}
+
+class ToolService <<Service>> {
+    + addTool(tool: ToolSpecification)
+    + deleteTool(id: String)
+    + getTools(): List<ToolSpecification>
+}
+
+class ToolRepository <<Repository>> {
+    + save(tool: ToolSpecification)
+    + delete(id: String)
+    + findAll(): List<ToolSpecification>
+}
+
+class UserManagementService <<Service>> {
+    + getToolsForUser(userId: String): List<ToolSpecification>
+}
+
+class McpServer {
+    - server: McpSyncServer
+    + registerTool(tool: McpServerFeatures.SyncToolSpecification)
+}
+
+class ToolFactory {
+    - invokeTool(args: Object... ): Object
+    + create(tool: Tool): McpServerFeatures.SyncToolSpecification
+}
+
+ToolController -> ToolService : uses
+ToolService -> ToolRepository : uses
+
+class ToolSpecification {
+    name: String
+    description: String
+    tools: List<Tool>
+}
+
+class Tool {
+    name: String
+    description: String
+    endpoint: String
+    parameters: List<Parameter>
+}
+
+class Parameter {
+    name: String
+    description: String
+    type: String
+}
+
+@enduml
