@@ -1,5 +1,6 @@
 package de.thm.mcptest;
 
+import de.thm.mcptest.security.McpUserHolder;
 import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.server.McpSyncServer;
 import io.modelcontextprotocol.spec.McpSchema;
@@ -11,6 +12,9 @@ import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.method.MethodToolCallback;
 import org.springframework.ai.util.json.schema.JsonSchemaGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.RestClient;
@@ -20,7 +24,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Service
+//@Service
 public class ToolService {
 
     private static final Logger logger = LoggerFactory.getLogger(ToolService.class);
@@ -126,6 +130,7 @@ public class ToolService {
                 ),
                 (exchange, args) -> {
                     try {
+                        logger.info("Executing Tool with user " + McpUserHolder.get());
                         // TODO: How to handle the args dynamically?
                         Object expr = args.get("postId");
                         String callResult = toolFunction.apply(new Object[]{expr}).toString();
@@ -135,6 +140,8 @@ public class ToolService {
                         logger.error(e.getMessage());
                         return new McpSchema.CallToolResult(
                                 List.of(new McpSchema.TextContent(e.getMessage())), true);
+                    } finally {
+                        McpUserHolder.clear();
                     }
                 }
         );
