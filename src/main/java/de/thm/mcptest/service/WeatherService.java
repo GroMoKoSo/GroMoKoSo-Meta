@@ -1,4 +1,4 @@
-package de.thm.mcptest;
+package de.thm.mcptest.service;
 
 import java.time.LocalDateTime;
 

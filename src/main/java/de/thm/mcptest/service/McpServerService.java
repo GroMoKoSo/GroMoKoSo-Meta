@@ -1,7 +1,7 @@
-package de.thm.mcptest;
+package de.thm.mcptest.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.thm.mcptest.security.McpUserHolder;
+import de.thm.mcptest.security.OAuthTokenHolder;
 import io.modelcontextprotocol.server.McpAsyncServer;
 import io.modelcontextprotocol.server.McpServer;
 import io.modelcontextprotocol.server.McpServerFeatures;
@@ -39,7 +39,7 @@ public class McpServerService {
         providers = new HashMap<>();
 
         WebMvcSseServerTransportProvider provider = new WebMvcSseServerTransportProvider(new ObjectMapper(),
-                        "/mcp/message", "/sse");
+                "/mcp/message", "/sse");
 
         McpSchema.ServerCapabilities capabilities = McpSchema.ServerCapabilities.builder()
                 .tools(true)
@@ -87,7 +87,7 @@ public class McpServerService {
                 ),
                 (exchange, args) -> {
                     try {
-                        logger.info("Executing Tool with user {}", McpUserHolder.get());
+                        logger.info("Executing Tool with user {}", OAuthTokenHolder.get());
                         // TODO: How to handle the args dynamically?
                         Object expr = args.get("postId");
                         String callResult = toolFunction.apply(new Object[]{expr}).toString();
@@ -98,7 +98,7 @@ public class McpServerService {
                         return Mono.fromSupplier(() ->new McpSchema.CallToolResult(
                                 List.of(new McpSchema.TextContent(e.getMessage())), true));
                     } finally {
-                        McpUserHolder.clear();
+                        OAuthTokenHolder.clear();
                     }
                 }
         );

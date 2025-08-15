@@ -1,4 +1,4 @@
-package de.thm.mcptest;
+package de.thm.mcptest.client;
 
 import org.springframework.web.client.RestClient;
 

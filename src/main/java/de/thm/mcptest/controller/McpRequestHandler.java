@@ -1,6 +1,7 @@
-package de.thm.mcptest;
+package de.thm.mcptest.controller;
 
 
+import de.thm.mcptest.service.McpServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,14 +13,14 @@ import org.springframework.web.servlet.function.ServerResponse;
 import java.util.Optional;
 
 @Component
-public class McpHandler {
+public class McpRequestHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(McpHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(McpRequestHandler.class);
 
 
     private final McpServerService mcpServerService;
 
-    public McpHandler(McpServerService mcpServerService) {
+    public McpRequestHandler(McpServerService mcpServerService) {
         this.mcpServerService = mcpServerService;
     }
 

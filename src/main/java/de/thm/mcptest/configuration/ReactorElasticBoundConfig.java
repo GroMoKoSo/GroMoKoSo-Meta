@@ -1,15 +1,13 @@
-package de.thm.mcptest.security;
+package de.thm.mcptest.configuration;
 
-import de.thm.mcptest.ToolService;
+import de.thm.mcptest.security.AccessTokenExtractor;
+import de.thm.mcptest.security.OAuthTokenHolder;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.function.Function;
@@ -28,12 +26,12 @@ public class ReactorElasticBoundConfig {
 
             return () -> {
                 try {
-                    McpUserHolder.set(token.getTokenValue());
+                    OAuthTokenHolder.set(token.getTokenValue());
                     runnable.run();
                 } finally {
                     logger.info("[{}] [Reactor Hook] McpUserHolder clean",
                             Thread.currentThread().getName());
-                    McpUserHolder.clear();
+                    OAuthTokenHolder.clear();
                 }
             };
         };
@@ -43,13 +41,3 @@ public class ReactorElasticBoundConfig {
 }
 
 
-record AccessTokenExtractor(SecurityContext securityContext) {
-
-    public Jwt extractAccessToken() {
-        Authentication authentication = securityContext.getAuthentication();
-        if (!(authentication instanceof JwtAuthenticationToken jwtAuth)) {
-            throw new IllegalStateException("Authentication is not a JwtAuthenticationToken");
-        }
-        return jwtAuth.getToken();
-    }
-}

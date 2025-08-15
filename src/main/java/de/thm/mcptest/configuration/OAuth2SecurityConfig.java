@@ -1,5 +1,6 @@
-package de.thm.mcptest.security;
+package de.thm.mcptest.configuration;
 
+import de.thm.mcptest.security.OAuthChallengeEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;

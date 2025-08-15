@@ -1,5 +1,7 @@
 package de.thm.mcptest;
 
+import de.thm.mcptest.tool.MathTools;
+import de.thm.mcptest.service.WeatherService;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncToolSpecification;
 import io.modelcontextprotocol.server.McpSyncServer;
 import org.slf4j.Logger;

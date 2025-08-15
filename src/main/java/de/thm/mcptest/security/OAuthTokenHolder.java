@@ -1,6 +1,6 @@
 package de.thm.mcptest.security;
 
-public class McpUserHolder {
+public class OAuthTokenHolder {
     private static final InheritableThreadLocal<String> holder = new InheritableThreadLocal<>();
 
     public static void set(String token) {
