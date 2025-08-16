@@ -231,7 +231,7 @@ The goal of this chapter is to make the system's communication relationships wit
 
 ## 3.1 Business Context
 
-![Business context diagram](/docs/diagrams/business_context.svg)
+![Business context diagram](/docs/diagrams/level_0_context/business_context.svg)
 
 | Element       | Description                                                                                                                            |
 |---------------|----------------------------------------------------------------------------------------------------------------------------------------|
@@ -245,7 +245,7 @@ The goal of this chapter is to make the system's communication relationships wit
 
 ## 3.2 Technical Context
 
-![Technical context diagram](/docs/diagrams/technical_context.svg)
+![Technical context diagram](/docs/diagrams/level_0_context/technical_context.svg)
 
 | Element                  | Interfaces | Description                                                                                                                                                         |
 |--------------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -278,208 +278,82 @@ The necessary work which needs to be done to reach the predefined project-goals 
 To achieve the quality goals, a version control system (GitLab) shall be used to manage the source code and documentation.
 This also includes the commitment to review any code-changes which should be done.
 
-# 5. Building Block View {#section-building-block-view}
+# 5. Building Block View
 
-::: formalpara-title
-**Content**
-:::
+All diagrams in this chapter use the following legend.
 
-The building block view shows the static decomposition of the system
-into building blocks (modules, components, subsystems, classes,
-interfaces, packages, libraries, frameworks, layers, partitions, tiers,
-functions, macros, operations, data structures, ...) as well as their
-dependencies (relationships, associations, ...)
+![Building block legend](/docs/diagrams/building_block_legend.svg)
 
-This view is mandatory for every architecture documentation. In analogy
-to a house this is the *floor plan*.
+## 5.1 Level 1: Subsystems/ Mircoservices
 
-::: formalpara-title
-**Motivation**
-:::
+![GroMoKoSo Subsystems](/docs/diagrams/level_1_subsystem/gromokoso_subsystems.svg)
 
-Maintain an overview of your source code by making its structure
-understandable through abstraction.
+| Element               | Dependencies                             | Description                                                                                                                                                      |
+|-----------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| User (external)       | UI                                       | A person using the GroMoKoSo system. This can either be a administrator, tool manager or regular user.                                                           |
+| Mcp Client (external) | McpManagement                            | The GroMoKoSo system supports every client that complies with the mcp specification (Claude, Github Copilot, ...).                                               |
+| UI                    | UserManagement, ApiManagement            | Provides an interactive easy to use graphical user interface as a webapp.                                                                                        |
+| UserManagement        | -                                        | Manage user, groups and permissions. A user can have tools and be part of multiple groups. A group can also have tools.                                          |
+| ApiManagement         | UserManagement, Spec2Tool, McpManagement | Manage apis, specifications and tokens. This service is responsible for every external api call on behalf of the system.                                         |
+| McpManagement         | UserManagement, ApiManagement            | Manage and host mcp servers with tools. Routes mcp requests from users to its personal mcp servers and call apis using ApiManagement to fulfill client requests. |
+| Spec2Tool             | -                                        | Convert common api specifications formats to GroMoKoSos internal api/tool representation.                                                                        |
 
-This allows you to communicate with your stakeholder on an abstract
-level without disclosing implementation details.
+TODO: motivation for the decomposition
 
-::: formalpara-title
-**Form**
-:::
+TODO: describe each black box using the following template. We can properly do this at the beginning of the 5.2.x chapters.  
 
-The building block view is a hierarchical collection of black boxes and
-white boxes (see figure below) and their descriptions.
-
-![Hierarchy of building blocks](images/05_building_blocks-EN.png)
-
-**Level 1** is the white box description of the overall system together
-with black box descriptions of all contained building blocks.
-
-**Level 2** zooms into some building blocks of level 1. Thus it contains
-the white box description of selected building blocks of level 1,
-together with black box descriptions of their internal building blocks.
-
-**Level 3** zooms into selected building blocks of level 2, and so on.
-
-See [Building Block View](https://docs.arc42.org/section-5/) in the
-arc42 documentation.
-
-## 5.1 Whitebox Overall System {#_whitebox_overall_system}
-
-Here you describe the decomposition of the overall system using the
-following white box template. It contains
-
--   an overview diagram
-
--   a motivation for the decomposition
-
--   black box descriptions of the contained building blocks. For these
-    we offer you alternatives:
-
-    -   use *one* table for a short and pragmatic overview of all
-        contained building blocks and their interfaces
-
-    -   use a list of black box descriptions of the building blocks
-        according to the black box template (see below). Depending on
-        your choice of tool this list could be sub-chapters (in text
-        files), sub-pages (in a Wiki) or nested elements (in a modeling
-        tool).
-
--   (optional:) important interfaces, that are not explained in the
-    black box templates of a building block, but are very important for
-    understanding the white box. Since there are so many ways to specify
-    interfaces why do not provide a specific template for them. In the
-    worst case you have to specify and describe syntax, semantics,
-    protocols, error handling, restrictions, versions, qualities,
-    necessary compatibilities and many things more. In the best case you
-    will get away with examples or simple signatures.
-
-***\<Overview Diagram>***
-
-Motivation
-
-:   *\<text explanation>*
-
-Contained Building Blocks
-
-:   *\<Description of contained building block (black boxes)>*
-
-Important Interfaces
-
-:   *\<Description of important interfaces>*
-
-Insert your explanations of black boxes from level 1:
-
-If you use tabular form you will only describe your black boxes with
-name and responsibility according to the following schema:
-
-+-----------------------+-----------------------------------------------+
-| **Name**              | **Responsibility**                            |
-+=======================+===============================================+
-| *\<black box 1>*      |  *\<Text>*                                    |
-+-----------------------+-----------------------------------------------+
-| *\<black box 2>*      |  *\<Text>*                                    |
-+-----------------------+-----------------------------------------------+
-
-If you use a list of black box descriptions then you fill in a separate
-black box template for every important building block . Its headline is
-the name of the black box.
-
-### \<Name black box 1> {#__name_black_box_1}
-
-Here you describe \<black box 1> according the the following black box
 template:
-
 -   Purpose/Responsibility
-
 -   Interface(s), when they are not extracted as separate paragraphs.
     This interfaces may include qualities and performance
     characteristics.
-
 -   (Optional) Quality-/Performance characteristics of the black box,
     e.g.availability, run time behavior, ....
-
 -   (Optional) directory/file location
-
 -   (Optional) Fulfilled requirements (if you need traceability to
     requirements).
-
 -   (Optional) Open issues/problems/risks
 
 *\<Purpose/Responsibility>*
-
 *\<Interface(s)>*
-
 *\<(Optional) Quality/Performance Characteristics>*
-
 *\<(Optional) Directory/File Location>*
-
 *\<(Optional) Fulfilled Requirements>*
-
 *\<(optional) Open Issues/Problems/Risks>*
 
-### \<Name black box 2> {#__name_black_box_2}
+## 5.2 Level 2: Container View
 
-*\<black box template>*
+### 5.2.1 UI
 
-### \<Name black box n> {#__name_black_box_n}
+![UI Containers](/docs/diagrams/level_2_container/ui_subsystem_container_view.svg)
 
-*\<black box template>*
+### 5.2.2 UserManagement
 
-### \<Name interface 1> {#__name_interface_1}
+![UserManagement Containers](/docs/diagrams/level_2_container/user_management_subsystem_container_view.svg)
 
-...
+### 5.2.3 ApiManagement
 
-### \<Name interface m> {#__name_interface_m}
+![ApiManagement Containers](/docs/diagrams/level_2_container/api_management_subsystem_container_view.svg)
 
-## Level 2 {#_level_2}
+### 5.2.4 McpManagement
 
-Here you can specify the inner structure of (some) building blocks from
-level 1 as white boxes.
+![McpManagement Containers](/docs/diagrams/level_2_container/mcp_management_subsystem_container_view.svg)
 
-You have to decide which building blocks of your system are important
-enough to justify such a detailed description. Please prefer relevance
-over completeness. Specify important, surprising, risky, complex or
-volatile building blocks. Leave out normal, simple, boring or
-standardized parts of your system
+### 5.2.5 Spec2Tool
 
-### White Box *\<building block 1>* {#_white_box_emphasis_building_block_1_emphasis}
+![Spec2Tool Containers](/docs/diagrams/level_2_container/spec_2_tool_subsystem_container_view.svg)
 
-...describes the internal structure of *building block 1*.
+## 5.3 Level 3: Component/ Class View
 
-*\<white box template>*
+### 5.3.1 UI
 
-### White Box *\<building block 2>* {#_white_box_emphasis_building_block_2_emphasis}
+### 5.3.2 UserManagement
 
-*\<white box template>*
+### 5.3.3 ApiManagement
 
-...
+### 5.3.4 McpManagement
 
-### White Box *\<building block m>* {#_white_box_emphasis_building_block_m_emphasis}
-
-*\<white box template>*
-
-## Level 3 {#_level_3}
-
-Here you can specify the inner structure of (some) building blocks from
-level 2 as white boxes.
-
-When you need more detailed levels of your architecture please copy this
-part of arc42 for additional levels.
-
-### White Box \<\_building block x.1\_\> {#_white_box_building_block_x_1}
-
-Specifies the internal structure of *building block x.1*.
-
-*\<white box template>*
-
-### White Box \<\_building block x.2\_\> {#_white_box_building_block_x_2}
-
-*\<white box template>*
-
-### White Box \<\_building block y.1\_\> {#_white_box_building_block_y_1}
-
-*\<white box template>*
+### 5.3.5 Spec2Tool
 
 # 6. Runtime View {#section-runtime-view}
 

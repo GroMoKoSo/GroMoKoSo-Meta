@@ -12,7 +12,7 @@ paths:
       summary: Convert API specification to MCP Tool Definition
       description: Convert OpenAPI or RAML to MCP Tool Definition
       requestBody:
-        description: Create a new pet in the store
+        description: Api specification with metadata
         content:
           application/json:
             schema:
