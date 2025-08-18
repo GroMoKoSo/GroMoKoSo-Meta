@@ -1,0 +1,809 @@
+
+# GroßsprachmodellModellKontextProtokollServer 
+
+(Abk.: GroMoKoSo)
+
+
+[[_TOC_]]
+
+# 0. Terminology and Conformance Language
+Normative text describes one or both of the following kinds of elements:
+
+Vital elements of the specification
+Elements that contain the conformance language key words as defined by IETF RFC 2119 "Key words for use in RFCs to Indicate Requirement Levels"
+Informative text is potentially helpful to the user, but dispensable. 
+Informative text can be changed, added, or deleted editorially without negatively affecting the implementation of the specification. 
+Informative text does not contain conformance keywords.
+
+All text in this document is, by default, normative.
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in IETF RFC 2119 "Key words for use in RFCs to Indicate Requirement Levels".
+
+According to: https://datatracker.ietf.org/doc/rfc2119/
+
+# 1. Introduction and Goals
+
+Describes the relevant requirements and the driving forces that software
+architects and development team must consider. These include
+
+-   underlying business goals,
+-   essential features,
+-   essential functional requirements,
+-   quality goals for the architecture and
+-   relevant stakeholders and their expectations
+
+## 1.1 Goals
+Our goal is to develop a plattform which allows users to integrate existing RESTful APIs
+and automatically create [MCP](#12-model-context-protocol-mcp) Tools which empower the capabilities of Large Language Models (LLMs).
+Users should be able to define API specifications in a WYSIWYG interface or upload OpenAPI specifications.
+
+
+## 1.2 Model Context Protocol (MCP)
+
+Full MCP specification: [Model Context Protocol](https://modelcontextprotocol.io/specification/2025-06-18)
+
+The Model Context Protocol (MCP) is an open, standardized interface that allows
+Large Language Models (LLMs) to interact seamlessly with external tools, APIs,
+and data sources. It provides a consistent architecture to enhance AI model
+functionality beyond their training data, enabling smarter, scalable, and more
+responsive AI systems.
+
+### 1.2.1 Core Components
+
+server client architecture:
+- Hosts: Contains one or more instance of LLMs which use one or more MCP clients which handle the communication with the MCP Server.
+- Clients: maintain 1:1 connection with a server; inside the host application
+- Servers: provide context, tools, prompts to clients
+
+```
+------- Host -------                         -- Server Process --
+|  --------------  |                         |  --------------  |
+|  | MCP Client | <----- Transport Layer -----> | MCP Server |  |
+|  --------------  |                         |  --------------  |
+|                  |                         --------------------
+|                  |
+|                  |                         -- Server Process --
+|  --------------  |                         |  --------------  |
+|  | MCP Client | <----- Transport Layer -----> | MCP Server |  |
+|  --------------  |                         |  --------------  |
+--------------------                         --------------------
+```
+
+## 1.3 Stakeholder
+
+| Stakeholder    | Role          | Goal                                                                                                          | Expectations             |
+|----------------|---------------|---------------------------------------------------------------------------------------------------------------|--------------------------|
+| M. Münker      | Product Owner | Architecture and software that enables the dynamic and reusable provision of services via MCP for AI agents.  | Interesting architecture |
+| Dev Team       | SW Devs       | Granular architecture, easy to maintain and expandable                                                        |                          |
+| General Public | User          | Easy to use, intuitive interface                                                                              |                          |
+
+## 1.4. Requirements Overview
+**Requirement-type:**
+
+| Short | Meaning  | Description                                                                                           |
+|-------|----------|-------------------------------------------------------------------------------------------------------|
+| `M`   | Must     | Must be fulfilled, otherwise the architecture is not acceptable                                       |
+| `O`   | Optional | Optional, but desirable, requirements that can be fulfilled later                                     |
+| `Q`   | Quality  | Quality requirements that are not directly related to the architecture, but to the system as a whole  |
+
+`<type>`-`<id>` e.g. `M-1`, `O-1`, `Q-1`
+
+## 1.4.1 Non-functional Requirements / Quality Goals
+
+Quality goals as defined by [ISO 25010](https://www.iso.org/obp/ui/#iso:std:iso-iec:25010:ed-2:v1:en) 
+
+| Quality goal           | Description                                                                                                                                                                                                                                |
+|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Functional suitability | Capability of a product to provide functions that meet stated and implied needs of intended users when it is used under specified conditions                                                                                               |
+| Performance efficiency | Capability of a product to perform its functions within specified time and throughput parameters and be efficient in the use of resources under specified conditions                                                                       |  
+| Compatibility          | Capability of a product to exchange information with other products, and/or to perform its required functions while sharing the same common environment and resources                                                                      |
+| Interaction capability | Capability of a product to be interacted with by specified users to exchange information between a user and a system via the user interface to complete the intended task                                                                  |
+| Reliability            | Capability of a product to perform specified functions under specified conditions for a specified period of time without interruptions and failures                                                                                        | 
+| Security               | Capability of a product to protect information and data so that persons or other products have the degree of data access appropriate to their types and levels of authorization, and to defend against attack patterns by malicious actors |
+| Maintainability        | Capability of a product to be modified by the intended maintainers with effectiveness and efficiency                                                                                                                                       |
+| Flexibility            | Capability of a product to be adapted to changes in its requirements, contexts of use, or system environment                                                                                                                               |
+| Safety                 | Capability of a product under defined conditions to avoid a state in which human life, health, property, or the environment is endangered                                                                                                  |
+
+
+Priorities
+
+| Prio | Description         | Explanation                                                          |
+|------|---------------------|----------------------------------------------------------------------|
+| 1    | Extremely important | Compromises only when higher priority features are strengthened.     |
+| 2    | Important           | Compromises are possible when core requirements are not compromised. |
+| 3    | Significant         | Compromises are possible when core requirements are not compromised. |
+| 4    | Insignificant       | This feature should only be taken into account to a limited extent.  |
+
+| ID  | Prio | Quality Goal           | Description                                   |
+|-----|------|------------------------|-----------------------------------------------|
+| Q-1 |      | Interaction capability | Project requires complete documentation       |
+| Q-2 |      | Interaction capability | Code should be modular and reusable           |
+| Q-3 |      | Usability              | Easy to use, intuitive interface              |
+| Q-4 |      | Security               | Authentification against a OAuth Server       |
+
+
+## 1.4.2 Functional Requirements
+| ID  | Requirement                                                   | Description                                                                                                 |
+|-----|---------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| M-1 | Parse OpenApi Specs to internal API-representation            | The Software MUST be able to convert any OpenApi specification to a more abstract, internal representation. |
+| M-2 | Create internal API-representation by using a WYSIWYG-editor  | The User MUST be able to add a new tool to the MCP Server by adding it's API within the UI.                 |
+| M-3 | Create MCP-Tools from internal API-representation             | The Software MUST be able to create MCP-Tools by using Spring Boot's MCP-Library                            |
+| M-4 | Serve MCP-Tools to MCP-Client                                 | Serving MCP-Tools by complying to MCP                                                                       |
+| M-5 | Authentification against THM oauth2 Server                    | The User of the Software MUST authenticate against the THM oauth2 Server using OpenID Connect.              |
+| O-1 | Support RAML Specs                                            | In addition to Open-Api specs, API specs as RAML should also be supported                                   |
+| O-2 | Support Authentication for MCP Tools                          | The software MAY provide sufficient OAuth2 based Authentication mechanisms for MCP-Tools.                   |
+| O-3 | REST-API secrets should be stored securely                    | The Software MAY store secrets (e.g. API-Keys) securely, e.g. in a vault or encrypted database.             |
+
+# 2. Architecture Constraints
+Any requirement that constraints software architects in their freedom of
+design and implementation decisions or decision about the development
+process. These constraints sometimes go beyond individual systems and
+are valid for whole organizations and companies.
+
+
+## 2.1 Organizational constraints
+
+| ID | Constraint             | Description                                                                                                                                                                                               |
+|----|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1  | Team members are fixed | **Team**: <ul><li>Heimann, Jannik</li><li>Lange-Hermstädt, Benjamin Michael</li><li>Menger, Josia</li><li>Schäfer, Leon</li><li>Wolek, Justin</li></ul>No new team members are expected to join the team. |
+| 2  | Presentation           | Presentation on 09.09.2025                                                                                                                                                                                | 
+| 3  | Deadline               | The projects MUST be finished by 02.10.2025                                                                                                                                                               |
+| 4  | Planning               | Planning MUST be done inside the GitLab issue board.                                                                                                                                                      |
+| 5  | Documentation          | Documentation is done inside the GitLab wiki. According to the [Arc42 Template](https://arc42.de/), All diagrams SHOULD be available as images inside the documentation                                   |                     
+
+### 2.1.1 Evaluation Criteria
+
+* **Architecture and Concepts (33%)**
+
+    * Quality and clarity of the architecture
+    * Use of appropriate modeling
+    * Consideration of alternatives
+    * Flexibility and scalability
+    * Suitable framework
+
+* **Prototyping and Implementation (33%)**
+
+    * Functioning prototype
+    * GUI (10%)
+    * Logic / REST API
+    * Data persistence
+    * Deployment
+    * Code structuring
+
+* **Documentation (Descriptive materials)**
+
+    * Prototype documentation
+    * Architecture documentation
+
+* **Presentation (20%)**
+
+    * Presentation style / structure
+    * Appropriate scope for 20 minutes
+    * Clarity and comprehensibility
+    * Slides / materials
+    * Demo
+
+* **Teamwork and Methodology (Git handling)**
+
+    * Task distribution and communication (e.g., Git Issues)
+    * Working with Git for coding
+
+* **Additional Achievements, Special Technologies, Features (5%)**
+
+    * Use of innovative technologies (MCP / AI)
+    * Significant improvements after the interim presentation
+
+---
+
+**Interim Presentation** *(not graded, 10–20 minutes)*
+
+* Architecture and concepts
+* Component structure / Use case
+* Sequence diagram
+* ER diagram
+* Class diagram
+* Intermediate results of the final product
+
+---
+
+Let me know if you'd like it formatted for a document or presentation.
+
+
+
+
+## 2.2 Technical constraints
+| ID | Constraint   | Description                                                         |
+|----|--------------|---------------------------------------------------------------------|
+| 1  | Technologies | MUST: Java, Spring Boot, ThymeLeaf                                  |  
+| 2  | Architecture | RESTful API MUST be used.                                           |                                 
+| 3  | Deployment   | Deployment MUST be done within the university server infrastruture. |
+
+
+# 2.3 Conventions
+
+Programming Conventions are documented [here](/home/conventions)
+
+
+# 3. Context and Scope
+
+The context boundary represents the `GroMoKoSo` system in relation to its external interfaces, users, and neighboring systems.
+The goal of this chapter is to make the system's communication relationships with its environment transparent.
+
+## 3.1 Business Context
+
+![Business context diagram](/docs/diagrams/level_0_context/business_context.svg)
+
+| Element       | Description                                                                                                                            |
+|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| User          | Person who uses an MCP-Host to take advantage of the MCP-Server to fulfill his requests.                                               |
+| Tool Manager  | Person who manages tools and configures new tools using the WebApp. A tool manager is also a user of the system.                       |
+| Administrator | Person who manages user, groups and roles using the WebApp. An Administrator is also a tool manager and a user of the system.          |
+| WebApp        | Web portal through which tools resources and prompts are managed. It is also possible to manage users, groups and roles.               |
+| MCP Server    | Software system that provide MCP capabilities. Provides interface to corresponding REST API. Responses are sent back to the requester. |
+| MCP Host      | Software system that allows a LLM Tool to use a MCP server to fulfill complex requests.                                                |
+| REST APIs     | External software systems, which serve varttri                                                                                         |
+
+## 3.2 Technical Context
+
+![Technical context diagram](/docs/diagrams/level_0_context/technical_context.svg)
+
+| Element                  | Interfaces | Description                                                                                                                                                         |
+|--------------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| User                     | html, http | Person who uses an MCP-Host to take advantage of the MCP-Server to fulfill his requests.                                                                            |
+| Tool Manager             | html, http | Person who manages tools and configures new tools using the WebApp. A tool manager is also a user of the system.                                                    |
+| Administrator            | html, http | Person who manages user, groups and roles using the WebApp. An Administrator is also a tool manager and a user of the system.                                       |
+| WebApp                   | html, http | Web-Application which serves as a Graphical-User-Interface for all users to interact with the system and perform user-dedicated configurations and functionalities. |
+| MCP Server               |            |                                                                                                                                                                     |
+| MCP Host                 |            | Container for managing LLMs and MCP clients                                                                                                                         |
+| MCP Client               | http, sse  | Client used by an LLM to communicate with the MCP Server. A client has a 1 to 1 relationship with a server                                                          |
+| LLM                      |            |                                                                                                                                                                     |
+| REST APIs (extern)       |            |                                                                                                                                                                     |
+| REST API (internal)      |            | REST API of the internal System which provides the same functionality as the WebApp, so that it can be used by an external Software.                                |
+| OpenID Identity Provider | http       | Server against which the user and the request MUST be identified.                                                                                                   |
+| Any Software tool        | http       | Placeholder for any software system that may implement the REST API to use GroMoKoSos features.                                                                     |
+
+# 4. Solution Strategy
+## 4.1 Technology Decisions
+
+Technologies which will be used are **Java** and **Spring Boot** as requested by the stakeholder M. Münker.
+The project goal also requires the implementation of MCP-Tools.
+
+The system will be separated into multiple microservices which will be deployed as Docker containers.
+Each service will be responsible for a specific domain except the UI service.
+
+
+## Organizational Decisions
+
+The necessary work which needs to be done to reach the predefined project-goals should be done entirely within the team.
+To achieve the quality goals, a version control system (GitLab) shall be used to manage the source code and documentation.
+This also includes the commitment to review any code-changes which should be done.
+
+# 5. Building Block View
+
+All diagrams in this chapter use the following legend.
+
+![Building block legend](/docs/diagrams/building_block_legend.svg)
+
+## 5.1 Level 1: Subsystems/ Mircoservices
+
+![GroMoKoSo Subsystems](/docs/diagrams/level_1_subsystem/gromokoso_subsystems.svg)
+
+| Element               | Dependencies                             | Description                                                                                                                                                      |
+|-----------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| User (external)       | UI                                       | A person using the GroMoKoSo system. This can either be a administrator, tool manager or regular user.                                                           |
+| Mcp Client (external) | McpManagement                            | The GroMoKoSo system supports every client that complies with the mcp specification (Claude, Github Copilot, ...).                                               |
+| UI                    | UserManagement, ApiManagement            | Provides an interactive easy to use graphical user interface as a webapp.                                                                                        |
+| UserManagement        | -                                        | Manage user, groups and permissions. A user can have tools and be part of multiple groups. A group can also have tools.                                          |
+| ApiManagement         | UserManagement, Spec2Tool, McpManagement | Manage apis, specifications and tokens. This service is responsible for every external api call on behalf of the system.                                         |
+| McpManagement         | UserManagement, ApiManagement            | Manage and host mcp servers with tools. Routes mcp requests from users to its personal mcp servers and call apis using ApiManagement to fulfill client requests. |
+| Spec2Tool             | -                                        | Convert common api specifications formats to GroMoKoSos internal api/tool representation.                                                                        |
+
+TODO: motivation for the decomposition
+
+TODO: describe each black box using the following template. We can properly do this at the beginning of the 5.2.x chapters.  
+
+template:
+-   Purpose/Responsibility
+-   Interface(s), when they are not extracted as separate paragraphs.
+    This interfaces may include qualities and performance
+    characteristics.
+-   (Optional) Quality-/Performance characteristics of the black box,
+    e.g.availability, run time behavior, ....
+-   (Optional) directory/file location
+-   (Optional) Fulfilled requirements (if you need traceability to
+    requirements).
+-   (Optional) Open issues/problems/risks
+
+*\<Purpose/Responsibility>*
+*\<Interface(s)>*
+*\<(Optional) Quality/Performance Characteristics>*
+*\<(Optional) Directory/File Location>*
+*\<(Optional) Fulfilled Requirements>*
+*\<(optional) Open Issues/Problems/Risks>*
+
+## 5.2 Level 2: Container View
+
+### 5.2.1 UI
+
+![UI Containers](/docs/diagrams/level_2_container/ui_subsystem_container_view.svg)
+
+### 5.2.2 UserManagement
+
+![UserManagement Containers](/docs/diagrams/level_2_container/user_management_subsystem_container_view.svg)
+
+### 5.2.3 ApiManagement
+
+![ApiManagement Containers](/docs/diagrams/level_2_container/api_management_subsystem_container_view.svg)
+
+### 5.2.4 McpManagement
+
+![McpManagement Containers](/docs/diagrams/level_2_container/mcp_management_subsystem_container_view.svg)
+
+### 5.2.5 Spec2Tool
+
+![Spec2Tool Containers](/docs/diagrams/level_2_container/spec_2_tool_subsystem_container_view.svg)
+
+## 5.3 Level 3: Component/ Class View
+
+### 5.3.1 UI
+
+### 5.3.2 UserManagement
+
+### 5.3.3 ApiManagement
+
+### 5.3.4 McpManagement
+
+The McpManagement uses a layer architecture to cleanly separate the different concerns. 
+This separation improves maintainability by making each layer responsible for a single concern.
+```
+┌──────────────────────────┐
+│  Controller Layer        │  ← REST, SSE endpoints
+├──────────────────────────┤
+│  Service Layer           │  ← Business logic
+├──────────────────────────┤
+│  Repository Layer        │  ← Spring Data / custom DAO
+├──────────────────────────┤
+│  Model                   │  ← Entities, value objects
+└──────────────────────────┘
+```
+
+![Mcp Server Components](/docs/diagrams/level_3_component_class/mcp_server_container_component_view.svg)
+
+| Element        | Description                                                                                                                |
+|----------------|----------------------------------------------------------------------------------------------------------------------------|
+| Mcp Client     | Mcp client that confirms to the [mcp specification](https://modelcontextprotocol.io/specification/2025-06-18/client/roots) |
+| ApiManagement  | see chapter [5.2.3](#523-apimanagement)                                                                                    |
+| UserManagement | see chapter [5.2.2](#522-usermanagement)                                                                                   |
+| ToolDb         | SQL Database storing tool definitions                                                                                      |
+| Controller     | (REST) Endpoints for external systems                                                                                      |
+| Service        | Business logic/ Mcp servers                                                                                                |
+| Model          | Entities (ORM), value objects                                                                                              |
+| Repository     | Encapsulate persistence                                                                                                    |
+| Security       | Cross-cutting concern: OAuth2 authorization                                                                                |
+| Configuration  | Cross-cutting concern: Spring configuration classes                                                                        |
+| Client         | Cross-cutting concern: Communication with other subsystems (ApiManagement, UserManagement)                                 |
+
+The class diagram can be found [here](/docs/diagrams/level_3_component_class/mcp_management_class_diagram.puml)
+
+### 5.3.5 Spec2Tool
+
+# 6. Runtime View {#section-runtime-view}
+
+::: formalpara-title
+**Contents**
+:::
+
+The runtime view describes concrete behavior and interactions of the
+system's building blocks in form of scenarios from the following areas:
+
+-   important use cases or features: how do building blocks execute
+    them?
+
+-   interactions at critical external interfaces: how do building blocks
+    cooperate with users and neighboring systems?
+
+-   operation and administration: launch, start-up, stop
+
+-   error and exception scenarios
+
+Remark: The main criterion for the choice of possible scenarios
+(sequences, workflows) is their **architectural relevance**. It is
+**not** important to describe a large number of scenarios. You should
+rather document a representative selection.
+
+::: formalpara-title
+**Motivation**
+:::
+
+You should understand how (instances of) building blocks of your system
+perform their job and communicate at runtime. You will mainly capture
+scenarios in your documentation to communicate your architecture to
+stakeholders that are less willing or able to read and understand the
+static models (building block view, deployment view).
+
+::: formalpara-title
+**Form**
+:::
+
+There are many notations for describing scenarios, e.g.
+
+-   numbered list of steps (in natural language)
+
+-   activity diagrams or flow charts
+
+-   sequence diagrams
+
+-   BPMN or EPCs (event process chains)
+
+-   state machines
+
+-   ...
+
+See [Runtime View](https://docs.arc42.org/section-6/) in the arc42
+documentation.
+
+## \<Runtime Scenario 1> {#__runtime_scenario_1}
+
+-   *\<insert runtime diagram or textual description of the scenario>*
+
+-   *\<insert description of the notable aspects of the interactions
+    between the building block instances depicted in this diagram.\>*
+
+## \<Runtime Scenario 2> {#__runtime_scenario_2}
+
+## ... {#_}
+
+## \<Runtime Scenario n> {#__runtime_scenario_n}
+
+# 7. Deployment View {#section-deployment-view}
+
+::: formalpara-title
+**Content**
+:::
+
+The deployment view describes:
+
+1.  technical infrastructure used to execute your system, with
+    infrastructure elements like geographical locations, environments,
+    computers, processors, channels and net topologies as well as other
+    infrastructure elements and
+
+2.  mapping of (software) building blocks to that infrastructure
+    elements.
+
+Often systems are executed in different environments, e.g. development
+environment, test environment, production environment. In such cases you
+should document all relevant environments.
+
+Especially document a deployment view if your software is executed as
+distributed system with more than one computer, processor, server or
+container or when you design and construct your own hardware processors
+and chips.
+
+From a software perspective it is sufficient to capture only those
+elements of an infrastructure that are needed to show a deployment of
+your building blocks. Hardware architects can go beyond that and
+describe an infrastructure to any level of detail they need to capture.
+
+::: formalpara-title
+**Motivation**
+:::
+
+Software does not run without hardware. This underlying infrastructure
+can and will influence a system and/or some cross-cutting concepts.
+Therefore, there is a need to know the infrastructure.
+
+Maybe a highest level deployment diagram is already contained in section
+3.2. as technical context with your own infrastructure as ONE black box.
+In this section one can zoom into this black box using additional
+deployment diagrams:
+
+-   UML offers deployment diagrams to express that view. Use it,
+    probably with nested diagrams, when your infrastructure is more
+    complex.
+
+-   When your (hardware) stakeholders prefer other kinds of diagrams
+    rather than a deployment diagram, let them use any kind that is able
+    to show nodes and channels of the infrastructure.
+
+See [Deployment View](https://docs.arc42.org/section-7/) in the arc42
+documentation.
+
+## Infrastructure Level 1 {#_infrastructure_level_1}
+
+Describe (usually in a combination of diagrams, tables, and text):
+
+-   distribution of a system to multiple locations, environments,
+    computers, processors, .., as well as physical connections between
+    them
+
+-   important justifications or motivations for this deployment
+    structure
+
+-   quality and/or performance features of this infrastructure
+
+-   mapping of software artifacts to elements of this infrastructure
+
+For multiple environments or alternative deployments please copy and
+adapt this section of arc42 for all relevant environments.
+
+***\<Overview Diagram>***
+
+Motivation
+
+:   *\<explanation in text form>*
+
+Quality and/or Performance Features
+
+:   *\<explanation in text form>*
+
+Mapping of Building Blocks to Infrastructure
+
+:   *\<description of the mapping>*
+
+## Infrastructure Level 2 {#_infrastructure_level_2}
+
+Here you can include the internal structure of (some) infrastructure
+elements from level 1.
+
+Please copy the structure from level 1 for each selected element.
+
+### *\<Infrastructure Element 1>* {#__emphasis_infrastructure_element_1_emphasis}
+
+*\<diagram + explanation>*
+
+### *\<Infrastructure Element 2>* {#__emphasis_infrastructure_element_2_emphasis}
+
+*\<diagram + explanation>*
+
+...
+
+### *\<Infrastructure Element n>* {#__emphasis_infrastructure_element_n_emphasis}
+
+*\<diagram + explanation>*
+
+# 8. Cross-cutting Concepts {#section-concepts}
+
+::: formalpara-title
+**Content**
+:::
+
+This section describes overall, principal regulations and solution ideas
+that are relevant in multiple parts (= cross-cutting) of your system.
+Such concepts are often related to multiple building blocks. They can
+include many different topics, such as
+
+-   models, especially domain models
+
+-   architecture or design patterns
+
+-   rules for using specific technology
+
+-   principal, often technical decisions of an overarching (=
+    cross-cutting) nature
+
+-   implementation rules
+
+::: formalpara-title
+**Motivation**
+:::
+
+Concepts form the basis for *conceptual integrity* (consistency,
+homogeneity) of the architecture. Thus, they are an important
+contribution to achieve inner qualities of your system.
+
+Some of these concepts cannot be assigned to individual building blocks,
+e.g. security or safety.
+
+::: formalpara-title
+**Form**
+:::
+
+The form can be varied:
+
+-   concept papers with any kind of structure
+
+-   cross-cutting model excerpts or scenarios using notations of the
+    architecture views
+
+-   sample implementations, especially for technical concepts
+
+-   reference to typical usage of standard frameworks (e.g. using
+    Hibernate for object/relational mapping)
+
+::: formalpara-title
+**Structure**
+:::
+
+A potential (but not mandatory) structure for this section could be:
+
+-   Domain concepts
+
+-   User Experience concepts (UX)
+
+-   Safety and security concepts
+
+-   Architecture and design patterns
+
+-   \"Under-the-hood\"
+
+-   development concepts
+
+-   operational concepts
+
+Note: it might be difficult to assign individual concepts to one
+specific topic on this list.
+
+![Possible topics for crosscutting
+concepts](images/08-concepts-EN.drawio.png)
+
+See [Concepts](https://docs.arc42.org/section-8/) in the arc42
+documentation.
+
+## *\<Concept 1>* {#__emphasis_concept_1_emphasis}
+
+*\<explanation>*
+
+## *\<Concept 2>* {#__emphasis_concept_2_emphasis}
+
+*\<explanation>*
+
+...
+
+## *\<Concept n>* {#__emphasis_concept_n_emphasis}
+
+*\<explanation>*
+
+# 9. Architecture Decisions
+
+Decisions that have been made during the design of the architecture
+
+| Decision | Status   | Description                                                                                                                                                                |
+|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ADR-01   | accepted | Modularization Strategy: The architecture is based on a Domain-Driven Design (DDD) approach, with the exception of the UI service, which is treated as a technology layer. |
+
+# Quality Requirements {#section-quality-scenarios}
+
+::: formalpara-title
+**Content**
+:::
+
+This section contains all quality requirements as quality tree with
+scenarios. The most important ones have already been described in
+section 1.2. (quality goals)
+
+Here you can also capture quality requirements with lesser priority,
+which will not create high risks when they are not fully achieved.
+
+::: formalpara-title
+**Motivation**
+:::
+
+Since quality requirements will have a lot of influence on architectural
+decisions you should know for every stakeholder what is really important
+to them, concrete and measurable.
+
+See [Quality Requirements](https://docs.arc42.org/section-10/) in the
+arc42 documentation.
+
+## Quality Tree {#_quality_tree}
+
+::: formalpara-title
+**Content**
+:::
+
+The quality tree (as defined in ATAM -- Architecture Tradeoff Analysis
+Method) with quality/evaluation scenarios as leafs.
+
+::: formalpara-title
+**Motivation**
+:::
+
+The tree structure with priorities provides an overview for a sometimes
+large number of quality requirements.
+
+::: formalpara-title
+**Form**
+:::
+
+The quality tree is a high-level overview of the quality goals and
+requirements:
+
+-   tree-like refinement of the term \"quality\". Use \"quality\" or
+    \"usefulness\" as a root
+
+-   a mind map with quality categories as main branches
+
+In any case the tree should include links to the scenarios of the
+following section.
+
+## Quality Scenarios {#_quality_scenarios}
+
+::: formalpara-title
+**Contents**
+:::
+
+Concretization of (sometimes vague or implicit) quality requirements
+using (quality) scenarios.
+
+These scenarios describe what should happen when a stimulus arrives at
+the system.
+
+For architects, two kinds of scenarios are important:
+
+-   Usage scenarios (also called application scenarios or use case
+    scenarios) describe the system's runtime reaction to a certain
+    stimulus. This also includes scenarios that describe the system's
+    efficiency or performance. Example: The system reacts to a user's
+    request within one second.
+
+-   Change scenarios describe a modification of the system or of its
+    immediate environment. Example: Additional functionality is
+    implemented or requirements for a quality attribute change.
+
+::: formalpara-title
+**Motivation**
+:::
+
+Scenarios make quality requirements concrete and allow to more easily
+measure or decide whether they are fulfilled.
+
+Especially when you want to assess your architecture using methods like
+ATAM you need to describe your quality goals (from section 1.2) more
+precisely down to a level of scenarios that can be discussed and
+evaluated.
+
+::: formalpara-title
+**Form**
+:::
+
+Tabular or free form text.
+
+# 10. Risks and Technical Debts {#section-technical-risks}
+
+::: formalpara-title
+**Contents**
+:::
+
+A list of identified technical risks or technical debts, ordered by
+priority
+
+::: formalpara-title
+**Motivation**
+:::
+
+"Risk management is project management for grown-ups" (Tim Lister,
+Atlantic Systems Guild.)
+
+This should be your motto for systematic detection and evaluation of
+risks and technical debts in the architecture, which will be needed by
+management stakeholders (e.g. project managers, product owners) as part
+of the overall risk analysis and measurement planning.
+
+::: formalpara-title
+**Form**
+:::
+
+List of risks and/or technical debts, probably including suggested
+measures to minimize, mitigate or avoid risks or reduce technical debts.
+
+See [Risks and Technical Debt](https://docs.arc42.org/section-11/) in
+the arc42 documentation.
+
+# 11. Glossary {#section-glossary}
+
+::: formalpara-title
+**Contents**
+:::
+
+The most important domain and technical terms that your stakeholders use
+when discussing the system.
+
+::: formalpara-title
+**Motivation**
+:::
+
+| Term                  | Definition                                                                                          |
+|-----------------------|-----------------------------------------------------------------------------------------------------|
+| WYSIWYG               | What you see is what you get. Further information: [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) |
+| MCP                   | Model Context Protocol. Further information: [MCP](https://modelcontextprotocol.io/introduction)    |

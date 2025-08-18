@@ -1,0 +1,526 @@
+openapi: 3.0.4
+info:
+  title: User Management API
+  version: 1.0.0
+  description: API for managing Users and Groups including adding new Users/groups and deleting existing ones.
+servers:
+  - url: ??
+paths:
+  /users:
+    get:
+      summary: Get all Users.
+      description: Returns a list of all Users.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Add a new User
+      description: Create a new User and persist it's data.
+      requestBody:
+        required: true
+        description: User data.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the User.
+              required:
+                - name
+      responses:
+        "201":
+          description: User successfully created.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{id}:
+    get:
+      summary: Get a User.
+      description: Returns a User which has the given ID.
+      parameters:
+        - in: path
+          name: id
+          description: Unique identifier of the User.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Edit a User.
+      description: Edit the attributes of a User which has the given ID.
+      parameters:
+        - in: path
+          name: id
+          description: Unique identifier of the User.
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: name
+          schema:
+            type: string
+            description: New name of the User.
+            example: John Doe
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a User.
+      description: Deletes a User with the specified ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the User to delete.
+      responses:
+        "204":
+          description: User successfully deleted; no content returned.
+        "404":
+          description: User not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{id}/apis:
+    get:
+      summary: Get the Api Id's belonging to a User.
+      description: Returns a array of Api Id's belonging to the User which has the given ID.
+      parameters:
+        - in: path
+          name: id
+          description: Unique identifier of the User.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiIdList"
+        "404":
+          description: User not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Add a new Api Id to a User.
+      description: Add a new Api Id to a User.
+      requestBody:
+        description: API data.
+        content:
+          application/json:
+            schema:
+              type: integer
+              description: Api Id of the new Api
+              required: true
+      responses:
+        "201":
+          description: Api successfully added.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{id}/apis/{api_id}:
+    delete:
+      summary: Delete a Api Id from a User.
+      description: Deletes a Api Id from a User with the specified ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the User.
+        - in: path
+          name: api_id
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the Api which should be deleted from the User.
+      responses:
+        "204":
+          description: Api Id successfully deleted; no content returned.
+        "404":
+          description: User or Api Id not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /groups:
+    get:
+      summary: Get all Groups.
+      description: Returns a list of all Groups.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Add a new Group.
+      description: Create a new Group and persist it's data.
+      requestBody:
+        required: true
+        description: Group data.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the Group.
+              required:
+                - name
+      responses:
+        "201":
+          description: Group successfully created.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /groups/{id}:
+    get:
+      summary: Get a Group.
+      description: Returns a Group which has the given ID.
+      parameters:
+        - in: path
+          name: id
+          description: Unique identifier of the Group.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "404":
+          description: Group not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Edit a Group.
+      description: Edit the attributes of a Group which has the given ID.
+      parameters:
+        - in: path
+          name: id
+          description: Unique identifier of the Group.
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: name
+          schema:
+            type: string
+            description: New name of the Group.
+            example: Group A
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "404":
+          description: Group not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a Group.
+      description: Deletes a Group with the specified ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the Group to delete.
+      responses:
+        "204":
+          description: Group successfully deleted; no content returned.
+        "404":
+          description: Group not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /groups/{id}/users:
+    get:
+      summary: Get the User Id's belonging to a Group.
+      description: Returns a array of User Id's belonging to the Group which has the given ID.
+      parameters:
+        - in: path
+          name: id
+          description: Unique identifier of the Group.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserIdList"
+        "404":
+          description: Group not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Add a new User to a Group.
+      description: Add a new User to a Group by providing the Users unique Identifier.
+      requestBody:
+        description: User data.
+        content:
+          application/json:
+            schema:
+              type: integer
+              description: User Id of the User which should be added to the Group.
+              required: true
+      responses:
+        "201":
+          description: User successfully added.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /groups/{id}/users/{uer_id}:
+    delete:
+      summary: Delete a User from a Group.
+      description: Deletes a User from a Group with the specified ID by providing the unique identifier of the User.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the Group.
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the User which should be deleted from the Group.
+      responses:
+        "204":
+          description: User Id successfully deleted; no content returned.
+        "404":
+          description: Group or User Id not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /groups/{id}/apis:
+    get:
+      summary: Get the Api Id's belonging to a Group.
+      description: Returns a array of Api Id's belonging to the Group which has the given ID.
+      parameters:
+        - in: path
+          name: id
+          description: Unique identifier of the Group.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiIdList"
+        "404":
+          description: Group not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Add a new Api Id to a Group.
+      description: Add a new Api Id to a Group.
+      requestBody:
+        description: API data.
+        content:
+          application/json:
+            schema:
+              type: integer
+              description: Api Id of the new Api
+              required: true
+      responses:
+        "201":
+          description: Api successfully added.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /groups/{id}/apis/{api_id}:
+    delete:
+      summary: Delete a Api Id from a Group.
+      description: Deletes a Api Id from a Group with the specified ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the Group.
+        - in: path
+          name: api_id
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the Api which should be deleted from the Group.
+      responses:
+        "204":
+          description: Api Id successfully deleted; no content returned.
+        "404":
+          description: Group or Api Id not found.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: unique identifier of the User.
+        name:
+          type: string
+          description: Name of the User.
+          example: John Doe
+    UserList:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: unique identifier of the Group.
+        name:
+          type: string
+          description: Name of the Group.
+          example: Group A
+    GroupList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Group'
+    UserId:
+      type: integer
+      description: Unique Identifier of an User
+    UserIdList:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserId'
+    ApiId:
+      type: integer
+      description: Unique Identifier of an Api.
+    ApiIdList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ApiId'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message

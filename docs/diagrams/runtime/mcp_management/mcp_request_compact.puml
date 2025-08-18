@@ -1,0 +1,37 @@
+@startuml
+autonumber
+
+participant handler as ":McpRequestHandler"
+participant manager as ":McpServerManager"
+participant user as ":UserManagementClient"
+participant alice_server as "aliceServer:GroMoSoKoMcpServer"
+
+
+-> handler: handleRequest(request)
+activate handler
+handler -> manager: getServerForUser("alice")
+activate manager
+note over manager: server = servers.get("alice")
+
+alt server == null
+
+    manager ->> user: getToolsForUser("alice")
+    activate user
+    manager <-- user: :List<ToolSet>
+    deactivate user
+
+    note over manager: build new server
+end
+
+handler <-- manager: aliceServer
+deactivate manager
+
+handler -> alice_server: handle(request)
+activate alice_server
+note over alice_server: handle request
+handler <-- alice_server: response
+deactivate alice_server
+<-- handler: mcp response
+deactivate handler
+
+@enduml

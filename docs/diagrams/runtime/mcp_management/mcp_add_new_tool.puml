@@ -1,0 +1,17 @@
+@startuml
+participant controller as ":ToolController"
+participant service as ":ToolService"
+participant repository as ":ToolRepository"
+database tool_db as "Tool Database"
+
+->  controller: POST /tools
+
+controller -> service: addTool(id, tool_specification)
+service -> repository: insert(tool_specification)
+repository -> tool_db: INSERT
+service <-- repository
+controller <-- service
+<-- controller: 201 Created
+
+
+@enduml
