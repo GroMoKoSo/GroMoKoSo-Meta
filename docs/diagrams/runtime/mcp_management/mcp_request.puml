@@ -1,0 +1,63 @@
+@startuml
+autonumber
+
+actor client as "alice:McpClient"
+
+participant router as ":McpRouterConfig"
+participant handler as ":McpRequestHandler"
+participant manager as ":McpServerManager"
+participant alice_server as "aliceServer:GroMoSoKoMcpServer"
+participant server_router as "server_router:RouterFunction"
+participant mcp_server as "mcp_server:McpAsyncServer"
+participant tool as ":AsyncToolSpecification"
+participant tool_factory as ":ToolFactory"
+participant api as ":ApiManagementClient"
+
+client -> router: mcp request
+activate router
+router -> handler: handleRequest(request)
+activate handler
+handler -> manager: getServerForUser("alice")
+activate manager
+manager -> manager: servers.get("alice")
+
+alt server == null
+    note over manager: build new server
+end
+
+handler <-- manager: aliceServer
+deactivate manager
+
+handler -> alice_server: handle(request)
+activate alice_server
+alice_server -> server_router: route(request)
+activate server_router
+server_router -> mcp_server: handle request
+activate mcp_server
+mcp_server -> tool: invoke(request)
+activate tool
+tool -> tool_factory: invoke(request)
+activate tool_factory
+tool_factory -> api: call(request)
+activate api
+
+tool_factory <-- api: api response
+deactivate api
+tool <-- tool_factory: api response
+deactivate tool_factory
+mcp_server <-- tool: mcp response
+deactivate tool
+server_router <-- mcp_server: response
+deactivate mcp_server
+alice_server <-- server_router: response
+deactivate server_router
+handler <-- alice_server: response
+deactivate alice_server
+
+router <-- handler: :ServerResponse
+deactivate handler
+
+client <-- router: mcp response
+deactivate router
+
+@enduml

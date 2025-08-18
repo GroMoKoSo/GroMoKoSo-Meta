@@ -1,0 +1,56 @@
+@startuml
+autonumber
+
+participant manager as ":McpServerManager"
+participant user as ":UserManagementClient"
+participant provider as ":GroMoSoKoMcpServerProvider"
+
+-> manager: getServerForUser("alice)
+alt server == null
+    par
+        manager ->> user: getToolsForUser("alice")
+        activate user
+        manager <-- user: :List<ToolSet>
+        deactivate user
+    else
+        manager -> provider: builder()
+        activate provider
+        create participant builder as "builder:GroMoSoKoMcpServerSpecification"
+        provider -> builder: new
+        activate builder
+        manager <-- provider: builder
+        deactivate provider
+    end
+
+
+
+    manager -> builder: name("alice")
+
+    participant tool_factory as ":ToolFactory"
+
+    loop for each toolSet in toolSets
+        manager -> builder: addToolSet(toolSet)
+        activate tool_factory
+        loop for each tool in toolSet
+            builder -> tool_factory: create(toolSet)
+            create participant tool as ":AsyncToolSpecification"
+            tool_factory -> tool: new
+            builder <- tool_factory: :AsyncToolSpecification
+        end
+            deactivate tool_factory
+    end
+
+    manager -> builder: build()
+
+    create participant server_router as "server_router:RouterFunction"
+    builder -> server_router : new
+    create participant mcp_server as "mcp_server:McpAsyncServer"
+    builder -> mcp_server : new
+
+    create participant alice_server as "aliceServer:GroMoSoKoMcpServer"
+    builder -> alice_server: new(mcp_server, server_router)
+    manager <-- builder: aliceServer
+
+    destroy builder
+end
+@enduml

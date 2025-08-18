@@ -1,0 +1,20 @@
+@startuml "MCP Client OAuth 2.0 Authorization"
+    actor client as "MCP Client (Client)"
+    actor resource_server as "MCP Server (Resource Server)"
+    actor auth_server as "Keycloak (Authorization Server)"
+
+    client -> resource_server: MCP request without token (POST /sse)
+    client <-- resource_server: HTTP 401 Unauthorized (with www-authenticate header)
+    note over client: Extract resource_metadata\n from www-authenticate
+    client -> resource_server: get resource metadata (GET /.well-known/oauth-protected-resource)
+    client <-- resource_server: resource metadata with authorization server url
+    note over client: validate rs metadata,\n build authorization server\n metadata url
+    client -> auth_server: get authorization server metadata (GET /.well-known/oauth-authorization-server)
+    client <-- auth_server: authorization server metadata
+    note over client, auth_server: OAuth 2.1 authorization flow happens here
+    client -> auth_server: exchange authorization code with access token
+    client <-- auth_server: Access Token
+    client -> resource_server: MCP request with access token (POST /sse)
+    client <-- resource_server: MCP response
+    note over client, resource_server: MCP communication continues with valid token
+@enduml
