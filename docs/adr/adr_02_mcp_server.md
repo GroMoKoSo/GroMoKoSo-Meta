@@ -305,7 +305,7 @@ To register that challenge point we need to add another method call in the Secur
 
 #### MCP client OAuth 2.0 authentication sequence
 
-![MCP client OAuth 2.0 authentication sequence diagram](/docs/mcp_management/sequence_diagrams/mcp_client_oauth2.svg)
+![MCP client OAuth 2.0 authentication sequence diagram](/docs/diagrams/runtime/mcp_management/mcp_client_oauth2.svg)
 
 1. Request protected resource (GET /sse)
 2. Response 401 Unauthorised with www-authenticate bearer
