@@ -10,6 +10,13 @@ paths:
     get:
       summary: Get all Users.
       description: Returns a list of all Users.
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: An general purpose query to search for an user by his attributes
+
       responses:
         "200":
           description: Successful operation
@@ -137,13 +144,24 @@ paths:
           required: true
           schema:
             type: integer
+        - in: query
+          name: isActivated
+          description: Whether only Api Ids should be returned which are set as activated for the user, defualtvalue = false.
+          schema:
+            type: boolean
+        - in: query
+          name: groupApis
+          description: Whether Api Ids should be returned which the user has only access to because of the groups he belongs to.
+          schema:
+            type: boolean
+
       responses:
         "200":
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiIdList"
+                $ref: "#/components/schemas/ApiActivatedList"
         "404":
           description: User not found.
         default:
@@ -200,11 +218,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /users/{id}/groups:
+    get:
+      summary: Get all Groups of which the User is a Member.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupList"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 
   /groups:
     get:
       summary: Get all Groups.
       description: Returns a list of all Groups.
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: An general purpose query to search for an group by his attributes
+          example: username=abc
       responses:
         "200":
           description: Successful operation
@@ -406,13 +448,18 @@ paths:
           required: true
           schema:
             type: integer
+        - in: query
+          name: isActivated
+          description: Whether only Api Ids should be returned which are set as activated for the group, defualtvalue = false.
+          schema:
+            type: boolean
       responses:
         "200":
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiIdList"
+                $ref: "#/components/schemas/ApiActivatedList"
         "404":
           description: Group not found.
         default:
@@ -514,6 +561,13 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ApiId'
+    ApiActivatedList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ApiActivated'
+    ApiActivated:
+      type: integer
+      description: Unique Identifier of an Api with an boolean indicating if the API is activated.
     Error:
       type: object
       properties:
