@@ -367,23 +367,23 @@ This separation improves maintainability by making each layer responsible for a 
 └──────────────────────────┘
 ```
 
-![Mcp Server Components](/docs/diagrams/level_3_component_class/mcp_server_container_component_view.svg)
+![Mcp Server Components](/docs/diagrams/level_3_component/mcp_server_container_component_view.svg)
 
-| Element        | Description                                                                                                                |
-|----------------|----------------------------------------------------------------------------------------------------------------------------|
-| Mcp Client     | Mcp client that confirms to the [mcp specification](https://modelcontextprotocol.io/specification/2025-06-18/client/roots) |
-| ApiManagement  | see chapter [5.2.3](#523-apimanagement)                                                                                    |
-| UserManagement | see chapter [5.2.2](#522-usermanagement)                                                                                   |
-| ToolDb         | SQL Database storing tool definitions                                                                                      |
-| Controller     | (REST) Endpoints for external systems                                                                                      |
-| Service        | Business logic/ Mcp servers                                                                                                |
-| Model          | Entities (ORM), value objects                                                                                              |
-| Repository     | Encapsulate persistence                                                                                                    |
-| Security       | Cross-cutting concern: OAuth2 authorization                                                                                |
-| Configuration  | Cross-cutting concern: Spring configuration classes                                                                        |
-| Client         | Cross-cutting concern: Communication with other subsystems (ApiManagement, UserManagement)                                 |
+| Element        | Description                                                                                                                 |
+|----------------|-----------------------------------------------------------------------------------------------------------------------------|
+| Mcp Client     | Mcp client that confirms to the [mcp specification](https://modelcontextprotocol.io/specification/2025-06-18/client/roots)  |
+| ApiManagement  | see chapter [5.2.3](#523-apimanagement)                                                                                     |
+| UserManagement | see chapter [5.2.2](#522-usermanagement)                                                                                    |
+| ToolDb         | SQL Database storing tool definitions                                                                                       |
+| Controller     | (REST) Endpoints for external systems                                                                                       |
+| Service        | Business logic/ Mcp servers                                                                                                 |
+| Model          | Entities (ORM), value objects                                                                                               |
+| Repository     | Encapsulate persistence                                                                                                     |
+| Security       | Cross-cutting concern: OAuth2 authorization                                                                                 |
+| Configuration  | Cross-cutting concern: Spring configuration classes                                                                         |
+| Client         | Cross-cutting concern: Communication with other subsystems (ApiManagement, UserManagement)                                  |
 
-The class diagram can be found [here](/docs/diagrams/level_3_component_class/mcp_management_class_diagram.puml)
+The class diagram can be found [here](/docs/diagrams/level_3_component/mcp_management_class_diagram.puml)
 
 ### 5.3.5 Spec2Tool
 
