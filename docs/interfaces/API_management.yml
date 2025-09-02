@@ -1,0 +1,246 @@
+openapi: 3.0.3
+info:
+  title: ApiManagement REST API
+  version: 1.0.0
+  description: Manage stored API specs and invoke them.
+
+servers:
+  - url: https://api.example.com
+
+paths:
+  /apis:
+    get:
+      summary: Get all saved API specs
+      parameters:
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/dataFormat'
+        - $ref: '#/components/parameters/user'
+        - $ref: '#/components/parameters/group'
+      responses:
+        '200':
+          description: List of APIs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/API'
+    post:
+      summary: Add a new API spec
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APICreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              description: URL of the created resource
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API'
+
+  /apis/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    get:
+      summary: Get API spec by id
+      responses:
+        '200':
+          description: The API spec
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API'
+        '404':
+          description: Not found
+    put:
+      summary: Edit API spec by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APIUpdate'
+      responses:
+        '200':
+          description: Updated API spec
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API'
+        '404':
+          description: Not found
+    delete:
+      summary: Delete API spec by id
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not found
+
+  /apis/{id}/invoke:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    post:
+      summary: Invoke an existing API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvokeRequest'
+      responses:
+        '200':
+          description: Invocation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvokeResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: API not found
+
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: API identifier
+    query:
+      name: query
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Free-text search over name/description
+    dataFormat:
+      name: dataFormat
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter by data format (e.g., openapi, graphql)
+    user:
+      name: user
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter by owner user
+    group:
+      name: group
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter by group
+
+  schemas:
+    API:
+      type: object
+      required: [id, name, version, dataFormat, spec]
+      properties:
+        id:
+          type: integer
+          example: 42
+        name:
+          type: string
+          example: Orders API
+        description:
+          type: string
+          example: CRUD for orders
+        version:
+          type: string
+          example: "1.2.0"
+        dataFormat:
+          type: string
+          example: openapi
+        spec:
+          type: string
+          description: The API specification document (e.g., OpenAPI YAML) as text
+
+    APICreate:
+      type: object
+      required: [name, version, dataFormat, spec]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+        dataFormat:
+          type: string
+        spec:
+          type: string
+
+    APIUpdate:
+      type: object
+      description: Fields allowed to change during update
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+        dataFormat:
+          type: string
+        spec:
+          type: string
+
+    InvokeRequest:
+      type: object
+      required: [requestType, requestPath]
+      properties:
+        requestType:
+          type: string
+          enum: [POST, PUT, GET, PATCH, DELETE]
+        requestPath:
+          type: string
+          description: Relative path to call on the target API (e.g., /orders/123)
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        body:
+          type: string
+          format: byte
+          description: Optional base64-encoded request body
+        requestParameter:
+          type: object
+          additionalProperties:
+            type: string
+          description: Query parameters to append (key/value)
+        pathParameter:
+          type: object
+          additionalProperties:
+            type: string
+          description: Path params map (keys treated as strings)
+
+    InvokeResponse:
+      type: object
+      required: [responseCode]
+      properties:
+        responseCode:
+          type: string
+          example: "200"
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        body:
+          type: string
+          format: byte
+          description: Base64-encoded response body (if any)
