@@ -206,11 +206,6 @@ are valid for whole organizations and companies.
 
 ---
 
-Let me know if you'd like it formatted for a document or presentation.
-
-
-
-
 ## 2.2 Technical constraints
 | ID | Constraint   | Description                                                         |
 |----|--------------|---------------------------------------------------------------------|
@@ -345,15 +340,8 @@ template:
 
 ## 5.3 Level 3: Component/ Class View
 
-### 5.3.1 UI
-
-### 5.3.2 UserManagement
-
-### 5.3.3 ApiManagement
-
-### 5.3.4 McpManagement
-
-The McpManagement uses a layer architecture to cleanly separate the different concerns. 
+### 5.3.1 Multi-layered architecture
+To achieve a sufficent separation of concerns, a common architecture which containers can implement is as follows.
 This separation improves maintainability by making each layer responsible for a single concern.
 ```
 ┌──────────────────────────┐
@@ -367,25 +355,48 @@ This separation improves maintainability by making each layer responsible for a 
 └──────────────────────────┘
 ```
 
-![Mcp Server Components](/docs/diagrams/level_3_component/mcp_server_container_component_view.svg)
+### 5.3.2 UI
 
-| Element        | Description                                                                                                                 |
-|----------------|-----------------------------------------------------------------------------------------------------------------------------|
-| Mcp Client     | Mcp client that confirms to the [mcp specification](https://modelcontextprotocol.io/specification/2025-06-18/client/roots)  |
-| ApiManagement  | see chapter [5.2.3](#523-apimanagement)                                                                                     |
-| UserManagement | see chapter [5.2.2](#522-usermanagement)                                                                                    |
-| ToolDb         | SQL Database storing tool definitions                                                                                       |
-| Controller     | (REST) Endpoints for external systems                                                                                       |
-| Service        | Business logic/ Mcp servers                                                                                                 |
-| Model          | Entities (ORM), value objects                                                                                               |
-| Repository     | Encapsulate persistence                                                                                                     |
-| Security       | Cross-cutting concern: OAuth2 authorization                                                                                 |
-| Configuration  | Cross-cutting concern: Spring configuration classes                                                                         |
-| Client         | Cross-cutting concern: Communication with other subsystems (ApiManagement, UserManagement)                                  |
+### 5.3.3 UserManagement
 
-The class diagram can be found [here](/docs/diagrams/level_3_component/mcp_management_class_diagram.puml)
+### 5.3.4 ApiManagement
+The ApiManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
+to cleanly separate different concerns.
 
-### 5.3.5 Spec2Tool
+[TODO] Component View APIProxy
+
+| Element    | Description                               |
+|------------|-------------------------------------------|
+| Controller | (REST) Endpoints for external systems     |
+| Service    | Business Logic used by endpoint functions |
+| Repository | Handles data persistence                  |
+| Entity     | Entities and value-objects                |
+
+The corresponding class-diagram can be found TODO: Insert component_class diagram here
+
+### 5.3.5 McpManagement
+The McpManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
+to cleanly separate the different concerns.
+
+![Mcp Server Components](/docs/diagrams/level_3_component_class/mcp_server_container_component_view.svg)
+
+| Element        | Description                                                                                                                |
+|----------------|----------------------------------------------------------------------------------------------------------------------------|
+| Mcp Client     | Mcp client that confirms to the [mcp specification](https://modelcontextprotocol.io/specification/2025-06-18/client/roots) |
+| ApiManagement  | see chapter [5.2.3](#523-apimanagement)                                                                                    |
+| UserManagement | see chapter [5.2.2](#522-usermanagement)                                                                                   |
+| ToolDb         | SQL Database storing tool definitions                                                                                      |
+| Controller     | (REST) Endpoints for external systems                                                                                      |
+| Service        | Business logic/ Mcp servers                                                                                                |
+| Model          | Entities (ORM), value objects                                                                                              |
+| Repository     | Encapsulate persistence                                                                                                    |
+| Security       | Cross-cutting concern: OAuth2 authorization                                                                                |
+| Configuration  | Cross-cutting concern: Spring configuration classes                                                                        |
+| Client         | Cross-cutting concern: Communication with other subsystems (ApiManagement, UserManagement)                                 |
+
+The class diagram can be found [here](/docs/diagrams/level_3_component_class/mcp_management_class_diagram.puml)
+
+### 5.3.6 Spec2Tool
 
 # 6. Runtime View {#section-runtime-view}
 
