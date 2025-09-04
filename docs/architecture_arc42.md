@@ -405,7 +405,7 @@ The corresponding entity-relationship-diagram can be found [here](/docs/diagrams
 The ApiManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
 to cleanly separate different concerns.
 
-[TODO] Component View APIProxy
+![API Management component view](/docs/diagrams/level_3_component/api_proxy_container_component_view.svg)
 
 | Element    | Description                               |
 |------------|-------------------------------------------|
@@ -414,7 +414,8 @@ to cleanly separate different concerns.
 | Repository | Handles data persistence                  |
 | Entity     | Entities and value-objects                |
 
-The corresponding class-diagram can be found TODO: Insert component_class diagram here
+The corresponding class-diagram can be found [here](/docs/diagrams/level_4_class/api-management-class-diagram.drawio).
+The corresponding entity-relationship-diagram can be found [here](/docs/diagrams/level_4_class/api-management-er-diagram.svg).
 
 ### 5.3.5 McpManagement
 The McpManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
