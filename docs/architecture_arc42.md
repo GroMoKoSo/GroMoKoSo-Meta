@@ -342,6 +342,18 @@ The interfaces to request or update the data of the user management are defined 
 
 ### 5.2.3 ApiManagement
 
+The ApiManagement Container is responsible for handling all external API interactions and the management of apis, specifications and tokens. 
+Its central component, the ApiProxy container, provides REST endpoints that allow the UI to retrieve API specifications 
+and the McpManagement subsystem to invoke external API calls. 
+In addition, ApiProxy manages tool registration and delegates specification conversion tasks to the Spec2Tool subsystem. 
+To ensure secure communication, ApiProxy stores and retrieves authentication tokens from the ApiDB container using SQL queries. 
+This design cleanly separates responsibilities: 
+
+-ApiProxy acts as the gateway for specification handling and API invocation
+-ApiDb ensures reliable credential storage. 
+
+Together, these containers form a cohesive unit that abstracts the complexity of external APIs and provides a uniform interface to the rest of the system.
+
 ![ApiManagement Containers](/docs/diagrams/level_2_container/api_management_subsystem_container_view.svg)
 
 ### 5.2.4 McpManagement
