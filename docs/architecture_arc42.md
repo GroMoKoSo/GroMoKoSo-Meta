@@ -323,12 +323,39 @@ template:
 ![UI Containers](/docs/diagrams/level_2_container/ui_subsystem_container_view.svg)
 
 ### 5.2.2 UserManagement
-
 ![UserManagement Containers](/docs/diagrams/level_2_container/user_management_subsystem_container_view.svg)
+
+The purpose of this Microservice is to provide and save all relevant data regarding the users and groups which will be using this Application.
+This data consists of:
+- User data:
+    - Unique username
+    - First- and Lastname
+    - E-Mail
+    - Role
+    - API Id's which the user has access to.
+- Group data:
+  - Unique group of the name
+  - Users which are part of the group.
+  - API Id's which the users of the group have access to.
+
+The interfaces to request or update the data of the user management are defined as REST API in the [User Managament REST API  Documentation](/docs/interfaces/user_management.yaml)
 
 ### 5.2.3 ApiManagement
 
 ![ApiManagement Containers](/docs/diagrams/level_2_container/api_management_subsystem_container_view.svg)
+
+The ApiManagement Container is responsible for handling all external API interactions and the management of apis, specifications and tokens.
+Its central component, the ApiProxy container, provides REST endpoints that allow the UI to retrieve API specifications
+and the McpManagement subsystem to invoke external API calls.
+In addition, ApiProxy manages tool registration and delegates specification conversion tasks to the Spec2Tool subsystem.
+To ensure secure communication, ApiProxy stores and retrieves authentication tokens from the ApiDB container using SQL queries.
+This design cleanly separates responsibilities:
+
+-ApiProxy acts as the gateway for specification handling and API invocation
+-ApiDb ensures reliable credential storage.
+
+Together, these containers form a cohesive unit that abstracts the complexity of external APIs and provides a uniform interface to the rest of the system.
+
 
 ### 5.2.4 McpManagement
 
@@ -358,6 +385,21 @@ This separation improves maintainability by making each layer responsible for a 
 ### 5.3.2 UI
 
 ### 5.3.3 UserManagement
+The UserManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
+to cleanly separate different concerns.
+
+![User management component view](/docs/diagrams/level_3_component/user_management_container_component_view.svg)
+
+| Element     | Description                                     |
+|-------------|-------------------------------------------------|
+| Controller  | (REST) Endpoints for external systems           |
+| Client      | Calling (REST) Endpoints of other Microservices |
+| Service     | Business Logic used by endpoint functions       |
+| Repository  | Handles data persistence                        |
+| Entity      | Entities and value-objects                      |
+
+The corresponding class-diagram can be found [here](/docs/diagrams/level_4_class/user_management_class_diagram.drawio).
+The corresponding entity-relationship-diagram can be found [here](/docs/diagrams/level_4_class/user_management_er_diagramm.drawio).
 
 ### 5.3.4 ApiManagement
 The ApiManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
@@ -378,7 +420,7 @@ The corresponding class-diagram can be found TODO: Insert component_class diagra
 The McpManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
 to cleanly separate the different concerns.
 
-![Mcp Server Components](/docs/diagrams/level_3_component_class/mcp_server_container_component_view.svg)
+![Mcp Server Components](/docs/diagrams/level_3_component/mcp_server_container_component_view.svg)
 
 | Element        | Description                                                                                                                |
 |----------------|----------------------------------------------------------------------------------------------------------------------------|
@@ -394,7 +436,7 @@ to cleanly separate the different concerns.
 | Configuration  | Cross-cutting concern: Spring configuration classes                                                                        |
 | Client         | Cross-cutting concern: Communication with other subsystems (ApiManagement, UserManagement)                                 |
 
-The class diagram can be found [here](/docs/diagrams/level_3_component_class/mcp_management_class_diagram.puml)
+The class diagram can be found [here](/docs/diagrams/level_4_class/mcp_management_class_diagram.drawio)
 
 ### 5.3.6 Spec2Tool
 
