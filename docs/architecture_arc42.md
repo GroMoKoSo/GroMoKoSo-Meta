@@ -344,6 +344,19 @@ The interfaces to request or update the data of the user management are defined 
 
 ![ApiManagement Containers](/docs/diagrams/level_2_container/api_management_subsystem_container_view.svg)
 
+The ApiManagement Container is responsible for handling all external API interactions and the management of apis, specifications and tokens.
+Its central component, the ApiProxy container, provides REST endpoints that allow the UI to retrieve API specifications
+and the McpManagement subsystem to invoke external API calls.
+In addition, ApiProxy manages tool registration and delegates specification conversion tasks to the Spec2Tool subsystem.
+To ensure secure communication, ApiProxy stores and retrieves authentication tokens from the ApiDB container using SQL queries.
+This design cleanly separates responsibilities:
+
+-ApiProxy acts as the gateway for specification handling and API invocation
+-ApiDb ensures reliable credential storage.
+
+Together, these containers form a cohesive unit that abstracts the complexity of external APIs and provides a uniform interface to the rest of the system.
+
+
 ### 5.2.4 McpManagement
 
 ![McpManagement Containers](/docs/diagrams/level_2_container/mcp_management_subsystem_container_view.svg)
@@ -392,7 +405,7 @@ The corresponding entity-relationship-diagram can be found [here](/docs/diagrams
 The ApiManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
 to cleanly separate different concerns.
 
-[TODO] Component View APIProxy
+![API Management component view](/docs/diagrams/level_3_component/api_proxy_container_component_view.svg)
 
 | Element    | Description                               |
 |------------|-------------------------------------------|
@@ -401,7 +414,8 @@ to cleanly separate different concerns.
 | Repository | Handles data persistence                  |
 | Entity     | Entities and value-objects                |
 
-The corresponding class-diagram can be found TODO: Insert component_class diagram here
+The corresponding class-diagram can be found [here](/docs/diagrams/level_4_class/api-management-class-diagram.drawio).
+The corresponding entity-relationship-diagram can be found [here](/docs/diagrams/level_4_class/api-management-er-diagram.svg).
 
 ### 5.3.5 McpManagement
 The McpManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
