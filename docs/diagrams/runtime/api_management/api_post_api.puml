@@ -1,0 +1,51 @@
+@startuml
+participant api_controller as ":ApiController"
+participant api_service as ":ApiService"
+participant user_management_client as ":UserManagementClient"
+participant user_management_subsystem as "UserManagementSubsystem"
+participant spec2tool_client as ":Spec2ToolClient"
+participant spec2tool_subsystem as ":Spec2ToolSubsystem"
+participant mcp_management_client as ":McpManagementClient"
+participant mcp_management_subsystem as "McpManagementSubsystem"
+participant api_repository as ":ApiRepository"
+database api_database as "Api Database"
+
+-> api_controller: POST /apis
+api_controller -> api_service : + saveApi(api: Api): Api
+api_service -> user_management_client: + isUserAuthorized(user: string, group: string)
+
+alt group == null && user != null
+    user_management_client -> api_service : true
+else group != null && user != null
+    user_management_client -> user_management_subsystem : GET /groups/<id>/users
+    user_management_client <-- user_management_subsystem : RESPONSE [200] [User]
+    alt user in users
+        api_service <-- user_management_client : true
+    else else
+        api_service <-- user_management_client : false
+    end
+end
+
+alt isUserAuthorized() == false
+    api_controller <-- api_service : null
+    <-- api_controller : RESPONSE [401]
+else isUserAuthorized() == true
+    api_service -> spec2tool_client : + convertSpec2Tool(spec: string): ToolDefinition
+    spec2tool_client -> spec2tool_subsystem : POST /convert
+    spec2tool_client <-- spec2tool_subsystem : RESPONSE [200] {ToolDefinition}
+    api_service <-- spec2tool_client : ToolDefinition
+
+    api_service -> mcp_management_client : addTool(apiId: int, definition: ToolDefintion)
+    mcp_management_client -> mcp_management_subsystem : POST /tools
+    mcp_management_client <-- mcp_management_subsystem : RESPONSE [201]
+    api_service <-- mcp_management_client
+
+    api_service -> api_repository : insert(api: Api)
+    api_repository -> api_database : INSERT
+    api_repository <-- api_database
+    api_service <-- api_repository
+    api_controller <-- api_service : Api
+    <-- api_controller : RESPONSE [200] {Api}
+end
+
+@enduml

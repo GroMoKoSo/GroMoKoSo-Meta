@@ -1,0 +1,36 @@
+@startuml
+participant api_controller as ":ApiController"
+participant api_service as ":ApiService"
+participant user_management_client as ":UserManagementClient"
+participant user_management_subsystem as "UserManagementSubsystem"
+participant api_repository as ":ApiRepository"
+database api_database as "Api Database"
+
+-> api_controller: GET /apis/<id>
+
+api_controller -> api_service: + fetchApiById(apiId: int)
+api_service -> user_management_client: + fetchApis(user: string, group: string)
+
+alt user != null
+    user_management_client -> user_management_subsystem: GET /users/<id>/apis
+    user_management_client <-- user_management_subsystem: RESPONSE [200] [ApiAccess]
+    api_service <-- user_management_client : List<ApiAccess>
+else group != null
+    user_management_client -> user_management_subsystem: GET /groups/<id>/apis
+    user_management_client <-- user_management_subsystem: RESPONSE [200] [ApiAccess]
+    api_service <-- user_management_client : List<ApiAccess>
+end
+
+alt apiId in List<ApiAccess>
+    api_service -> api_repository: + select(apiId: int): Api
+    api_repository -> api_database: + SELECT * WHERE id == apiId
+    api_database --> api_repository: Api
+    api_repository --> api_service: Api
+    api_service --> api_controller: Api
+    <-- api_controller : RESPONSE [200] {Api}
+else else
+    api_service --> api_controller: null
+    <-- api_controller : RESPONSE [404]
+end
+
+@enduml
