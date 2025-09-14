@@ -2,7 +2,7 @@
 participant api_controller as ":ApiController"
 participant api_service as ":ApiService"
 participant user_management_client as ":UserManagementClient"
-participant user_management_subsystem as "UserManagementSubsystem"
+participant user_management_subsystem as "UserManagementSubsystem\n«Subsystem»"
 participant api_repository as ":ApiRepository"
 database api_database as "Api Database"
 
