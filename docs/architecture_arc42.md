@@ -266,6 +266,38 @@ The project goal also requires the implementation of MCP-Tools.
 The system will be separated into multiple microservices which will be deployed as Docker containers.
 Each service will be responsible for a specific domain except the UI service.
 
+These services include:
+- McpManagement
+- UserManagement
+- ApiManagement
+- Spec2Tool
+- UI
+
+Each microservice including their responsibility and purpose is described in [4.1](#41-subservices)
+
+## 4.1 Subservices
+### 4.1.1 McpManagement
+MCP management will provide Servers dynamically depending on user requests. Each user will have their own MCP Server
+to ensure that the corresponding tools of the user will be available. Therefore the usage of the servers will be
+monitored and additional servers will be started or shut down if needed.
+
+### 4.1.2 UserManagement
+User management is responsible for managing access-rights for MCP tools which are split between users and groups.
+When actions like the execution of MCP tools or modifying APIs are made, User management provides a method to check
+wether these operations should be authorized.
+
+### 4.1.3 ApiManagement
+Api management is the entrypoint for creating, modifying and deleting APIs which should be used as MCP Tools.
+Api management uses user management to check if operations should be allowed, Spec2Tool to convert OpenAPI specs to
+MCP tools and mcp management to finally create these MCP tools.
+
+### 4.1.4 Spec2Tool
+Spec2Tool is responsible for converting OpenAPI specs to an internal representation of MCP tools. These representations
+are used by mcp management to create MCP tools.
+
+### 4.1.5 UI
+UI provides a graphical user interface for the user to interact with the system itself. Each use-case which has been
+defined is covered by the UI. UI uses REST endpoints which are provided by each microservice to perform actions.
 
 ## Organizational Decisions
 
@@ -351,8 +383,8 @@ In addition, ApiProxy manages tool registration and delegates specification conv
 To ensure secure communication, ApiProxy stores and retrieves authentication tokens from the ApiDB container using SQL queries.
 This design cleanly separates responsibilities:
 
--ApiProxy acts as the gateway for specification handling and API invocation
--ApiDb ensures reliable credential storage.
+- ApiProxy acts as the gateway for specification handling and API invocation
+- ApiDb ensures reliable credential storage.
 
 Together, these containers form a cohesive unit that abstracts the complexity of external APIs and provides a uniform interface to the rest of the system.
 
