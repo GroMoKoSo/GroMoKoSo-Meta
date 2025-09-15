@@ -424,7 +424,6 @@ The McpManagement implements a layer architecture as described in [8.1](#81-mult
 to cleanly separate the different concerns.
 
 ![Mcp Server Components](/docs/diagrams/level_3_component/mcp_server_container_component_view.svg)
-TODO: update Diagram
 
 | Element        | Description                                                                                                                |
 |----------------|----------------------------------------------------------------------------------------------------------------------------|
