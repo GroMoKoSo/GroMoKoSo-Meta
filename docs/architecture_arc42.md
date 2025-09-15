@@ -33,7 +33,7 @@ architects and development team must consider. These include
 -   relevant stakeholders and their expectations
 
 ## 1.1 Goals
-Our goal is to develop a plattform which allows users to integrate existing RESTful APIs
+Our goal is to develop a platform which allows users to integrate existing RESTful APIs
 and automatically create [MCP](#12-model-context-protocol-mcp) Tools which empower the capabilities of Large Language Models (LLMs).
 Users should be able to define API specifications in a WYSIWYG interface or upload OpenAPI specifications.
 
@@ -162,9 +162,7 @@ are valid for whole organizations and companies.
 
 
 # 2.3 Conventions
-
-TODO: Fix link
-Programming Conventions are documented [here](/home/conventions)
+Programming Conventions are documented on the wiki page in Gitlab. And can be found [here](https://git.thm.de/softwarearchitektur-wz-ss24/studentswa2025/enton/gromokoso/-/wikis/home/conventions).
 
 
 # 3. Context and Scope
@@ -213,6 +211,10 @@ The project goal also requires the implementation of MCP-Tools.
 
 The system will be separated into multiple microservices which will be deployed as Docker containers.
 Each service will be responsible for a specific domain except the UI service.
+The decision to use microservices instead of a monolithic architecture was taken with respect to 
+expandability, maintainability, reusability and interchangeability. 
+The decision to use microservices was also taken with respect to the stakeholders requirements to provide a 
+complex architecture with the attributes mentioned above.
 
 These services include:
 - McpManagement
@@ -223,8 +225,6 @@ These services include:
 
 Each microservice including their responsibility and purpose is described in [4.2](#42-subservices)
 
-TODO: Tell me why
-
 ## 4.2 Subservices
 
 ### 4.2.1 UI
@@ -234,7 +234,7 @@ defined is covered by the UI. UI uses REST endpoints which are provided by each 
 ### 4.2.2 UserManagement
 User management is responsible for managing access-rights for MCP tools which are split between users and groups.
 When actions like the execution of MCP tools or modifying APIs are made, User management provides a method to check
-wether these operations should be authorized.
+whether these operations should be authorized.
 
 ### 4.2.3 ApiManagement
 Api management is the entrypoint for creating, modifying and deleting APIs which should be used as MCP Tools.
@@ -299,23 +299,39 @@ TODO: Add Mock-ups and short purpose description
 ### 5.2.2 UserManagement
 ![UserManagement Containers](/docs/diagrams/level_2_container/user_management_subsystem_container_view.svg)
 
-TODO: Explain Group Roles and System roles
-
 The purpose of this Microservice is to provide and save all relevant data regarding the users and groups which will be using this Application.
 This data consists of:
 - User data:
     - Unique username
     - First- and Lastname
     - E-Mail
-    - Systemrole
+    - System Role which can be one of the following:
+      - System member
+      - System admin
     - API Id's which the user has access to and whether they are currently active.
 - Group data:
   - Unique name of the group.
   - Users which can have the following roles within the group:
-    - member
-    - editor
-    - admin
+    - Group member
+    - Group editor
+    - Group admin
   - API Id's which the users of the group have access to.
+  - Group Type which can be one of the following:
+    - Private
+    - Public
+
+In the following table is an overview which further describes the mentioned roles or types above:  
+
+| Role / Type   | Description                                            | Rights                                                                                                                                                                                                |
+|---------------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| System member | Standard role in the System.                           | MUST be able to create and use personal tools.<br/> MUST be able to join public groups and leave any joined groups.<br/>MUST be able to use tools from groups they belong to.                         |
+| System Admin  | System wide admin role.                                | MUST be able to create users, assign roles, and create/delete groups.<br/>MUST be able to manage all groups, including assigning group roles.                                                         |
+| Group member  | Standard role within groups.                           | MUST be able to use tools of the group.<br/>MUST be able to leave the group.                                                                                                                          |
+| Group editor  | Allowed to edit tool settings within the group.        | MUST be able to create and edit tools within the group.                                                                                                                                               |
+| Group admin   | Allowed to manage tools and members within the group.  | MUST be able to create and edit tools within the group.<br/>MUST be able to manage group members (add/remove/edit roles).<br/>MUST be able to edit the group profile (name, description, visibility). |
+| Private group | Group is only visible for corresponding group members. | -                                                                                                                                                                                                     |
+| Public group  | Group is visible to all System members.                | -                                                                                                                                                                                                     |
+
 
 The interfaces to request or update the data of the user management are defined as a REST API in the [User management REST API documentation](/docs/interfaces/user_management.yaml)
 
