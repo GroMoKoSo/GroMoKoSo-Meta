@@ -292,7 +292,7 @@ template:
 
 ![UI Containers](/docs/diagrams/level_2_container/ui_subsystem_container_view.svg)
 
-TODO: Add Mock-ups and short purpose description
+[Link to excalidraw board](https://excalidraw.com/#room=e2d64da42ffe07c87d8e,l5fMXfX1RgUFZkcbNKHvIQ)
 
 ### 5.2.2 UserManagement
 ![UserManagement Containers](/docs/diagrams/level_2_container/user_management_subsystem_container_view.svg)
@@ -383,7 +383,16 @@ The interfaces which Spec2Tool offers are defined as a REST API in the [Spec2Too
 
 ### 5.3.1 UI
 
-TODO: Add C4 if there are any, if not delete this subsection
+The user interface implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
+to cleanly separate different concerns.
+
+| Element     | Description                                         |
+|-------------|-----------------------------------------------------|
+| Router      | React component that handles routing                |
+| Page        | React component that can ge accessed throug a route |
+
+
+The corresponding class-diagram can be found [here](/docs/diagrams/level_4_class/user_interface_container_component_view.svg).
 
 ### 5.3.2 UserManagement
 The UserManagement implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
