@@ -1,0 +1,22 @@
+@startuml
+autonumber
+
+participant client as ":McpClient"
+participant mcpManagement as "mcp server:McpManagement"
+participant apiManagement as "api proxy:ApiManagement"
+participant api as ":External REST API"
+
+-> client : Invoke tool
+activate client
+client -> mcpManagement : POST /sse
+activate mcpManagement
+mcpManagement -> apiManagement : POST /api/{id}/invoke
+activate apiManagement
+apiManagement -> api : REST request
+activate api
+return REST response
+return
+return
+return
+
+@enduml

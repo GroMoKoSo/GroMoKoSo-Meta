@@ -260,7 +260,7 @@ All diagrams in this chapter use the following legend.
 
 ![Building block legend](/docs/diagrams/building_block_legend.svg)
 
-## 5.1 Level 1: Subsystems/ Mircoservices
+## 5.1 Level 1: Subsystems/ Mirco services
 
 ![GroMoKoSo Subsystems](/docs/diagrams/level_1_subsystem/gromokoso_subsystems.svg)
 
@@ -460,9 +460,19 @@ TODO: Add Sequence Diagrams based on Use cases (Also link use cases from beginni
 < Add description >
 
 ## Use MCP Tool
-< Which use case >
-< Diagram >
-< Add description >
+
+**Scenario**: A user/ LLM wants to invoke a mcp tool using an MCP client.
+
+![Sequenz diagram](/docs/diagrams/runtime/invoke_mcp_tool.png)
+
+1. The LLM invokes a mcp tool
+2. The mcp client sends a post request to the mcp server endpoint containing the parameter for the tool.
+3. The McpManagement uses the provided parameter to construct a REST request and call the external api. The call is done through the api proxy.
+4. The api proxy adds authentication to the api request and forwards the request to the corresponding external server.
+5. The external server returns a response.
+6. The api proxy wraps the response in a container to provide a standardized response and proper error handling.
+7. response forwarding
+8. response forwarding
 
 # 7. Deployment View {#section-deployment-view}
 
