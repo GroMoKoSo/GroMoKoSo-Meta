@@ -1,0 +1,53 @@
+@startuml
+title API Proxy Interactions
+
+actor "McpManagement\n<<Subsystem>>" as MCP
+
+
+
+
+  participant ":ApiController" as APICTRL
+  participant ":ApiService" as APISRV
+  participant ":UserManagementClient" as UMC
+
+
+participant "UserManagement\n<<Subsystem>>" as UM
+participant "ExternalApiClient" as EXT
+
+participant "ExternalSystem" as EXT2
+' ==== Entry (generic "Invoke API calls") ====
+MCP -> APICTRL : Invoke API call <<REST>>\n(e.g., PUT /apis/{id})
+APICTRL -> APISRV : updateApi(...) / invokeApi(...)
+
+' ==== Branch: needs Users & Groups / Authorization ====
+alt Request requires Users & Groups
+  APISRV -> UMC : isUserAuthorized(user, group)?
+
+  ' UMC talks to UserManagement, which in turn may call external APIs
+  UMC -> UM : GET /groups/{id}/users <<REST>>
+
+  UM --> UMC : 200 Users & Groups
+  UMC --> APISRV : auth result (true|false)
+
+  alt Authorized == false
+    APISRV --> APICTRL : Error(401 Unauthorized)
+    APICTRL --> MCP : HTTP 401 Unauthorized
+  else Authorized == true
+    APISRV -> EXT :  invoke(InvokeQuery): invokeResult
+ EXT -> EXT2 : Forward actual API call <<REST>>
+   EXT2 --> EXT : API response
+   EXT --> APISRV : HTTP 200 Payload
+   APISRV --> APICTRL : HTTP 200 payload
+   APICTRL --> MCP : HTTP 200 OK
+  end
+
+else Request does NOT require Users & Groups
+  APISRV -> EXT :  invoke(InvokeQuery): invokeResult
+  EXT -> EXT2 : Forward actual API call <<REST>>
+  EXT2 --> EXT : API response
+  EXT --> APISRV : HTTP 200 Payload
+  APISRV --> APICTRL : HTTP 200 payload
+  APICTRL --> MCP : HTTP 200 OK
+end
+
+@enduml
