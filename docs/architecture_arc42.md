@@ -78,7 +78,9 @@ server client architecture:
 | General Public | User          | Easy to use, intuitive interface                                                                              |                          |
 
 ## 1.4. Requirements Overview
-TODO: Update and add Use case diagram
+
+![Use Case diagram](/docs/diagrams/use_case.svg)
+
 TODO: Add user and System Requirements
 
 | Short | Meaning  | Description                                                                                           |
