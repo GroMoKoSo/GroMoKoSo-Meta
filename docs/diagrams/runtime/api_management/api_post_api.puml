@@ -11,41 +11,61 @@ participant api_repository as ":ApiRepository"
 database api_database as "Api Database"
 
 -> api_controller: POST /apis
+activate api_controller
 api_controller -> api_service : + saveApi(api: Api): Api
+activate api_service
 api_service -> user_management_client: + isUserAuthorized(user: string, group: string)
+activate user_management_client
 
 alt group == null && user != null
     user_management_client -> api_service : true
 else group != null && user != null
     user_management_client -> user_management_subsystem : GET /groups/<id>/users
+    activate user_management_subsystem
     user_management_client <-- user_management_subsystem : RESPONSE [200] [User]
+    deactivate user_management_subsystem
     alt user in users
         api_service <-- user_management_client : true
     else else
         api_service <-- user_management_client : false
     end
 end
+deactivate user_management_client
 
 alt isUserAuthorized() == false
     api_controller <-- api_service : null
     <-- api_controller : RESPONSE [401]
 else isUserAuthorized() == true
     api_service -> spec2tool_client : + convertSpec2Tool(spec: string): ToolDefinition
+    activate spec2tool_client
     spec2tool_client -> spec2tool_subsystem : POST /convert
+    activate spec2tool_subsystem
     spec2tool_client <-- spec2tool_subsystem : RESPONSE [200] {ToolDefinition}
+    deactivate spec2tool_subsystem
     api_service <-- spec2tool_client : ToolDefinition
+    deactivate spec2tool_client
 
     api_service -> mcp_management_client : addTool(apiId: int, definition: ToolDefintion)
+    activate mcp_management_client
     mcp_management_client -> mcp_management_subsystem : POST /tools
+    activate mcp_management_subsystem
     mcp_management_client <-- mcp_management_subsystem : RESPONSE [201]
+    deactivate mcp_management_subsystem
     api_service <-- mcp_management_client
+    deactivate mcp_management_client
 
     api_service -> api_repository : insert(api: Api)
+    activate api_repository
     api_repository -> api_database : INSERT
+    activate api_database
     api_repository <-- api_database
+    deactivate api_database
     api_service <-- api_repository
+    deactivate api_repository
     api_controller <-- api_service : Api
+    deactivate api_service
     <-- api_controller : RESPONSE [200] {Api}
+    deactivate api_controller
 end
 
 @enduml

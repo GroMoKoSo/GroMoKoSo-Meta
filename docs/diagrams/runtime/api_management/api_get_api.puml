@@ -7,30 +7,45 @@ participant api_repository as ":ApiRepository"
 database api_database as "Api Database"
 
 -> api_controller: GET /apis/<id>
+activate api_controller
 
 api_controller -> api_service: + fetchApiById(apiId: int)
+activate api_service
 api_service -> user_management_client: + fetchApis(user: string, group: string)
+activate user_management_client
 
 alt user != null
     user_management_client -> user_management_subsystem: GET /users/<id>/apis
+    activate user_management_subsystem
     user_management_client <-- user_management_subsystem: RESPONSE [200] [ApiAccess]
+    deactivate user_management_subsystem
     api_service <-- user_management_client : List<ApiAccess>
 else group != null
     user_management_client -> user_management_subsystem: GET /groups/<id>/apis
+    activate user_management_subsystem
     user_management_client <-- user_management_subsystem: RESPONSE [200] [ApiAccess]
+    deactivate user_management_subsystem
     api_service <-- user_management_client : List<ApiAccess>
 end
+deactivate user_management_client
 
 alt apiId in List<ApiAccess>
     api_service -> api_repository: + select(apiId: int): Api
+    activate api_repository
     api_repository -> api_database: + SELECT * WHERE id == apiId
+    activate api_database
     api_database --> api_repository: Api
+    deactivate api_database
     api_repository --> api_service: Api
+    deactivate api_repository
     api_service --> api_controller: Api
     <-- api_controller : RESPONSE [200] {Api}
 else else
     api_service --> api_controller: null
+    deactivate api_service
     <-- api_controller : RESPONSE [404]
+    deactivate api_controller
+
 end
 
 @enduml
