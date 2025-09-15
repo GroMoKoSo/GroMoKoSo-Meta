@@ -359,7 +359,6 @@ TODO: Add C4 if there are any, if not delete this subsection
 The UserManagement implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
 to cleanly separate different concerns.
 
-TODO: update Picture
 ![User management component view](/docs/diagrams/level_3_component/user_management_container_component_view.svg)
 
 | Element     | Description                                     |
