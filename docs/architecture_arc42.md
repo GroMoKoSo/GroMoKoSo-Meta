@@ -292,7 +292,18 @@ template:
 
 ![UI Containers](/docs/diagrams/level_2_container/ui_subsystem_container_view.svg)
 
-[Link to excalidraw board](https://excalidraw.com/#room=e2d64da42ffe07c87d8e,l5fMXfX1RgUFZkcbNKHvIQ)
+The UI container delivers the web application and acts as a frontend for GroMoKoSo. 
+It renders all user flows (sign-in, API/spec management, tool creation, group membership, tool usage dashboards) and orchestrates calls to backend services to execute actions initiated in the browser.
+The UI is implemented using React, TypeScript, and Vite. It is served as a single-page application (SPA) that communicates with backend microservices exclusively via RESTful HTTP endpoints. The UI itself does not expose a public REST API, it only provides browser-facing routes and assets.
+
+Consumed Interfaces:
+- **UserManagement**: perform CRUD operations on users, groups, and roles, including role assignment and group membership management.
+- **ApiManagement**: upload/retrieve API specifications, trigger tool registration/lifecycle operations, and query API/token metadata.
+
+Authentication is performed via OpenID Connect (THM OAuth2). The UI MUST enforce role-aware navigation and ensure backend authorization checks before executing protected operations.
+
+
+[Link to Mock-Ups: excalidraw board](https://excalidraw.com/#room=e2d64da42ffe07c87d8e,l5fMXfX1RgUFZkcbNKHvIQ)
 
 ### 5.2.2 UserManagement
 ![UserManagement Containers](/docs/diagrams/level_2_container/user_management_subsystem_container_view.svg)
@@ -386,13 +397,15 @@ The interfaces which Spec2Tool offers are defined as a REST API in the [Spec2Too
 The user interface implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
 to cleanly separate different concerns.
 
+![User management component view](/docs/diagrams/level_3_component/user_interface_container_component_view_excalidraw.svg)
+
 | Element     | Description                                         |
 |-------------|-----------------------------------------------------|
 | Router      | React component that handles routing                |
 | Page        | React component that can ge accessed throug a route |
 
 
-The corresponding class-diagram can be found [here](/docs/diagrams/level_4_class/user_interface_container_component_view.svg).
+The corresponding class-diagram can be found [here](/docs/diagrams/level_4_class/user_interface_container_component_view_puml.svg).
 
 ### 5.3.2 UserManagement
 The UserManagement implements a layer architecture as described in [8.1](#81-multi-layered-architecture)

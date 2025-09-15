@@ -1,4 +1,6 @@
-# MCP Maybe
+# GroMoKoSo
+
+[excalidraw board](https://excalidraw.com/#room=ae4ba4503ae7eed7c4b2,f_J23PktsZ_Hk9i5DfFX6Q)
 
 
 
