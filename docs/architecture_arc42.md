@@ -1,5 +1,5 @@
 
-# GroßsprachmodellModellKontextProtokollServer 
+# GroßsprachmodellModellKontextProtokollServerOrchestrierung 
 
 (Abk.: GroMoKoSo)
 
@@ -10,14 +10,14 @@
 Normative text describes one or both of the following kinds of elements:
 
 Vital elements of the specification
-Elements that contain the conformance language key words as defined by IETF RFC 2119 "Key words for use in RFCs to Indicate Requirement Levels"
+Elements that contain the conformance language keywords as defined by IETF RFC 2119 "Key words for use in RFCs to Indicate Requirement Levels"
 Informative text is potentially helpful to the user, but dispensable. 
 Informative text can be changed, added, or deleted editorially without negatively affecting the implementation of the specification. 
 Informative text does not contain conformance keywords.
 
 All text in this document is, by default, normative.
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in IETF RFC 2119 "Key words for use in RFCs to Indicate Requirement Levels".
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in IETF RFC 2119 "Key words for use in RFCs to Indicate Requirement Levels".
 
 According to: https://datatracker.ietf.org/doc/rfc2119/
 
@@ -78,7 +78,8 @@ server client architecture:
 | General Public | User          | Easy to use, intuitive interface                                                                              |                          |
 
 ## 1.4. Requirements Overview
-**Requirement-type:**
+TODO: Update and add Use case diagram
+TODO: Add user and System Requirements
 
 | Short | Meaning  | Description                                                                                           |
 |-------|----------|-------------------------------------------------------------------------------------------------------|
@@ -151,60 +152,6 @@ are valid for whole organizations and companies.
 | 4  | Planning               | Planning MUST be done inside the GitLab issue board.                                                                                                                                                      |
 | 5  | Documentation          | Documentation is done inside the GitLab wiki. According to the [Arc42 Template](https://arc42.de/), All diagrams SHOULD be available as images inside the documentation                                   |                     
 
-### 2.1.1 Evaluation Criteria
-
-* **Architecture and Concepts (33%)**
-
-    * Quality and clarity of the architecture
-    * Use of appropriate modeling
-    * Consideration of alternatives
-    * Flexibility and scalability
-    * Suitable framework
-
-* **Prototyping and Implementation (33%)**
-
-    * Functioning prototype
-    * GUI (10%)
-    * Logic / REST API
-    * Data persistence
-    * Deployment
-    * Code structuring
-
-* **Documentation (Descriptive materials)**
-
-    * Prototype documentation
-    * Architecture documentation
-
-* **Presentation (20%)**
-
-    * Presentation style / structure
-    * Appropriate scope for 20 minutes
-    * Clarity and comprehensibility
-    * Slides / materials
-    * Demo
-
-* **Teamwork and Methodology (Git handling)**
-
-    * Task distribution and communication (e.g., Git Issues)
-    * Working with Git for coding
-
-* **Additional Achievements, Special Technologies, Features (5%)**
-
-    * Use of innovative technologies (MCP / AI)
-    * Significant improvements after the interim presentation
-
----
-
-**Interim Presentation** *(not graded, 10–20 minutes)*
-
-* Architecture and concepts
-* Component structure / Use case
-* Sequence diagram
-* ER diagram
-* Class diagram
-* Intermediate results of the final product
-
----
 
 ## 2.2 Technical constraints
 | ID | Constraint   | Description                                                         |
@@ -216,6 +163,7 @@ are valid for whole organizations and companies.
 
 # 2.3 Conventions
 
+TODO: Fix link
 Programming Conventions are documented [here](/home/conventions)
 
 
@@ -225,7 +173,7 @@ The context boundary represents the `GroMoKoSo` system in relation to its extern
 The goal of this chapter is to make the system's communication relationships with its environment transparent.
 
 ## 3.1 Business Context
-
+TODO: Fix... :(
 ![Business context diagram](/docs/diagrams/level_0_context/business_context.svg)
 
 | Element       | Description                                                                                                                            |
@@ -239,7 +187,7 @@ The goal of this chapter is to make the system's communication relationships wit
 | REST APIs     | External software systems, which serve varttri                                                                                         |
 
 ## 3.2 Technical Context
-
+TODO: Fix... :(
 ![Technical context diagram](/docs/diagrams/level_0_context/technical_context.svg)
 
 | Element                  | Interfaces | Description                                                                                                                                                         |
@@ -273,31 +221,34 @@ These services include:
 - Spec2Tool
 - UI
 
-Each microservice including their responsibility and purpose is described in [4.1](#41-subservices)
+Each microservice including their responsibility and purpose is described in [4.2](#42-subservices)
 
-## 4.1 Subservices
-### 4.1.1 McpManagement
-MCP management will provide Servers dynamically depending on user requests. Each user will have their own MCP Server
-to ensure that the corresponding tools of the user will be available. Therefore the usage of the servers will be
-monitored and additional servers will be started or shut down if needed.
+TODO: Tell me why
 
-### 4.1.2 UserManagement
+## 4.2 Subservices
+
+### 4.2.1 UI
+UI provides a graphical user interface for the user to interact with the system itself. Each use-case which has been
+defined is covered by the UI. UI uses REST endpoints which are provided by each microservice to perform actions.
+
+### 4.2.2 UserManagement
 User management is responsible for managing access-rights for MCP tools which are split between users and groups.
 When actions like the execution of MCP tools or modifying APIs are made, User management provides a method to check
 wether these operations should be authorized.
 
-### 4.1.3 ApiManagement
+### 4.2.3 ApiManagement
 Api management is the entrypoint for creating, modifying and deleting APIs which should be used as MCP Tools.
 Api management uses user management to check if operations should be allowed, Spec2Tool to convert OpenAPI specs to
 MCP tools and mcp management to finally create these MCP tools.
 
-### 4.1.4 Spec2Tool
+### 4.2.4 McpManagement
+MCP management will provide Servers dynamically depending on user requests. Each user will have their own MCP Server
+to ensure that the corresponding tools of the user will be available. Therefore the usage of the servers will be
+monitored and additional servers will be started or shut down if needed.
+
+### 4.2.5 Spec2Tool
 Spec2Tool is responsible for converting OpenAPI specs to an internal representation of MCP tools. These representations
 are used by mcp management to create MCP tools.
-
-### 4.1.5 UI
-UI provides a graphical user interface for the user to interact with the system itself. Each use-case which has been
-defined is covered by the UI. UI uses REST endpoints which are provided by each microservice to perform actions.
 
 ## Organizational Decisions
 
@@ -325,10 +276,6 @@ All diagrams in this chapter use the following legend.
 | McpManagement         | UserManagement, ApiManagement            | Manage and host mcp servers with tools. Routes mcp requests from users to its personal mcp servers and call apis using ApiManagement to fulfill client requests. |
 | Spec2Tool             | -                                        | Convert common api specifications formats to GroMoKoSos internal api/tool representation.                                                                        |
 
-TODO: motivation for the decomposition
-
-TODO: describe each black box using the following template. We can properly do this at the beginning of the 5.2.x chapters.  
-
 template:
 -   Purpose/Responsibility
 -   Interface(s), when they are not extracted as separate paragraphs.
@@ -341,21 +288,18 @@ template:
     requirements).
 -   (Optional) Open issues/problems/risks
 
-*\<Purpose/Responsibility>*
-*\<Interface(s)>*
-*\<(Optional) Quality/Performance Characteristics>*
-*\<(Optional) Directory/File Location>*
-*\<(Optional) Fulfilled Requirements>*
-*\<(optional) Open Issues/Problems/Risks>*
-
 ## 5.2 Level 2: Container View
 
 ### 5.2.1 UI
 
 ![UI Containers](/docs/diagrams/level_2_container/ui_subsystem_container_view.svg)
 
+TODO: Add Mock-ups and short purpose description
+
 ### 5.2.2 UserManagement
 ![UserManagement Containers](/docs/diagrams/level_2_container/user_management_subsystem_container_view.svg)
+
+TODO: Explain Group Roles and System roles
 
 The purpose of this Microservice is to provide and save all relevant data regarding the users and groups which will be using this Application.
 This data consists of:
@@ -363,14 +307,17 @@ This data consists of:
     - Unique username
     - First- and Lastname
     - E-Mail
-    - Role
-    - API Id's which the user has access to.
+    - Systemrole
+    - API Id's which the user has access to and whether they are currently active.
 - Group data:
-  - Unique group of the name
-  - Users which are part of the group.
+  - Unique name of the group.
+  - Users which can have the following roles within the group:
+    - member
+    - editor
+    - admin
   - API Id's which the users of the group have access to.
 
-The interfaces to request or update the data of the user management are defined as REST API in the [User Managament REST API  Documentation](/docs/interfaces/user_management.yaml)
+The interfaces to request or update the data of the user management are defined as a REST API in the [User management REST API documentation](/docs/interfaces/user_management.yaml)
 
 ### 5.2.3 ApiManagement
 
@@ -388,38 +335,31 @@ This design cleanly separates responsibilities:
 
 Together, these containers form a cohesive unit that abstracts the complexity of external APIs and provides a uniform interface to the rest of the system.
 
+The interfaces which the API management offers are defined as a REST API in the [API management REST API documentation](/docs/interfaces/api_management.yml)
 
 ### 5.2.4 McpManagement
 
 ![McpManagement Containers](/docs/diagrams/level_2_container/mcp_management_subsystem_container_view.svg)
 
+TODO: Add REST interfaces and short purpose description
+
 ### 5.2.5 Spec2Tool
 
 ![Spec2Tool Containers](/docs/diagrams/level_2_container/spec_2_tool_subsystem_container_view.svg)
 
+TODO: Add REST interfaces and short purpose description
+
 ## 5.3 Level 3: Component/ Class View
 
-### 5.3.1 Multi-layered architecture
-To achieve a sufficent separation of concerns, a common architecture which containers can implement is as follows.
-This separation improves maintainability by making each layer responsible for a single concern.
-```
-┌──────────────────────────┐
-│  Controller Layer        │  ← REST, SSE endpoints
-├──────────────────────────┤
-│  Service Layer           │  ← Business logic
-├──────────────────────────┤
-│  Repository Layer        │  ← Spring Data / custom DAO
-├──────────────────────────┤
-│  Model                   │  ← Entities, value objects
-└──────────────────────────┘
-```
+### 5.3.1 UI
 
-### 5.3.2 UI
+TODO: Add C4 if there are any, if not delete this subsection
 
-### 5.3.3 UserManagement
-The UserManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
+### 5.3.2 UserManagement
+The UserManagement implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
 to cleanly separate different concerns.
 
+TODO: update Picture
 ![User management component view](/docs/diagrams/level_3_component/user_management_container_component_view.svg)
 
 | Element     | Description                                     |
@@ -433,27 +373,29 @@ to cleanly separate different concerns.
 The corresponding class-diagram can be found [here](/docs/diagrams/level_4_class/user_management_class_diagram.drawio).
 The corresponding entity-relationship-diagram can be found [here](/docs/diagrams/level_4_class/user_management_er_diagramm.drawio).
 
-### 5.3.4 ApiManagement
-The ApiManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
+### 5.3.3 ApiManagement
+The ApiManagement implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
 to cleanly separate different concerns.
 
 ![API Management component view](/docs/diagrams/level_3_component/api_proxy_container_component_view.svg)
 
-| Element    | Description                               |
-|------------|-------------------------------------------|
-| Controller | (REST) Endpoints for external systems     |
-| Service    | Business Logic used by endpoint functions |
-| Repository | Handles data persistence                  |
-| Entity     | Entities and value-objects                |
+| Element    | Description                                                                                                          |
+|------------|----------------------------------------------------------------------------------------------------------------------|
+| Controller | (REST) Endpoints for external systems                                                                                |
+| Service    | Business Logic used by endpoint functions                                                                            |
+| Repository | Handles data persistence                                                                                             |
+| Entity     | Entities and value-objects                                                                                           |
+| Clients    | Cross-cutting concern: Communication with other subsystems (Spec2Tool, McpManagement, UserManagement, external APIs) |
 
 The corresponding class-diagram can be found [here](/docs/diagrams/level_4_class/api-management-class-diagram.drawio).
 The corresponding entity-relationship-diagram can be found [here](/docs/diagrams/level_4_class/api-management-er-diagram.svg).
 
-### 5.3.5 McpManagement
-The McpManagement implements a layer architecture as described in [5.3.1](#531-multi-layered-architecture)
+### 5.3.4 McpManagement
+The McpManagement implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
 to cleanly separate the different concerns.
 
 ![Mcp Server Components](/docs/diagrams/level_3_component/mcp_server_container_component_view.svg)
+TODO: update Diagram
 
 | Element        | Description                                                                                                                |
 |----------------|----------------------------------------------------------------------------------------------------------------------------|
@@ -463,7 +405,7 @@ to cleanly separate the different concerns.
 | ToolDb         | SQL Database storing tool definitions                                                                                      |
 | Controller     | (REST) Endpoints for external systems                                                                                      |
 | Service        | Business logic/ Mcp servers                                                                                                |
-| Model          | Entities (ORM), value objects                                                                                              |
+| Entity         | Entities (ORM), value objects                                                                                              |
 | Repository     | Encapsulate persistence                                                                                                    |
 | Security       | Cross-cutting concern: OAuth2 authorization                                                                                |
 | Configuration  | Cross-cutting concern: Spring configuration classes                                                                        |
@@ -471,75 +413,28 @@ to cleanly separate the different concerns.
 
 The class diagram can be found [here](/docs/diagrams/level_4_class/mcp_management_class_diagram.drawio)
 
-### 5.3.6 Spec2Tool
+### 5.3.5 Spec2Tool
+TODO: Add everything 
 
 # 6. Runtime View {#section-runtime-view}
 
-::: formalpara-title
-**Contents**
-:::
+TODO: Add Sequence Diagrams based on Use cases (Also link use cases from beginning)
 
-The runtime view describes concrete behavior and interactions of the
-system's building blocks in form of scenarios from the following areas:
 
--   important use cases or features: how do building blocks execute
-    them?
+## Add new MCP Tool
+< Which use case >
+< Diagram >
+< Add description >
 
--   interactions at critical external interfaces: how do building blocks
-    cooperate with users and neighboring systems?
+## List existing MCP Tools
+< Which use case >
+< Diagram >
+< Add description >
 
--   operation and administration: launch, start-up, stop
-
--   error and exception scenarios
-
-Remark: The main criterion for the choice of possible scenarios
-(sequences, workflows) is their **architectural relevance**. It is
-**not** important to describe a large number of scenarios. You should
-rather document a representative selection.
-
-::: formalpara-title
-**Motivation**
-:::
-
-You should understand how (instances of) building blocks of your system
-perform their job and communicate at runtime. You will mainly capture
-scenarios in your documentation to communicate your architecture to
-stakeholders that are less willing or able to read and understand the
-static models (building block view, deployment view).
-
-::: formalpara-title
-**Form**
-:::
-
-There are many notations for describing scenarios, e.g.
-
--   numbered list of steps (in natural language)
-
--   activity diagrams or flow charts
-
--   sequence diagrams
-
--   BPMN or EPCs (event process chains)
-
--   state machines
-
--   ...
-
-See [Runtime View](https://docs.arc42.org/section-6/) in the arc42
-documentation.
-
-## \<Runtime Scenario 1> {#__runtime_scenario_1}
-
--   *\<insert runtime diagram or textual description of the scenario>*
-
--   *\<insert description of the notable aspects of the interactions
-    between the building block instances depicted in this diagram.\>*
-
-## \<Runtime Scenario 2> {#__runtime_scenario_2}
-
-## ... {#_}
-
-## \<Runtime Scenario n> {#__runtime_scenario_n}
+## Use MCP Tool
+< Which use case >
+< Diagram >
+< Add description >
 
 # 7. Deployment View {#section-deployment-view}
 
@@ -649,6 +544,23 @@ Please copy the structure from level 1 for each selected element.
 *\<diagram + explanation>*
 
 # 8. Cross-cutting Concepts {#section-concepts}
+
+### 8.1 Multi-layered architecture
+To achieve a sufficent separation of concerns, a common architecture which containers can implement is as follows.
+This separation improves maintainability by making each layer responsible for a single concern.
+```
+┌──────────────────────────┐
+│  Controller Layer        │  ← REST, SSE endpoints
+├──────────────────────────┤
+│  Service Layer           │  ← Business logic
+├──────────────────────────┤
+│  Repository Layer        │  ← Spring Data / custom DAO
+├──────────────────────────┤
+│  Model                   │  ← Entities, value objects
+└──────────────────────────┘
+```
+
+
 
 ::: formalpara-title
 **Content**
