@@ -1,0 +1,80 @@
+@startuml
+title Update API via DELETE+POST on MCP (no PUT)
+
+participant api_controller as ":ApiController"
+participant api_service as ":ApiService"
+participant user_management_client as ":UserManagementClient"
+participant user_management_subsystem as "UserManagementSubsystem"
+participant spec2tool_client as ":Spec2ToolClient"
+participant spec2tool_subsystem as ":Spec2ToolSubsystem"
+participant mcp_management_client as ":McpManagementClient"
+participant mcp_management_subsystem as "McpManagementSubsystem"
+participant api_repository as ":ApiRepository"
+database api_database as "Api Database"
+
+-> api_controller: PUT /apis/{id}
+api_controller -> api_service : + updateApi(apiId: int, api: Api)
+api_service -> user_management_client: + isUserAuthorized(user: string, group: string)
+
+alt group == null && user != null
+  user_management_client -> api_service : true
+else group != null && user != null
+  user_management_client -> user_management_subsystem : GET /groups/<id>/users
+  user_management_client <-- user_management_subsystem : RESPONSE [200] users: List<int>
+  alt user in users
+    api_service <-- user_management_client : true
+  else
+    api_service <-- user_management_client : false
+  end
+else
+  api_service <-- user_management_client : false
+end
+
+alt isUserAuthorized() == false
+  api_controller <-- api_service : null
+  <-- api_controller : RESPONSE [401]
+else isUserAuthorized() == true
+  ' Convert spec to tool definition
+  api_service -> spec2tool_client : + convertSpec2Tool(spec: string): ToolDefinition
+  spec2tool_client -> spec2tool_subsystem : POST /convert
+  spec2tool_client <-- spec2tool_subsystem : RESPONSE [200] definition: ToolDefinition
+  api_service <-- spec2tool_client : definition: ToolDefinition
+
+  ' Because MCP has no PUT, perform DELETE then POST
+  api_service -> mcp_management_client : updateTool(definition: ToolDefinition)
+
+  alt POST success
+    mcp_management_client -> mcp_management_subsystem : DELETE /tools/{id}
+    alt delete ok
+      mcp_management_client <-- mcp_management_subsystem : RESPONSE [204]
+    else not found
+      mcp_management_client <-- mcp_management_subsystem : RESPONSE [404]
+      note right of mcp_management_client
+        If the tool did not exist, proceed
+        with creation directly.
+      end note
+    end
+    mcp_management_client -> mcp_management_subsystem : POST /tools
+    mcp_management_client <-- mcp_management_subsystem : RESPONSE [201] toolId: string
+    api_service <-- mcp_management_client : toolId
+      ' Update our repository after MCP change succeeded
+      api_service -> api_repository : update(apiId: int, api: Api)
+      api_repository -> api_database : UPDATE
+      api_repository <-- api_database
+      api_service <-- api_repository
+
+      api_controller <-- api_service : api: Api
+      <-- api_controller : RESPONSE [200] api: Api
+  else POST fails
+    mcp_management_client <-- mcp_management_subsystem : RESPONSE [4xx/5xx]
+    api_service <-- mcp_management_client : error
+    api_controller <-- api_service : null
+    <-- api_controller : RESPONSE [400]
+
+  end
+
+
+
+
+@enduml
+

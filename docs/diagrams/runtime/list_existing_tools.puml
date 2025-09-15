@@ -1,0 +1,30 @@
+@startuml
+participant UI as ":UserInterface"
+participant UserManagement as ":UserManagement"
+participant ApiManagement as ":ApiManagement"
+
+[o->> UI: list existing MCP Tools
+activate UI
+UI -> UserManagement: GET users/{id}/apis
+activate UserManagement
+return API_ACCESS
+
+group loop (for every API ID)
+UI -> ApiManagement: GET apis/{id}
+activate ApiManagement
+return spec
+
+alt API ic active
+UI -> UI: mark as active
+activate UI
+return
+else
+UI -> UI: mark as inactive
+activate UI
+return
+end
+
+end
+
+return
+@enduml
