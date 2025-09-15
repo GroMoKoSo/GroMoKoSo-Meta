@@ -173,37 +173,33 @@ The context boundary represents the `GroMoKoSo` system in relation to its extern
 The goal of this chapter is to make the system's communication relationships with its environment transparent.
 
 ## 3.1 Business Context
-TODO: Fix... :(
 ![Business context diagram](/docs/diagrams/level_0_context/business_context.svg)
 
-| Element       | Description                                                                                                                            |
-|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| User          | Person who uses an MCP-Host to take advantage of the MCP-Server to fulfill his requests.                                               |
-| Tool Manager  | Person who manages tools and configures new tools using the WebApp. A tool manager is also a user of the system.                       |
-| Administrator | Person who manages user, groups and roles using the WebApp. An Administrator is also a tool manager and a user of the system.          |
-| WebApp        | Web portal through which tools resources and prompts are managed. It is also possible to manage users, groups and roles.               |
-| MCP Server    | Software system that provide MCP capabilities. Provides interface to corresponding REST API. Responses are sent back to the requester. |
-| MCP Host      | Software system that allows a LLM Tool to use a MCP server to fulfill complex requests.                                                |
-| REST APIs     | External software systems, which serve varttri                                                                                         |
+| Element       | Description                                                                                          |
+|---------------|------------------------------------------------------------------------------------------------------|
+| System Member | Person who uses an MCP-Host which uses the provided tools by the GroMoKoSo system.                   |
+| Group Member  | Person who is part of a corresponding group and which MCP Host has access to the tools of the group. |
+| Group Editor  | Person who manages tools and configures new tools inside a group.                                    |
+| Group Admin   | Person who manages user, and tools within a corresponding group.                                     |
+| System Admin  | Person who has access to all users, groups and tools and can manage all of them.                     |
+| MCP Host      | Software system that allows a LLM Tool to use a MCP server to fulfill complex requests.              |
+| REST APIs     | External Interfaces from which the System can create a tool which can be used by the MCP Host.       |
 
 ## 3.2 Technical Context
-TODO: Fix... :(
 ![Technical context diagram](/docs/diagrams/level_0_context/technical_context.svg)
 
-| Element                  | Interfaces | Description                                                                                                                                                         |
-|--------------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| User                     | html, http | Person who uses an MCP-Host to take advantage of the MCP-Server to fulfill his requests.                                                                            |
-| Tool Manager             | html, http | Person who manages tools and configures new tools using the WebApp. A tool manager is also a user of the system.                                                    |
-| Administrator            | html, http | Person who manages user, groups and roles using the WebApp. An Administrator is also a tool manager and a user of the system.                                       |
-| WebApp                   | html, http | Web-Application which serves as a Graphical-User-Interface for all users to interact with the system and perform user-dedicated configurations and functionalities. |
-| MCP Server               |            |                                                                                                                                                                     |
-| MCP Host                 |            | Container for managing LLMs and MCP clients                                                                                                                         |
-| MCP Client               | http, sse  | Client used by an LLM to communicate with the MCP Server. A client has a 1 to 1 relationship with a server                                                          |
-| LLM                      |            |                                                                                                                                                                     |
-| REST APIs (extern)       |            |                                                                                                                                                                     |
-| REST API (internal)      |            | REST API of the internal System which provides the same functionality as the WebApp, so that it can be used by an external Software.                                |
-| OpenID Identity Provider | http       | Server against which the user and the request MUST be identified.                                                                                                   |
-| Any Software tool        | http       | Placeholder for any software system that may implement the REST API to use GroMoKoSos features.                                                                     |
+| Element                  | Interfaces | Description                                                                                                |
+|--------------------------|------------|------------------------------------------------------------------------------------------------------------|
+| User                     | html, http | Person who uses an MCP-Host to take advantage of the MCP-Server to fulfill his requests.                   |
+| UI                       | http       | User Interface. See [4.2.1](#421-UI)                                                                       |
+| UserManagement           | http       | See [4.2.2](#422-UserManagement)                                                                           |
+| ApiManagement            | http       | See [4.2.3](#423-ApiManagement)                                                                            |
+| McpManagement            | http       | See [4.2.4](#424-McpManagement)                                                                            |
+| Spec2Tool                | http       | See [4.2.5](#425-Spec2Tool)                                                                                |
+| MCP Client               | http, sse  | Client used by an LLM to communicate with the MCP Server. A client has a 1 to 1 relationship with a server |
+| LLM                      |            | Large Language Model                                                                                       |
+| REST APIs                | http       | External Interfaces from which the System can create a tool which can be used by the MCP Host.             |
+| OpenID Identity Provider | http       | Server against which the user and the request MUST be identified.                                          |
 
 # 4. Solution Strategy
 ## 4.1 Technology Decisions
