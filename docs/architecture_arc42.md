@@ -335,19 +335,35 @@ This design cleanly separates responsibilities:
 
 Together, these containers form a cohesive unit that abstracts the complexity of external APIs and provides a uniform interface to the rest of the system.
 
-The interfaces which the API management offers are defined as a REST API in the [API management REST API documentation](/docs/interfaces/api_management.yml)
+The interfaces which the API management offers are defined as a REST API in the [API management REST API documentation](/docs/interfaces/api_management.yaml)
 
 ### 5.2.4 McpManagement
 
 ![McpManagement Containers](/docs/diagrams/level_2_container/mcp_management_subsystem_container_view.svg)
 
-TODO: Add REST interfaces and short purpose description
+MCP management subsystem is responsible for providing MCP tools to each user.
+When using an MCP tool the request is forwarded to the API management subsystem which handles calling the related external APIs.
+
+Tools themselves are registered by the API management subsystem using a REST API the mcp server provides.
+To get the mapping between users and their tools, the UserManagement subsystem is used.
+
+Each active user receives their own MCP server which only contains MCP tools they should have access to.
+After a certain amount of time mcp-servers get shutdown to save on ressources.
+
+Tools are saved inside the ToolDb database container. Each tool instance belongs to a toolset.
+Each toolset may have zero or more tools associated.
+
+The interfaces which MCP management offers are defined as a REST API in the [MCP management REST API documentation](/docs/interfaces/mcp_management.yaml)
 
 ### 5.2.5 Spec2Tool
 
 ![Spec2Tool Containers](/docs/diagrams/level_2_container/spec_2_tool_subsystem_container_view.svg)
 
-TODO: Add REST interfaces and short purpose description
+Spec2Tool is responsible for converting OpenAPI specifications to an internal representation of MCP tools.
+To achieve this, Spec2Tool offers a RESTful endpoint to provide specifications as a string which returns the
+corresponding tool representation as a JSON structure.
+
+The interfaces which Spec2Tool offers are defined as a REST API in the [Spec2Tool REST API documentation](/docs/interfaces/spec2tool.yaml)
 
 ## 5.3 Level 3: Component/ Class View
 
