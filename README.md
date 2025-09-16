@@ -3,9 +3,19 @@
 [excalidraw board](https://excalidraw.com/#room=ae4ba4503ae7eed7c4b2,f_J23PktsZ_Hk9i5DfFX6Q)
 
 
-
 ## Getting started
 
+- Setup ssh for gitlab
+    - Setup private/public key pair
+    - Add public key to gitlab account
+    - Add private key to ~/.ssh/<file_name>
+    - Add key to ~/.ssh/config
+        ```
+        Host gitlab.com
+          HostName gitlab.com
+          User git
+          IdentityFile ~/.ssh/<file_name>
+        ```
 - Clone this repository
 - Unix-based OS:
     - Make the `build` script executable: `chmod +x build.sh`
