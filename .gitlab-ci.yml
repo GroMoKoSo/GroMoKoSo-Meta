@@ -1,0 +1,24 @@
+stages:
+  - build
+  - test
+
+variables:
+  IMAGE_TAG: hello-world:$CI_COMMIT_SHORT_SHA
+
+build-image:
+  stage: build
+  image: docker:20.10
+  services:
+    - docker:dind
+  script:
+    - echo "Building Docker image..."
+    - docker build -t $IMAGE_TAG .
+
+run-container:
+  stage: test
+  image: docker:20.10
+  services:
+    - docker:dind
+  script:
+    - echo "Running container..."
+    - docker run --rm $IMAGE_TAG
