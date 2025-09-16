@@ -11,7 +11,7 @@ build-image:
   services:
     - docker:dind
   script:
-    - echo "Building Docker image..."
+    - echo "🔨 Building Docker image..."
     - docker build -t $IMAGE_TAG .
 
 run-container:
@@ -20,5 +20,5 @@ run-container:
   services:
     - docker:dind
   script:
-    - echo "Running container..."
+    - echo "🚀 Running container..."
     - docker run --rm $IMAGE_TAG
