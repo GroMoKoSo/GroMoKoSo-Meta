@@ -477,9 +477,19 @@ TODO: Add Sequence Diagrams based on Use cases (Also link use cases from beginni
 < Add description >
 
 ## List existing MCP Tools
-< Which use case >
-< Diagram >
-< Add description >
+**Scenario**: A user wants to list the available tools of his MCP client.  
+
+![Sequence diagram list existing MCP tools](/docs/diagrams/runtime/list_existing_tools.png)
+
+1. The MCP clients gets the order to list the available tools.
+2. A GET Request is sent to the User Management asking for the all API IDs which are available for the user with the given ID.
+3. The Object API_ACCESS which is returned is a list of API IDs with the additional information if the corresponding tool is set as active and if it is available to the user via a group or personal.
+4. For each API ID the corresponding spec is requested from the ApiManagement.
+5. The spec gets returned.
+6. Depending on whether they are active or not they will be shown differently.
+7. --
+8. --
+9. --
 
 ## Use MCP Tool
 
