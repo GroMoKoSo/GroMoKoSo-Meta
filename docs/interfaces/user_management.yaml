@@ -161,7 +161,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiActivatedList"
+                $ref: "#/components/schemas/ApiAccessList"
         "404":
           description: User not found.
         default:
@@ -247,6 +247,16 @@ paths:
             type: string
           description: An general purpose query to search for an group by his attributes
           example: username=abc
+        - in: query
+          name: accessibility
+          schema:
+            type: string
+            description: Whether the API should return public groups or all groups. All groups will only be returned if the caller is an admin.
+            default: all
+            example: public
+            enum:
+              - all
+              - public
       responses:
         "200":
           description: Successful operation
@@ -380,7 +390,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserIdList"
+                $ref: "#/components/schemas/UserList"
         "404":
           description: Group not found.
         default:
@@ -397,9 +407,7 @@ paths:
         content:
           application/json:
             schema:
-              type: integer
-              description: User Id of the User which should be added to the Group.
-              required: true
+              $ref: "#/components/schemas/User"
       responses:
         "201":
           description: User successfully added.
@@ -459,7 +467,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiActivatedList"
+                $ref: "#/components/schemas/ApiAccessList"
         "404":
           description: Group not found.
         default:
@@ -522,13 +530,26 @@ components:
     User:
       type: object
       properties:
-        id:
-          type: integer
-          description: unique identifier of the User.
-        name:
+        userName:
           type: string
-          description: Name of the User.
-          example: John Doe
+          description: unique identifier of the User.
+        firstName:
+          type: string
+          description: First name of the User.
+          example: John
+        lastName:
+          type: string
+          description: Last name of the User.
+          example: Doe
+        email:
+          type: string
+          example: john.doe@example.com
+        systemRole:
+          type: string
+          example: Member
+          enum:
+            - Member
+            - Admin
     UserList:
       type: array
       items:
@@ -536,24 +557,23 @@ components:
     Group:
       type: object
       properties:
-        id:
-          type: integer
-          description: unique identifier of the Group.
-        name:
+        groupName:
           type: string
-          description: Name of the Group.
-          example: Group A
+          description: unique identifier of the Group.
+        description:
+          type: string
+          description: Description of the Group.
+          example: This is a description of a group which contains a lot of useful information.
+        visibility:
+          type: string
+          description: Whether the group is private or public available.
+          enum:
+            - private
+            - public
     GroupList:
       type: array
       items:
         $ref: '#/components/schemas/Group'
-    UserId:
-      type: integer
-      description: Unique Identifier of an User
-    UserIdList:
-      type: array
-      items:
-        $ref: '#/components/schemas/UserId'
     ApiId:
       type: integer
       description: Unique Identifier of an Api.
@@ -561,13 +581,25 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ApiId'
-    ApiActivatedList:
+    ApiAccessList:
       type: array
       items:
-        $ref: '#/components/schemas/ApiActivated'
-    ApiActivated:
-      type: integer
-      description: Unique Identifier of an Api with an boolean indicating if the API is activated.
+        $ref: '#/components/schemas/ApiAccess'
+    ApiAccess:
+      type: object
+      properties:
+        apiId:
+          type: integer
+          description: Unique Identifier of an Api.
+        accessVia:
+          type: string
+          description: Whether the access was granted to the user personally or via a membership of a group.
+          enum:
+            - user
+            - group
+        activated:
+          type: boolean
+          description: boolean which is indicating if the API is currently activated for the user / group.
     Error:
       type: object
       properties:
