@@ -16,7 +16,6 @@ paths:
           schema:
             type: string
           description: An general purpose query to search for an user by his attributes
-
       responses:
         "200":
           description: Successful operation
@@ -39,33 +38,33 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Name of the User.
-              required:
-                - name
+              $ref: '#/components/schemas/User'
       responses:
         "201":
           description: User successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         default:
           description: Unexpected error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /users/{id}:
+
+  /users/{username}:
+    parameters:
+      - in: path
+        name: username
+        description: Unique identifier of the User.
+        required: true
+        schema:
+          type: string
+
     get:
       summary: Get a User.
-      description: Returns a User which has the given ID.
-      parameters:
-        - in: path
-          name: id
-          description: Unique identifier of the User.
-          required: true
-          schema:
-            type: integer
+      description: Returns a User which has the given username.
       responses:
         "200":
           description: Successful operation.
@@ -83,20 +82,13 @@ paths:
                 $ref: "#/components/schemas/Error"
     put:
       summary: Edit a User.
-      description: Edit the attributes of a User which has the given ID.
+      description: Edit the attributes of a User which has the given username.
       parameters:
-        - in: path
-          name: id
-          description: Unique identifier of the User.
+        - in: query
+          name: user
           required: true
           schema:
-            type: integer
-        - in: query
-          name: name
-          schema:
-            type: string
-            description: New name of the User.
-            example: John Doe
+            $ref: "#/components/schemas/User"
       responses:
         "200":
           description: Successful operation.
@@ -114,14 +106,7 @@ paths:
                 $ref: "#/components/schemas/Error"
     delete:
       summary: Delete a User.
-      description: Deletes a User with the specified ID.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the User to delete.
+      description: Deletes a User with the specified username.
       responses:
         "204":
           description: User successfully deleted; no content returned.
@@ -133,28 +118,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /users/{id}/apis:
+
+  /users/{username}/apis:
+    parameters:
+      - in: path
+        name: username
+        description: Unique identifier of the User.
+        required: true
+        schema:
+          type: string
+
     get:
       summary: Get the Api Id's belonging to a User.
-      description: Returns a array of Api Id's belonging to the User which has the given ID.
+      description: Returns a array of Api Id's belonging to the User which has the given username.
       parameters:
-        - in: path
-          name: id
-          description: Unique identifier of the User.
-          required: true
-          schema:
-            type: integer
         - in: query
           name: isActivated
-          description: Whether only Api Ids should be returned which are set as activated for the user, defualtvalue = false.
+          description: Whether only Api Ids should be returned which are set as activated for the user.
           schema:
             type: boolean
+            default: false
         - in: query
           name: groupApis
           description: Whether Api Ids should be returned which the user has only access to because of the groups he belongs to.
           schema:
             type: boolean
-
+            default: false
       responses:
         "200":
           description: Successful operation.
@@ -179,7 +168,7 @@ paths:
           application/json:
             schema:
               type: integer
-              description: Api Id of the new Api
+              description: Api Id of the new Api.
               required: true
       responses:
         "201":
@@ -190,23 +179,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /users/{id}/apis/{api_id}:
+
+  /users/{username}/apis/{api_id}:
+    parameters:
+      - in: path
+        name: username
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of the User.
+      - in: path
+        name: api_id
+        required: true
+        schema:
+          type: integer
+        description: Unique identifier of the Api which should be deleted from the User.
+
     delete:
       summary: Delete a Api Id from a User.
-      description: Deletes a Api Id from a User with the specified ID.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the User.
-        - in: path
-          name: api_id
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the Api which should be deleted from the User.
+      description: Deletes a Api Id from a User with the specified username.
       responses:
         "204":
           description: Api Id successfully deleted; no content returned.
@@ -218,16 +209,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /users/{id}/groups:
+
+  /users/{username}/groups:
+    parameters:
+      - in: path
+        name: username
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of the User.
+
     get:
-      summary: Get all Groups of which the User is a Member.
+      summary: Get all Groups of which the User is a Member and his corresponding role.
       responses:
         "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GroupList"
+                $ref: "#/components/schemas/GroupWithRoleList"
         default:
           description: Unexpected error
           content:
@@ -246,7 +246,7 @@ paths:
           schema:
             type: string
           description: An general purpose query to search for an group by his attributes
-          example: username=abc
+          example: name=MyGroupName
         - in: query
           name: accessibility
           schema:
@@ -279,33 +279,33 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Name of the Group.
-              required:
-                - name
+              $ref: '#/components/schemas/Group'
       responses:
         "201":
           description: Group successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
         default:
           description: Unexpected error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /groups/{id}:
+
+  /groups/{name}:
+    parameters:
+      - in: path
+        name: name
+        description: Unique identifier of the Group.
+        required: true
+        schema:
+          type: string
+
     get:
       summary: Get a Group.
-      description: Returns a Group which has the given ID.
-      parameters:
-        - in: path
-          name: id
-          description: Unique identifier of the Group.
-          required: true
-          schema:
-            type: integer
+      description: Returns a Group which has the given name.
       responses:
         "200":
           description: Successful operation.
@@ -323,20 +323,13 @@ paths:
                 $ref: "#/components/schemas/Error"
     put:
       summary: Edit a Group.
-      description: Edit the attributes of a Group which has the given ID.
+      description: Edit the attributes of a Group which has the given name.
       parameters:
-        - in: path
-          name: id
-          description: Unique identifier of the Group.
+        - in: query
+          name: group
           required: true
           schema:
-            type: integer
-        - in: query
-          name: name
-          schema:
-            type: string
-            description: New name of the Group.
-            example: Group A
+            $ref: '#/components/schemas/Group'
       responses:
         "200":
           description: Successful operation.
@@ -354,14 +347,7 @@ paths:
                 $ref: "#/components/schemas/Error"
     delete:
       summary: Delete a Group.
-      description: Deletes a Group with the specified ID.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the Group to delete.
+      description: Deletes a Group with the specified name.
       responses:
         "204":
           description: Group successfully deleted; no content returned.
@@ -373,24 +359,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /groups/{id}/users:
+
+  /groups/{name}/users:
+    parameters:
+      - in: path
+        name: name
+        description: Unique identifier of the Group.
+        required: true
+        schema:
+          type: string
+
     get:
-      summary: Get the User Id's belonging to a Group.
-      description: Returns a array of User Id's belonging to the Group which has the given ID.
-      parameters:
-        - in: path
-          name: id
-          description: Unique identifier of the Group.
-          required: true
-          schema:
-            type: integer
+      summary: Get the Users belonging to a Group.
+      description: Returns a array of Users belonging to the Group which has the given name.
       responses:
         "200":
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserList"
+                $ref: "#/components/schemas/UserWithGroupRoleList"
         "404":
           description: Group not found.
         default:
@@ -407,58 +395,67 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/UserWithGroupRole"
       responses:
         "201":
           description: User successfully added.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithGroupRole"
         default:
           description: Unexpected error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /groups/{id}/users/{uer_id}:
+
+  /groups/{name}/users/{username}:
+    parameters:
+      - in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of the Group.
+      - in: path
+        name: username
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of the User which should be deleted from the Group.
+
     delete:
       summary: Delete a User from a Group.
-      description: Deletes a User from a Group with the specified ID by providing the unique identifier of the User.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the Group.
-        - in: path
-          name: user_id
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the User which should be deleted from the Group.
+      description: Deletes a User, which has the given username, from a Group with the specified name.
       responses:
         "204":
-          description: User Id successfully deleted; no content returned.
+          description: User successfully deleted; no content returned.
         "404":
-          description: Group or User Id not found.
+          description: Group or User not found.
         default:
           description: Unexpected error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /groups/{id}/apis:
+
+  /groups/{name}/apis:
+    parameters:
+      - in: path
+        name: name
+        description: Unique identifier of the Group.
+        required: true
+        schema:
+          type: string
+
     get:
       summary: Get the Api Id's belonging to a Group.
-      description: Returns a array of Api Id's belonging to the Group which has the given ID.
+      description: Returns a array of Api Id's belonging to the Group which has the given name.
       parameters:
-        - in: path
-          name: id
-          description: Unique identifier of the Group.
-          required: true
-          schema:
-            type: integer
         - in: query
           name: isActivated
-          description: Whether only Api Ids should be returned which are set as activated for the group, defualtvalue = false.
+          description: Whether only Api Ids should be returned which are set as activated for the group, default value = false.
           schema:
             type: boolean
       responses:
@@ -496,23 +493,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /groups/{id}/apis/{api_id}:
+
+  /groups/{name}/apis/{api_id}:
+    parameters:
+      - in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of the Group.
+      - in: path
+        name: api_id
+        required: true
+        schema:
+          type: integer
+        description: Unique identifier of the Api which should be deleted from the Group.
+
     delete:
       summary: Delete a Api Id from a Group.
-      description: Deletes a Api Id from a Group with the specified ID.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the Group.
-        - in: path
-          name: api_id
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the Api which should be deleted from the Group.
+      description: Deletes a Api Id from a Group with the specified name.
       responses:
         "204":
           description: Api Id successfully deleted; no content returned.
@@ -533,6 +532,7 @@ components:
         userName:
           type: string
           description: unique identifier of the User.
+          example: user12345
         firstName:
           type: string
           description: First name of the User.
@@ -554,6 +554,20 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/User'
+    UserWithGroupRole:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        role:
+          enum:
+            - Member
+            - Editor
+            - Admin
+    UserWithGroupRoleList:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserWithGroupRole'
     Group:
       type: object
       properties:
@@ -574,6 +588,20 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Group'
+    GroupWithRole:
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/Group'
+        role:
+          enum:
+            - Member
+            - Editor
+            - Admin
+    GroupWithRoleList:
+      type: array
+      items:
+        $ref: '#/components/schemas/GroupWithRole'
     ApiId:
       type: integer
       description: Unique Identifier of an Api.
