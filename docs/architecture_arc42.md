@@ -129,8 +129,8 @@ Priorities
 | ID  | Requirement                                                   | Description                                                                                                 |
 |-----|---------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | M-1 | Parse OpenApi Specs to internal API-representation            | The Software MUST be able to convert any OpenApi specification to a more abstract, internal representation. |
-| M-2 | Create internal API-representation by using a WYSIWYG-editor  | The User MUST be able to add a new tool to the MCP Server by adding it's API within the UI.                 |
-| M-3 | Create MCP-Tools from internal API-representation             | The Software MUST be able to create MCP-Tools by using Spring Boot's MCP-Library                            |
+| M-2 | Create internal API-representation by using a WYSIWYG-editor  | The User MUST be able to add a new tool to the MCP Server by adding it\'s API within the UI.                 |
+| M-3 | Create MCP-Tools from internal API-representation             | The Software MUST be able to create MCP-Tools by using Spring Boot\'s MCP-Library                            |
 | M-4 | Serve MCP-Tools to MCP-Client                                 | Serving MCP-Tools by complying to MCP                                                                       |
 | M-5 | Authentification against THM oauth2 Server                    | The User of the Software MUST authenticate against the THM oauth2 Server using OpenID Connect.              |
 | O-1 | Support RAML Specs                                            | In addition to Open-Api specs, API specs as RAML should also be supported                                   |
@@ -163,14 +163,14 @@ are valid for whole organizations and companies.
 | 3  | Deployment   | Deployment MUST be done within the university server infrastruture. |
 
 
-# 2.3 Conventions
+## 2.3 Conventions
 Programming Conventions are documented on the wiki page in Gitlab. And can be found [here](https://git.thm.de/softwarearchitektur-wz-ss24/studentswa2025/enton/gromokoso/-/wikis/home/conventions).
 
 
 # 3. Context and Scope
 
 The context boundary represents the `GroMoKoSo` system in relation to its external interfaces, users, and neighboring systems.
-The goal of this chapter is to make the system's communication relationships with its environment transparent.
+The goal of this chapter is to make the system\'s communication relationships with its environment transparent.
 
 ## 3.1 Business Context
 ![Business context diagram](/docs/diagrams/level_0_context/business_context.svg)
@@ -280,8 +280,7 @@ template:
     This interfaces may include qualities and performance
     characteristics.
 -   (Optional) Quality-/Performance characteristics of the black box,
-    e.g.availability, run time behavior, ....
--   (Optional) directory/file location
+    e.g.availability, run time behavior, ....\n-   (Optional) directory/file location
 -   (Optional) Fulfilled requirements (if you need traceability to
     requirements).
 -   (Optional) Open issues/problems/risks
@@ -317,14 +316,14 @@ This data consists of:
     - System Role which can be one of the following:
       - System member
       - System admin
-    - API Id's which the user has access to and whether they are currently active.
+    - API Id\'s which the user has access to and whether they are currently active.
 - Group data:
   - Unique name of the group.
   - Users which can have the following roles within the group:
     - Group member
     - Group editor
     - Group admin
-  - API Id's which the users of the group have access to.
+  - API Id\'s which the users of the group have access to.
   - Group Type which can be one of the following:
     - Private
     - Public
@@ -726,9 +725,11 @@ documentation.
 
 Decisions that have been made during the design of the architecture
 
-| Decision | Status   | Description                                                                                                                                                                |
-|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ADR-01   | accepted | Modularization Strategy: The architecture is based on a Domain-Driven Design (DDD) approach, with the exception of the UI service, which is treated as a technology layer. |
+| Decision                                         | Status   | Description                                                                                                                                                                |
+|--------------------------------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [ADR-01](./adr/adr_01_modularization.md)         | accepted | Modularization Strategy: The architecture is based on a Domain-Driven Design (DDD) approach, with the exception of the UI service, which is treated as a technology layer. |
+| [ADR-02](./adr/adr_02_mcp_server.md)             | accepted | MCP Server Authorization and User Tool Mapping: Each user gets their own MCP server instance to handle authorization and tool mapping.                                     |
+| [ADR-03](./adr/adr_03_mcp_transport_protocol.md) | accepted | MCP Transport Protocol: Use the Streamable HTTP transport protocol instead of the deprecated SSE to avoid proxy issues with long-lasting connections.                      |
 
 # Quality Requirements {#section-quality-scenarios}
 
@@ -800,9 +801,9 @@ the system.
 For architects, two kinds of scenarios are important:
 
 -   Usage scenarios (also called application scenarios or use case
-    scenarios) describe the system's runtime reaction to a certain
-    stimulus. This also includes scenarios that describe the system's
-    efficiency or performance. Example: The system reacts to a user's
+    scenarios) describe the system\'s runtime reaction to a certain
+    stimulus. This also includes scenarios that describe the system\'s
+    efficiency or performance. Example: The system reacts to a user\'s
     request within one second.
 
 -   Change scenarios describe a modification of the system or of its
