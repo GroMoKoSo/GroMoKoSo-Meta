@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.0.3
 info:
-  title: Tool Management API
+  title: McpManagement API
   version: 1.0.0
   description: API for managing tools, including adding new tools and deleting existing ones.
 servers:
@@ -57,6 +57,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /tools/update:
+    post:
+      summary: Update list of tools from a user
+      description: Update the list of active tools from a specific user using his user_id. This list contains personal and group tools.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                  description: Unique identifier for the User to which the tool list belongs.
+                tool_list:
+                  type: array
+                  items:
+                    type: integer
+              required:
+                - api_id
+                - tool_list
+      responses:
+        "200":
+          description: Tool list successfully updated.
 components:
   schemas:
     ToolDefinition:
