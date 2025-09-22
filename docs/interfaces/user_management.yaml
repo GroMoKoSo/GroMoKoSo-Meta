@@ -1,640 +1,612 @@
-openapi: 3.0.4
+openapi: 3.1.0
 info:
-  title: User Management API
-  version: 1.0.0
-  description: API for managing Users and Groups including adding new Users/groups and deleting existing ones.
+  title: OpenAPI definition
+  version: v0
 servers:
-  - url: ??
+  - url: http://localhost:8080
+    description: Generated server url
+tags:
+  - name: Group Management
+    description: All Endpoints related to manage groups.
+  - name: User Management
+    description: All Endpoints related to manage users.
 paths:
+  /users/{username}:
+    get:
+      tags:
+        - User Management
+      operationId: getUser
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Found User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Username
+    put:
+      tags:
+        - User Management
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDto"
+        required: true
+      responses:
+        "200":
+          description: Updated User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Username
+    delete:
+      tags:
+        - User Management
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: User was successfully deleted.
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Username
+  /users/{username}/apis/{api_id}:
+    put:
+      tags:
+        - User Management
+      operationId: updateApi
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: api_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserToApiDto"
+        required: true
+      responses:
+        "200":
+          description: API ID for User successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserToApiDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Username or API ID
+    delete:
+      tags:
+        - User Management
+      operationId: deleteApi
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: api_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "204":
+          description: API ID from User successfully deleted.
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Username or API ID
+  /groups/{name}:
+    get:
+      tags:
+        - Group Management
+      operationId: getGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Found Group
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Group name
+    put:
+      tags:
+        - Group Management
+      operationId: updateGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupDto"
+        required: true
+      responses:
+        "200":
+          description: Updated Group
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Group name
+    delete:
+      tags:
+        - Group Management
+      operationId: deleteGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Group was successfully deleted.
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Group name
+  /groups/{name}/apis/{api_id}:
+    put:
+      tags:
+        - Group Management
+      operationId: updateApiIdFromGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: api_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupToApiDto"
+        required: true
+      responses:
+        "200":
+          description: API ID for Group successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupToApiDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Group name or API ID
+    delete:
+      tags:
+        - Group Management
+      operationId: deleteApiIdFromGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: api_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "204":
+          description: API ID from Group successfully deleted.
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Group name or API ID
   /users:
     get:
-      summary: Get all Users.
-      description: Returns a list of all Users.
-      parameters:
-        - in: query
-          name: query
-          schema:
-            type: string
-          description: An general purpose query to search for an user by his attributes
+      tags:
+        - User Management
+      operationId: getUsers
       responses:
         "200":
-          description: Successful operation
+          description: Successfully returned all Users
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserList"
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserDto"
+        "401":
+          description: Not authorized to perform this request.
     post:
-      summary: Add a new User
-      description: Create a new User and persist it's data.
+      tags:
+        - User Management
+      operationId: addUser
       requestBody:
-        required: true
-        description: User data.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        "201":
-          description: User successfully created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /users/{username}:
-    parameters:
-      - in: path
-        name: username
-        description: Unique identifier of the User.
+              $ref: "#/components/schemas/UserDto"
         required: true
-        schema:
-          type: string
-
-    get:
-      summary: Get a User.
-      description: Returns a User which has the given username.
       responses:
         "200":
-          description: Successful operation.
+          description: Added new User
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-        "404":
-          description: User not found.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    put:
-      summary: Edit a User.
-      description: Edit the attributes of a User which has the given username.
+                $ref: "#/components/schemas/UserDto"
+        "401":
+          description: Not authorized to perform this request.
+  /users/{username}/apis:
+    get:
+      tags:
+        - User Management
+      operationId: getApis
       parameters:
-        - in: query
-          name: user
+        - name: username
+          in: path
           required: true
           schema:
-            $ref: "#/components/schemas/User"
+            type: string
       responses:
         "200":
-          description: Successful operation.
+          description: API ID's of User successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserToApiDto"
+        "401":
+          description: Not authorized to perform this request.
         "404":
-          description: User not found
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      summary: Delete a User.
-      description: Deletes a User with the specified username.
-      responses:
-        "204":
-          description: User successfully deleted; no content returned.
-        "404":
-          description: User not found.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /users/{username}/apis:
-    parameters:
-      - in: path
-        name: username
-        description: Unique identifier of the User.
-        required: true
-        schema:
-          type: string
-
-    get:
-      summary: Get the Api Id's belonging to a User.
-      description: Returns a array of Api Id's belonging to the User which has the given username.
-      parameters:
-        - in: query
-          name: isActivated
-          description: Whether only Api Ids should be returned which are set as activated for the user.
-          schema:
-            type: boolean
-            default: false
-        - in: query
-          name: groupApis
-          description: Whether Api Ids should be returned which the user has only access to because of the groups he belongs to.
-          schema:
-            type: boolean
-            default: false
-      responses:
-        "200":
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiAccessList"
-        "404":
-          description: User not found.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          description: Invalid Username
     post:
-      summary: Add a new Api Id to a User.
-      description: Add a new Api Id to a User.
+      tags:
+        - User Management
+      operationId: addApis
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
-        description: API data.
         content:
           application/json:
             schema:
-              type: integer
-              description: Api Id of the new Api.
-              required: true
-      responses:
-        "201":
-          description: Api successfully added.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /users/{username}/apis/{api_id}:
-    parameters:
-      - in: path
-        name: username
+              $ref: "#/components/schemas/UserToApiDto"
         required: true
-        schema:
-          type: string
-        description: Unique identifier of the User.
-      - in: path
-        name: api_id
-        required: true
-        schema:
-          type: integer
-        description: Unique identifier of the Api which should be deleted from the User.
-
-    delete:
-      summary: Delete a Api Id from a User.
-      description: Deletes a Api Id from a User with the specified username.
-      responses:
-        "204":
-          description: Api Id successfully deleted; no content returned.
-        "404":
-          description: User or Api Id not found.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /users/{username}/groups:
-    parameters:
-      - in: path
-        name: username
-        required: true
-        schema:
-          type: string
-        description: Unique identifier of the User.
-
-    get:
-      summary: Get all Groups of which the User is a Member and his corresponding role.
       responses:
         "200":
-          description: Successful operation
+          description: API ID for User successfully added.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GroupWithRoleList"
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-
+                $ref: "#/components/schemas/UserToApiDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Username
   /groups:
     get:
-      summary: Get all Groups.
-      description: Returns a list of all Groups.
-      parameters:
-        - in: query
-          name: query
-          schema:
-            type: string
-          description: An general purpose query to search for an group by his attributes
-          example: name=MyGroupName
-        - in: query
-          name: accessibility
-          schema:
-            type: string
-            description: Whether the API should return public groups or all groups. All groups will only be returned if the caller is an admin.
-            default: all
-            example: public
-            enum:
-              - all
-              - public
+      tags:
+        - Group Management
+      operationId: getGroups
       responses:
         "200":
-          description: Successful operation
+          description: Successfully returned all Groups
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GroupList"
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+                type: array
+                items:
+                  $ref: "#/components/schemas/GroupDto"
+        "401":
+          description: Not authorized to perform this request.
     post:
-      summary: Add a new Group.
-      description: Create a new Group and persist it's data.
+      tags:
+        - Group Management
+      operationId: addGroup
       requestBody:
-        required: true
-        description: Group data.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Group'
-      responses:
-        "201":
-          description: Group successfully created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Group'
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /groups/{name}:
-    parameters:
-      - in: path
-        name: name
-        description: Unique identifier of the Group.
+              $ref: "#/components/schemas/GroupDto"
         required: true
-        schema:
-          type: string
-
-    get:
-      summary: Get a Group.
-      description: Returns a Group which has the given name.
       responses:
         "200":
-          description: Successful operation.
+          description: Added new Group
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Group"
-        "404":
-          description: Group not found.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    put:
-      summary: Edit a Group.
-      description: Edit the attributes of a Group which has the given name.
+                $ref: "#/components/schemas/GroupDto"
+        "401":
+          description: Not authorized to perform this request.
+  /groups/{name}/users:
+    get:
+      tags:
+        - Group Management
+      operationId: getUsersOfGroup
       parameters:
-        - in: query
-          name: group
+        - name: name
+          in: path
           required: true
           schema:
-            $ref: '#/components/schemas/Group'
+            type: string
       responses:
         "200":
-          description: Successful operation.
+          description: All Users of Group successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Group"
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserWithGroupRole"
+        "401":
+          description: Not authorized to perform this request.
         "404":
-          description: Group not found
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      summary: Delete a Group.
-      description: Deletes a Group with the specified name.
-      responses:
-        "204":
-          description: Group successfully deleted; no content returned.
-        "404":
-          description: Group not found.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /groups/{name}/users:
-    parameters:
-      - in: path
-        name: name
-        description: Unique identifier of the Group.
-        required: true
-        schema:
-          type: string
-
-    get:
-      summary: Get the Users belonging to a Group.
-      description: Returns a array of Users belonging to the Group which has the given name.
-      responses:
-        "200":
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserWithGroupRoleList"
-        "404":
-          description: Group not found.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          description: Invalid Group name
     post:
-      summary: Add a new User to a Group.
-      description: Add a new User to a Group by providing the Users unique Identifier.
+      tags:
+        - Group Management
+      operationId: addUserToGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
-        description: User data.
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/UserWithGroupRole"
-      responses:
-        "201":
-          description: User successfully added.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserWithGroupRole"
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /groups/{name}/users/{username}:
-    parameters:
-      - in: path
-        name: name
         required: true
-        schema:
-          type: string
-        description: Unique identifier of the Group.
-      - in: path
-        name: username
-        required: true
-        schema:
-          type: string
-        description: Unique identifier of the User which should be deleted from the Group.
-
-    delete:
-      summary: Delete a User from a Group.
-      description: Deletes a User, which has the given username, from a Group with the specified name.
-      responses:
-        "204":
-          description: User successfully deleted; no content returned.
-        "404":
-          description: Group or User not found.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /groups/{name}/apis:
-    parameters:
-      - in: path
-        name: name
-        description: Unique identifier of the Group.
-        required: true
-        schema:
-          type: string
-
-    get:
-      summary: Get the Api Id's belonging to a Group.
-      description: Returns a array of Api Id's belonging to the Group which has the given name.
-      parameters:
-        - in: query
-          name: isActivated
-          description: Whether only Api Ids should be returned which are set as activated for the group, default value = false.
-          schema:
-            type: boolean
       responses:
         "200":
-          description: Successful operation.
+          description: User successfully added to Group.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiAccessList"
+                $ref: "#/components/schemas/GroupDto"
+        "401":
+          description: Not authorized to perform this request.
         "404":
-          description: Group not found.
-        default:
-          description: Unexpected error.
+          description: Invalid Group name
+  /groups/{name}/apis:
+    get:
+      tags:
+        - Group Management
+      operationId: getApiIdsOfGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: API ID's of Group successfully returned.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                type: array
+                items:
+                  $ref: "#/components/schemas/GroupToApiDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Group name
     post:
-      summary: Add a new Api Id to a Group.
-      description: Add a new Api Id to a Group.
+      tags:
+        - Group Management
+      operationId: addApiIdToGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
-        description: API data.
         content:
           application/json:
             schema:
-              type: integer
-              description: Api Id of the new Api
-              required: true
+              $ref: "#/components/schemas/GroupToApiDto"
+        required: true
       responses:
-        "201":
-          description: Api successfully added.
-        default:
-          description: Unexpected error.
+        "200":
+          description: API ID for Group successfully added.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-
-  /groups/{name}/apis/{api_id}:
-    parameters:
-      - in: path
-        name: name
-        required: true
-        schema:
-          type: string
-        description: Unique identifier of the Group.
-      - in: path
-        name: api_id
-        required: true
-        schema:
-          type: integer
-        description: Unique identifier of the Api which should be deleted from the Group.
-
+                $ref: "#/components/schemas/GroupToApiDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Group name
+  /users/{username}/groups:
+    get:
+      tags:
+        - User Management
+      operationId: getGroups_1
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: All Groups of User with their Role in the group successfully
+            returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GroupWithGroupRole"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Username
+  /groups/{name}/users/{username}:
     delete:
-      summary: Delete a Api Id from a Group.
-      description: Deletes a Api Id from a Group with the specified name.
+      tags:
+        - Group Management
+      operationId: deleteUserFromGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "204":
-          description: Api Id successfully deleted; no content returned.
+          description: User from Group successfully deleted.
+        "401":
+          description: Not authorized to perform this request.
         "404":
-          description: Group or Api Id not found.
-        default:
-          description: Unexpected error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
+          description: Invalid Group name or Username
 components:
   schemas:
-    User:
+    UserDto:
       type: object
       properties:
         userName:
           type: string
-          description: unique identifier of the User.
-          example: user12345
+          example: user123
         firstName:
           type: string
-          description: First name of the User.
           example: John
         lastName:
           type: string
-          description: Last name of the User.
           example: Doe
         email:
           type: string
           example: john.doe@example.com
         systemRole:
           type: string
+          enum:
+            - Member
+            - Admin
           example: Member
-          enum:
-            - Member
-            - Admin
-    UserList:
-      type: array
-      items:
-        $ref: '#/components/schemas/User'
-    UserWithGroupRole:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/User'
-        role:
-          enum:
-            - Member
-            - Editor
-            - Admin
-    UserWithGroupRoleList:
-      type: array
-      items:
-        $ref: '#/components/schemas/UserWithGroupRole'
-    Group:
-      type: object
-      properties:
-        name:
-          type: string
-          description: unique identifier of the Group.
-        description:
-          type: string
-          description: Description of the Group.
-          example: This is a description of a group which contains a lot of useful information.
-        visibility:
-          type: string
-          description: Whether the group is private or public available.
-          enum:
-            - private
-            - public
-    GroupList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Group'
-    GroupWithRole:
-      type: object
-      properties:
-        group:
-          $ref: '#/components/schemas/Group'
-        role:
-          enum:
-            - Member
-            - Editor
-            - Admin
-    GroupWithRoleList:
-      type: array
-      items:
-        $ref: '#/components/schemas/GroupWithRole'
-    ApiId:
-      type: integer
-      description: Unique Identifier of an Api.
-    ApiIdList:
-      type: array
-      items:
-        $ref: '#/components/schemas/ApiId'
-    ApiAccessList:
-      type: array
-      items:
-        $ref: '#/components/schemas/ApiAccess'
-    ApiAccess:
+    UserToApiDto:
       type: object
       properties:
         apiId:
           type: integer
-          description: Unique Identifier of an Api.
-        accessVia:
-          type: string
-          description: Whether the access was granted to the user personally or via a membership of a group.
-          enum:
-            - user
-            - group
-        activated:
+          format: int32
+          example: 123
+        active:
           type: boolean
-          description: boolean which is indicating if the API is currently activated for the user / group.
-    Error:
+          example: true
+    GroupDto:
       type: object
       properties:
-        code:
+        name:
           type: string
-        message:
+          example: MyFirstGroup
+        description:
           type: string
-      required:
-        - code
-        - message
+          example: This description contains a lot of useful information
+        visibility:
+          type: string
+          enum:
+            - Private
+            - Public
+          example: Public
+    GroupToApiDto:
+      type: object
+      properties:
+        apiId:
+          type: integer
+          format: int32
+          example: 123
+        active:
+          type: boolean
+          example: true
+    UserWithGroupRole:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/UserDto"
+        groupRole:
+          type: string
+          enum:
+            - Member
+            - Editor
+            - Admin
+          example: Admin
+    GroupWithGroupRole:
+      type: object
+      properties:
+        group:
+          $ref: "#/components/schemas/GroupDto"
+        role:
+          type: string
+          enum:
+            - Member
+            - Editor
+            - Admin
+          example: Editor
