@@ -1,0 +1,57 @@
+@startuml Login Flow
+title Login Flow (Authorization Code + PKCE)
+
+skinparam ranksep 100
+
+actor User
+participant UI
+participant "Keycloak (IdP)" as KC
+
+group 1. Initial login request
+    autonumber
+
+    User -> UI: Clicks "Login" button
+    UI -> UI: Generate Code Verifier
+    UI -> UI: Create Code Challenge
+
+    autonumber stop
+end
+
+group 2. Redirect to Keycloak
+    autonumber
+
+        UI -[#red]> KC: Redirect to **/auth** 
+        KC -> User: Show login page
+
+    autonumber stop
+end
+
+group 3. User authentication
+    autonumber
+
+        User -> KC: Submit credentials
+        KC -[#red]> UI: Redirect with Authorization Code
+
+    autonumber stop
+end
+
+group 4. Authorization code exchange
+    autonumber
+
+        UI -> UI: Extract Authorization Code
+        UI -[#red]> KC: Send Authorization Code + Code Verifier to **/token**
+        KC -> UI: Return Tokens (Access, ID, Refresh)
+
+    autonumber stop
+end
+
+group 5. Token storage and redirect
+    autonumber
+
+        UI -> UI: Tokens stored in secure session/cookie
+        UI -> User: Redirected to app, logged in   
+
+    autonumber stop
+end
+
+@enduml
