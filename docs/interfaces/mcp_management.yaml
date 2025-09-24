@@ -68,8 +68,16 @@ paths:
       responses:
         "202":
           description: A new tool set was created
-        "204":
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ToolSpecificationDto"
+        "200":
           description: Tool set successfully updated
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ToolSpecificationDto"
     delete:
       tags:
         - ToolSet Management
@@ -94,7 +102,8 @@ paths:
       tags:
         - ToolSet Management
       summary: Notify a user's tool set list has changed
-      description: Signal that a specific user's tool set list has been updated.
+      description: Signal that a specific user's tool set list has been updated. The
+        body MUST contain a list of all api ids that should be available to the user
       operationId: updateToolSetList
       parameters:
         - name: id
@@ -103,6 +112,15 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int32
+        required: true
       responses:
         "200":
           description: Notification successful
@@ -144,18 +162,23 @@ components:
         title:
           type: string
           description: Unique identifier for the tool
+          minLength: 1
         description:
           type: string
           description: Human-readable description of functionality
+          minLength: 1
         requestMethod:
           type: string
           description: HTTP request method
+          minLength: 1
         endpoint:
           type: string
           description: Endpoint URL of the API
+          minLength: 1
         inputSchema:
           type: string
           description: JSON Schema defining expected parameters
+          minLength: 1
       required:
         - description
         - endpoint
@@ -168,15 +191,18 @@ components:
         name:
           type: string
           description: Unique identifier for the tool set
+          minLength: 1
         description:
           type: string
           description: Human-readable description of the tool set
+          minLength: 1
         tools:
           type: array
           description: List of tools to include in the tool set. One tool per API
             endpoint
           items:
             $ref: "#/components/schemas/ToolDto"
+          minItems: 1
       required:
         - description
         - name
