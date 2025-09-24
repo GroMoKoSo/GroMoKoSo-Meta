@@ -341,7 +341,7 @@ In the following table is an overview which further describes the mentioned role
 | Public group  | Group is visible to all System members.                | -                                                                                                                                                                                                     |
 
 
-The interfaces to request or update the data of the user management are defined as a REST API in the [User management REST API documentation](/docs/interfaces/user_management.yaml)
+The interfaces to request or update the data of the user management are defined as a REST API in the [User management REST API documentation](/docs/interfaces/user_management.yml)
 
 ### 5.2.3 ApiManagement
 
