@@ -47,7 +47,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserDto"
+              $ref: "#/components/schemas/UpdateUserDto"
         required: true
       responses:
         "200":
@@ -98,7 +98,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserToApiDto"
+              $ref: "#/components/schemas/UpdateUserToApiDto"
         required: true
       responses:
         "200":
@@ -170,7 +170,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GroupDto"
+              $ref: "#/components/schemas/UpdateGroupDto"
         required: true
       responses:
         "200":
@@ -200,6 +200,61 @@ paths:
           description: Not authorized to perform this request.
         "404":
           description: Invalid Group name
+  /groups/{name}/users/{username}:
+    put:
+      tags:
+        - Group Management
+      operationId: updateUserFromGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserWithGroupRoleDto"
+        required: true
+      responses:
+        "200":
+          description: User from Group successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithGroupRoleDto"
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Group name or Username
+    delete:
+      tags:
+        - Group Management
+      operationId: deleteUserFromGroup
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: User from Group successfully deleted.
+        "401":
+          description: Not authorized to perform this request.
+        "404":
+          description: Invalid Group name or Username
   /groups/{name}/apis/{api_id}:
     put:
       tags:
@@ -221,7 +276,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GroupToApiDto"
+              $ref: "#/components/schemas/UpdateGroupToApiDto"
         required: true
       responses:
         "200":
@@ -303,6 +358,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: accessViaGroup
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: true
       responses:
         "200":
           description: API ID's of User successfully returned.
@@ -397,7 +458,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/UserWithGroupRole"
+                  $ref: "#/components/schemas/UserWithGroupRoleDto"
         "401":
           description: Not authorized to perform this request.
         "404":
@@ -416,7 +477,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserWithGroupRole"
+              $ref: "#/components/schemas/UserWithGroupRoleDto"
         required: true
       responses:
         "200":
@@ -424,7 +485,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GroupDto"
+                $ref: "#/components/schemas/UserWithGroupRoleDto"
         "401":
           description: Not authorized to perform this request.
         "404":
@@ -500,36 +561,31 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/GroupWithGroupRole"
+                  $ref: "#/components/schemas/GroupWithGroupRoleDto"
         "401":
           description: Not authorized to perform this request.
         "404":
           description: Invalid Username
-  /groups/{name}/users/{username}:
-    delete:
-      tags:
-        - Group Management
-      operationId: deleteUserFromGroup
-      parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: username
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "204":
-          description: User from Group successfully deleted.
-        "401":
-          description: Not authorized to perform this request.
-        "404":
-          description: Invalid Group name or Username
 components:
   schemas:
+    UpdateUserDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john.doe@example.com
+        systemRole:
+          type: string
+          enum:
+            - Member
+            - Admin
+          example: Member
     UserDto:
       type: object
       properties:
@@ -551,6 +607,12 @@ components:
             - Member
             - Admin
           example: Member
+    UpdateUserToApiDto:
+      type: object
+      properties:
+        active:
+          type: boolean
+          example: true
     UserToApiDto:
       type: object
       properties:
@@ -558,9 +620,26 @@ components:
           type: integer
           format: int32
           example: 123
+        accessVia:
+          type: string
+          description: Where the user got the access from. This is either 'user' or
+            the name of the Group which grants the user access.
+          example: user
         active:
           type: boolean
           example: true
+    UpdateGroupDto:
+      type: object
+      properties:
+        description:
+          type: string
+          example: This description contains a lot of useful information
+        visibility:
+          type: string
+          enum:
+            - Private
+            - Public
+          example: Public
     GroupDto:
       type: object
       properties:
@@ -576,6 +655,35 @@ components:
             - Private
             - Public
           example: Public
+    UpdateUserWithGroupRoleDto:
+      type: object
+      properties:
+        groupRole:
+          type: string
+          enum:
+            - Member
+            - Editor
+            - Admin
+          example: Admin
+    UserWithGroupRoleDto:
+      type: object
+      properties:
+        username:
+          type: string
+          example: user123
+        groupRole:
+          type: string
+          enum:
+            - Member
+            - Editor
+            - Admin
+          example: Admin
+    UpdateGroupToApiDto:
+      type: object
+      properties:
+        active:
+          type: boolean
+          example: true
     GroupToApiDto:
       type: object
       properties:
@@ -586,23 +694,12 @@ components:
         active:
           type: boolean
           example: true
-    UserWithGroupRole:
+    GroupWithGroupRoleDto:
       type: object
       properties:
-        user:
-          $ref: "#/components/schemas/UserDto"
-        groupRole:
+        groupName:
           type: string
-          enum:
-            - Member
-            - Editor
-            - Admin
-          example: Admin
-    GroupWithGroupRole:
-      type: object
-      properties:
-        group:
-          $ref: "#/components/schemas/GroupDto"
+          example: MyFirstGroup
         role:
           type: string
           enum:
