@@ -32,7 +32,7 @@ paths:
       - name: group
         in: query
         description: Requesting user
-        required: true
+        required: false
         schema:
           type: string
       responses:
