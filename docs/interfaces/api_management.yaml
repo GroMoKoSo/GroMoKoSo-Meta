@@ -1,246 +1,391 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
-  title: ApiManagement REST API
-  version: 1.0.0
-  description: Manage stored API specs and invoke them.
-
+  title: OpenAPI definition
+  version: v0
 servers:
-  - url: https://api.example.com
-
+- url: http://localhost:8082
+  description: Generated server url
+tags:
+- name: APIs
+  description: CRUD & invocation for API definitions
 paths:
+  /apis/{id}:
+    get:
+      tags:
+      - APIs
+      summary: Get API by id
+      description: Fetch a single API definition by its id.
+      operationId: getApi
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: user
+        in: query
+        description: Requesting Group
+        required: true
+        schema:
+          type: string
+      - name: group
+        in: query
+        description: Requesting user
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: API returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Api"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
+        "403":
+          description: Not allowed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
+        "404":
+          description: Not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
+    put:
+      tags:
+      - APIs
+      summary: Replace an API
+      description: Replaces an existing API definition by id.
+      operationId: putApi
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: user
+        in: query
+        description: Requesting user
+        required: true
+        schema:
+          type: string
+      - name: group
+        in: query
+        description: Optional group
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Api"
+        required: true
+      responses:
+        "200":
+          description: API updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Api"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
+        "403":
+          description: Not allowed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
+        "404":
+          description: API or related service not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
+    delete:
+      tags:
+      - APIs
+      summary: Delete an API
+      description: Deletes an API definition by id.
+      operationId: deleteApi
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: user
+        in: query
+        description: Requesting user
+        required: true
+        schema:
+          type: string
+      - name: group
+        in: query
+        description: Optional group
+        required: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Deleted
+          content:
+            '*/*':
+              schema:
+                type: object
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: object
+        "403":
+          description: Not allowed
+          content:
+            '*/*':
+              schema:
+                type: object
+        "404":
+          description: API not found
+          content:
+            '*/*':
+              schema:
+                type: object
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
   /apis:
     get:
-      summary: Get all saved API specs
+      tags:
+      - APIs
+      summary: List APIs
+      description: Returns all API definitions.
+      operationId: getApis
       parameters:
-        - $ref: '#/components/parameters/query'
-        - $ref: '#/components/parameters/dataFormat'
-        - $ref: '#/components/parameters/user'
-        - $ref: '#/components/parameters/group'
+      - name: group
+        in: query
+        description: Requesting group
+        required: true
+        schema:
+          type: string
+      - name: user
+        in: query
+        description: Requesting user
+        required: true
+        schema:
+          type: string
       responses:
-        '200':
-          description: List of APIs
+        "200":
+          description: List of APIs returned
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/API'
+                  $ref: "#/components/schemas/Api"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Api"
     post:
-      summary: Add a new API spec
-      requestBody:
+      tags:
+      - APIs
+      summary: Create an API
+      description: Creates a new API definition.
+      operationId: postApi
+      parameters:
+      - name: user
+        in: query
+        description: Requesting user
         required: true
+        schema:
+          type: string
+      - name: group
+        in: query
+        description: Requesting group
+        required: false
+        schema:
+          type: string
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/APICreate'
-      responses:
-        '201':
-          description: Created
-          headers:
-            Location:
-              description: URL of the created resource
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-
-  /apis/{id}:
-    parameters:
-      - $ref: '#/components/parameters/id'
-    get:
-      summary: Get API spec by id
-      responses:
-        '200':
-          description: The API spec
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/API'
-        '404':
-          description: Not found
-    put:
-      summary: Edit API spec by id
-      requestBody:
+              $ref: "#/components/schemas/Api"
         required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/APIUpdate'
       responses:
-        '200':
-          description: Updated API spec
+        "200":
+          description: API created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/API'
-        '404':
-          description: Not found
-    delete:
-      summary: Delete API spec by id
-      responses:
-        '204':
-          description: No Content
-        '404':
-          description: Not found
-
+                $ref: "#/components/schemas/Api"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
+        "403":
+          description: Not allowed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
+        "500":
+          description: Internal Server error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Api"
   /apis/{id}/invoke:
-    parameters:
-      - $ref: '#/components/parameters/id'
     post:
-      summary: Invoke an existing API
-      requestBody:
+      tags:
+      - APIs
+      summary: Invoke an API
+      description: Invokes the configured upstream API using the provided query.
+      operationId: invokeApi
+      parameters:
+      - name: id
+        in: path
         required: true
+        schema:
+          type: integer
+          format: int32
+      - name: user
+        in: query
+        description: Requesting user
+        required: true
+        schema:
+          type: string
+      - name: group
+        in: query
+        description: Optional group
+        required: false
+        schema:
+          type: string
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvokeRequest'
+              $ref: "#/components/schemas/InvokeQuery"
+        required: true
       responses:
-        '200':
+        "200":
           description: Invocation result
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvokeResponse'
-        '400':
-          description: Bad request
-        '404':
+                $ref: "#/components/schemas/InvokeResult"
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/InvokeResult"
+        "403":
+          description: Not allowed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/InvokeResult"
+        "404":
           description: API not found
-
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/InvokeResult"
+        "500":
+          description: Internal Server error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/InvokeResult"
 components:
-  parameters:
-    id:
-      name: id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: API identifier
-    query:
-      name: query
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Free-text search over name/description
-    dataFormat:
-      name: dataFormat
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter by data format (e.g., openapi, graphql)
-    user:
-      name: user
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter by owner user
-    group:
-      name: group
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter by group
-
   schemas:
-    API:
+    Api:
       type: object
-      required: [id, name, version, dataFormat, spec]
       properties:
         id:
           type: integer
-          example: 42
-        name:
-          type: string
-          example: Orders API
-        description:
-          type: string
-          example: CRUD for orders
-        version:
-          type: string
-          example: "1.2.0"
-        dataFormat:
-          type: string
-          example: openapi
-        spec:
-          type: string
-          description: The API specification document (e.g., OpenAPI YAML) as text
-
-    APICreate:
-      type: object
-      required: [name, version, dataFormat, spec]
-      properties:
+          format: int32
         name:
           type: string
         description:
           type: string
         version:
           type: string
-        dataFormat:
+        format:
+          type: string
+        fileType:
           type: string
         spec:
           type: string
-
-    APIUpdate:
+        token:
+          type: string
+    InvokeQuery:
       type: object
-      description: Fields allowed to change during update
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        version:
-          type: string
-        dataFormat:
-          type: string
-        spec:
-          type: string
-
-    InvokeRequest:
-      type: object
-      required: [requestType, requestPath]
       properties:
         requestType:
           type: string
-          enum: [POST, PUT, GET, PATCH, DELETE]
+          enum:
+          - POST
+          - PUT
+          - GET
+          - PATCH
+          - DELETE
         requestPath:
           type: string
-          description: Relative path to call on the target API (e.g., /orders/123)
-        headers:
+        header:
           type: object
           additionalProperties:
             type: string
         body:
           type: string
-          format: byte
-          description: Optional base64-encoded request body
-        requestParameter:
+        requestParam:
           type: object
           additionalProperties:
             type: string
-          description: Query parameters to append (key/value)
-        pathParameter:
+        pathParam:
           type: object
           additionalProperties:
             type: string
-          description: Path params map (keys treated as strings)
-
-    InvokeResponse:
+    InvokeResult:
       type: object
-      required: [responseCode]
       properties:
         responseCode:
-          type: string
-          example: "200"
-        headers:
+          type: integer
+          format: int32
+        header:
           type: object
           additionalProperties:
             type: string
         body:
           type: string
-          format: byte
-          description: Base64-encoded response body (if any)
