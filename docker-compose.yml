@@ -9,10 +9,13 @@ services:
       - gromokoso-mcpmanagement
       - gromokoso-keycloak
     environment:
-      BASE_URL:
+      VITE_BASE_URL:
       VITE_KEYCLOAK_URL: http://localhost:9000
       VITE_KEYCLOAK_REALM: gromokoso
       VITE_KEYCLOAK_CLIENT_ID: gromokoso
+      VITE_USERMANAGEMENT_URL: http://localhost:8081
+      VITE_APIMANAGEMENT_URL: http://localhost:8082
+
 
     ports:
       - "8080:8080"
