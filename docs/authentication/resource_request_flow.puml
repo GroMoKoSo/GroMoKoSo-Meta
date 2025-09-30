@@ -1,0 +1,26 @@
+@startuml Resource Request Flow
+title Resource Request Flow (Access Token Validation) on the example of updating user profile
+
+
+actor User
+participant UI
+participant "UserManagement Service" as UM
+participant "Keycloak (IdP)" as KC
+database "User DB" as DB
+
+note right of User: User needs to be logged in
+User -> UI: Update Profile (e.g., change email)
+UI -> UM: PUT /users/<username>\nAuthorization: Bearer <Access Token>
+UM -> KC: Fetch JWKS (public keys, cached if available)
+UM -> UM: Validate JWT signature\n(exp, iss, aud, roles/scopes)
+
+alt Valid Token & User has "update_profile" permission
+  UM -> DB: Update user profile data
+  DB --> UM: Success
+  UM --> UI: 200 OK (Updated User)
+else Invalid/Expired Token OR missing permission
+  UM --> UI: 401 Not authorized to perform this request
+end
+UI --> User: Show result 
+
+@enduml1

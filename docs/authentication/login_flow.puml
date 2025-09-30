@@ -1,0 +1,91 @@
+@startuml login_flow
+title Login Flow (Authorization Code + PKCE)
+
+
+skinparam ranksep 100
+
+actor User
+participant UI
+participant "Keycloak (IdP)" as KC
+participant "User Management" as UM
+
+note left of User
+    Details to every step can be found in
+    <u><color #blue>authentication_with_keycloak.md</color></u>
+    Red arrows indicate a http request, 
+    which is documented more detailed
+end note
+
+group 1. Initial login request
+    autonumber 1.1
+
+    User -> UI: Clicks "Login" button
+    UI -> UI: Generate Code Verifier
+    UI -> UI: Create Code Challenge
+
+    autonumber stop
+end
+
+group 2. Redirect to Keycloak
+    autonumber 2.1
+
+        UI -[#red]> KC: Redirect to **/auth** 
+        KC -> User: Show login page
+
+    autonumber stop
+end
+
+group 3. User authentication
+    autonumber 3.1
+
+        User -> KC: Submit credentials
+        KC -[#red]> UI: Redirect with Authorization Code
+
+    autonumber stop
+end
+
+group 4. Authorization code exchange
+    autonumber 4.1
+
+        UI -> UI: Extract Authorization Code
+        UI -[#red]> KC: Send Authorization Code + Code Verifier to **/token**
+        KC -> UI: Return Tokens (Access, ID, Refresh)
+
+    autonumber stop
+end
+
+group 5. Token storage and redirect
+    autonumber 5.1
+
+        UI -> UI: Tokens stored in secure session/cookie
+        UI -> UI: Retrieve user info from ID Token
+        UI -> User: Redirected to app
+
+    autonumber stop
+end
+
+group 6. Fetching user details 
+    autonumber 6.1
+
+        UI -[#red]> UM: Get detailed user info :  **/users/<username>**
+        UM -> UM: Validate Access Token (internal)
+
+        autonumber 6.3.1.1
+        alt User exists
+            UM -> UI: Return user details
+        else User does not exist
+        autonumber 6.3.2.1
+            UM -> UI: Return 404 Not Found
+            UI -[#red]> UM: Create new user in User Management : **/users**
+            UM -> UI: Return created user details
+        end
+
+        autonumber 4
+        UI -> UI: Store user details in session/local storage
+        UI -> User: Show user-specific content
+
+    autonumber stop
+end
+
+
+@enduml
