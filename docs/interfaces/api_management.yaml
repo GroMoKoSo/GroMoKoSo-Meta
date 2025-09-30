@@ -36,28 +36,42 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: API returned
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Api"
         "401":
           description: Unauthorized
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Api"
+                type: object
+                additionalProperties:
+                  type: string
+        "404":
+          description: Not found
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
         "403":
           description: Not allowed
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Api"
-        "404":
-          description: Not found
+                type: object
+                additionalProperties:
+                  type: string
+        "200":
+          description: API returned
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/Api"
     put:
@@ -92,34 +106,42 @@ paths:
               $ref: "#/components/schemas/Api"
         required: true
       responses:
-        "200":
-          description: API updated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Api"
         "401":
           description: Unauthorized
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Api"
-        "403":
-          description: Not allowed
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/Api"
+                type: object
+                additionalProperties:
+                  type: string
         "404":
           description: API or related service not found
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Api"
+                type: object
+                additionalProperties:
+                  type: string
         "500":
           description: Internal server error
           content:
             '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "403":
+          description: Not allowed
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "200":
+          description: API updated
+          content:
+            application/json:
               schema:
                 $ref: "#/components/schemas/Api"
     delete:
@@ -148,32 +170,40 @@ paths:
         schema:
           type: string
       responses:
-        "204":
-          description: Deleted
-          content:
-            '*/*':
-              schema:
-                type: object
         "401":
           description: Unauthorized
           content:
             '*/*':
               schema:
                 type: object
-        "403":
-          description: Not allowed
-          content:
-            '*/*':
-              schema:
-                type: object
+                additionalProperties:
+                  type: string
         "404":
           description: API not found
           content:
             '*/*':
               schema:
                 type: object
+                additionalProperties:
+                  type: string
         "500":
           description: Internal server error
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "403":
+          description: Not allowed
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "204":
+          description: Deleted
           content:
             '*/*':
               schema:
@@ -186,31 +216,55 @@ paths:
       description: Returns all API definitions.
       operationId: getApis
       parameters:
-      - name: group
+      - name: user
         in: query
         description: Requesting group
         required: true
         schema:
           type: string
-      - name: user
+      - name: group
         in: query
         description: Requesting user
         required: true
         schema:
           type: string
       responses:
-        "200":
-          description: List of APIs returned
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Api"
         "401":
           description: Unauthorized
           content:
             '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "200":
+          description: List of APIs returned
+          content:
+            application/json:
               schema:
                 type: array
                 items:
@@ -241,28 +295,42 @@ paths:
               $ref: "#/components/schemas/Api"
         required: true
       responses:
-        "200":
-          description: API created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Api"
         "401":
           description: Unauthorized
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Api"
+                type: object
+                additionalProperties:
+                  type: string
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "500":
+          description: Internal Server error
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
         "403":
           description: Not allowed
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/Api"
-        "500":
-          description: Internal Server error
+                type: object
+                additionalProperties:
+                  type: string
+        "200":
+          description: API created
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/Api"
   /apis/{id}/invoke:
@@ -298,34 +366,42 @@ paths:
               $ref: "#/components/schemas/InvokeQuery"
         required: true
       responses:
-        "200":
-          description: Invocation result
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InvokeResult"
         "401":
           description: Unauthorized
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/InvokeResult"
-        "403":
-          description: Not allowed
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/InvokeResult"
+                type: object
+                additionalProperties:
+                  type: string
         "404":
           description: API not found
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/InvokeResult"
+                type: object
+                additionalProperties:
+                  type: string
         "500":
           description: Internal Server error
           content:
             '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "403":
+          description: Not allowed
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "200":
+          description: Invocation result
+          content:
+            application/json:
               schema:
                 $ref: "#/components/schemas/InvokeResult"
 components:
@@ -344,10 +420,9 @@ components:
           type: string
         format:
           type: string
-        fileType:
-          type: string
         spec:
-          type: string
+          type: object
+          additionalProperties: {}
         token:
           type: string
     InvokeQuery:
@@ -368,7 +443,8 @@ components:
           additionalProperties:
             type: string
         body:
-          type: string
+          type: object
+          additionalProperties: {}
         requestParam:
           type: object
           additionalProperties:
