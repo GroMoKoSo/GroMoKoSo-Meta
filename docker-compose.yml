@@ -54,11 +54,13 @@ services:
       - gromokoso-mcpmanagement-db
       - gromokoso-keycloak
     environment:
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
       SPRING_DATASOURCE_URL: jdbc:mariadb://gromokoso-mcpmanagement-db:3306/tooldb
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: secret
     ports:
       - "8083:8080"
+      - "5005:5005"
 
   gromokoso-spec2tool:
     build: ./spec2tool

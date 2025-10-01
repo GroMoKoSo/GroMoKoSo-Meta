@@ -1,69 +1,61 @@
-# GroMoKoSo
+# GroMoKoSo - Meta Repository
 
-[excalidraw board](https://excalidraw.com/#room=ae4ba4503ae7eed7c4b2,f_J23PktsZ_Hk9i5DfFX6Q)
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
+## 🧭 Overview
 
-## Getting started
+<div align="center">
 
-- Setup ssh for gitlab
-    - Setup private/public key pair
-    - Add public key to gitlab account
-    - Add private key to ~/.ssh/<file_name>
-    - Add key to ~/.ssh/config
-        ```
-        Host gitlab.com
-          HostName gitlab.com
-          User git
-          IdentityFile ~/.ssh/<file_name>
-        ```
-- Clone this repository
-- Unix-based OS:
-    - Make the `build` script executable: `chmod +x build.sh`
-    - Run `./build.sh`
-- Windows:
-    - format disk
-    - install unix-based os
+<img src="assets/icons/gromokoso/gromokoso-icon-transparent.png" alt="logo" width="200"/>
 
-## Suggestions for a good README
+<p>
+GroMoKoSo – in short for <strong>GroßsprachModellModellKontextProtokolServerOrchestrierung</strong> is a platform  
+that enables users to integrate existing RESTful APIs and automatically create MCP Tools  
+which enhance the capabilities of Large Language Models (LLMs).
+</p>
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+</div>
 
-## Name
-Choose a self-explaining name for your project.
+## 🚀 Features
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- Create and manage users, groups and Apis
+- Let users add their own APIs as Tools or share APIs in groups
+- Control who can add, modify or delete APIs in groups
+- Add the provided MCP Server in the LLM of your choice and use the tools you have access to
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## Sub repositories
+![subservices.png](assets/icons/readme/subservices.png)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The project is split into multiple sub-repositories. Each repository contains one microservice
+for the application. All subrepositories can be found here:  
+- [Spec2Tool](https://git.thm.de/softwarearchitektur-wz-ss24/studentswa2025/enton/spec2tool)
+- [UserInterface](https://git.thm.de/softwarearchitektur-wz-ss24/studentswa2025/enton/userinterface)
+- [UserManagement](https://git.thm.de/softwarearchitektur-wz-ss24/studentswa2025/enton/usermanagement)
+- [ApiManagament](https://git.thm.de/softwarearchitektur-wz-ss24/studentswa2025/enton/apimanagement)
+- [MCPManagement](https://git.thm.de/softwarearchitektur-wz-ss24/studentswa2025/enton/mcpmanagement)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## ⚙️ Installation
+1. First, clone the sub-repositories:
+```bash
+bash pull_subrepose.sh
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+2. Make sure docker and docker compose are installed:
+```bash
+docker --version
+docker compose version
+```
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+3. Start all subservices by:
+```bash
+docker compose up -d
+```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+4. To stop services, type:
+```bash
+docker compose down -v
+```
