@@ -1,0 +1,23 @@
+@startuml
+
+autonumber
+
+participant UI as ":UserInterface"
+participant API as ":ApiManagement"
+participant UM as ":UserManagement"
+participant MCPM as ":McpManagement"
+participant S2T as ":Spec2Tool"
+
+UI -> API : POST /apis
+activate API
+API -> UM : POST /users
+activate UM
+return
+API -> S2T : POST /convert
+activate S2T
+return Tool Definition
+API -> MCPM : PUT /toolset
+activate MCPM
+return
+return
+@enduml

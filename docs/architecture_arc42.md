@@ -81,61 +81,84 @@ server client architecture:
 
 ![Use Case diagram](/docs/diagrams/use_case.svg)
 
-TODO: Add user and System Requirements
 
-| Short | Meaning  | Description                                                                                           |
-|-------|----------|-------------------------------------------------------------------------------------------------------|
-| `M`   | Must     | Must be fulfilled, otherwise the architecture is not acceptable                                       |
-| `O`   | Optional | Optional, but desirable, requirements that can be fulfilled later                                     |
-| `Q`   | Quality  | Quality requirements that are not directly related to the architecture, but to the system as a whole  |
+### 1.4.1 User requirements
 
-`<type>`-`<id>` e.g. `M-1`, `O-1`, `Q-1`
+| ID    | Requirements                                                                                                                                                                                                                                                                                                                                                                                     |
+|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| UR_01 | As a member of the system, I want to be able to create and use my personal tools. As well as tools that are associated with a group that I am part of.                                                                                                                                                                                                                                           |
+| UR_02 | As a member of the system, I want to be able to view the group profile of a public group, join a public group and leave a group that I am part of.                                                                                                                                                                                                                                               |
+| UR_03 | As a member of the system, I want to edit my personal profile. I want to be able to edit my name, password and profile picture.                                                                                                                                                                                                                                                                  |
+| UR_04 | As a member of a group, I want to use all tools that are associated with the group.                                                                                                                                                                                                                                                                                                              |
+| UR_05 | As a member of a group, I want to be able to leave the group.                                                                                                                                                                                                                                                                                                                                    |
+| UR_06 | As a member of a group, I want to be able to view the group profile                                                                                                                                                                                                                                                                                                                              |
+| UR_07 | As an editor of a group, I want to perform CRUD operations for all tools that belong to the group.                                                                                                                                                                                                                                                                                               |
+| UR_08 | As an administrator of a group, I want to perform CRUD operations for all tools that belong to the group.                                                                                                                                                                                                                                                                                        |
+| UR_09 | As an administrator of a group, I want to edit the group profile. I want to be able to change the name, description and visibility of the group. A group can either be public or private. A public group can be joined from any user of the system. The members of a private group can only be managed by an administrator.                                                                      |
+| UR_10 | As an administrator of a group, I want to change the role of a member of this group. A member can either be a normal member, editor or administrator.                                                                                                                                                                                                                                            |
+| UR_11 | As an administrator of a group, I want to add and remove members from this group.                                                                                                                                                                                                                                                                                                                |
+| UR_12 | As an administrator of the system, I want to perform CRUD operations for all users of the system. Additionally I want to assign a system role to a user. A user can either be a member or an administrator of the system.                                                                                                                                                                        |
+| UR_13 | As an administrator of the system, I want to perform CRUD operations for all groups of the system. Additionally I want to edit the group profile, add and remove users from a specific group, or change their role within that group.                                                                                                                                                            |
+| UR_14 | As an administrator of the system, I want to perform CRUD operations for all tools registered in the system. These can either be personal tools from a user or tools associated with a group.                                                                                                                                                                                                    |
+| UR_15 | As a user of the system with an account, I want to log in to my account using my name and password. Functions are provided depending on user role/ rights.                                                                                                                                                                                                                                       |
+| UR_16 | As a user of the system without an account, I want to register myself using a name, password and also like to be able to add a profile picture.                                                                                                                                                                                                                                                  |
+| UR_17 | As a user of the system, I want to view and use all my tools through a single MCP server with any AI agent that supports MCP.                                                                                                                                                                                                                                                                    |
+| UR_18 | As a user of the system, I want to access all of its functions through an intuitive UI and an API.                                                                                                                                                                                                                                                                                               |
+| UR_19 | As a user of the system, I want to be able to generate a new MCP tool. For this I want to be able to upload an API specification, provide the root endpoint url, authentication/ authorization information, a name, description and version. If the API specification already includes some of the additional information I want to automatically fill the input fields to simplify the process. |
+| UR_20 | The system should support all common API specifications like OpenAPI, RAML, etc.                                                                                                                                                                                                                                                                                                                 |
 
-## 1.4.1 Non-functional Requirements / Quality Goals
+### 1.4.2 Functional Requirements
 
-Quality goals as defined by [ISO 25010](https://www.iso.org/obp/ui/#iso:std:iso-iec:25010:ed-2:v1:en) 
+#### ID Structure
 
-| Quality goal           | Description                                                                                                                                                                                                                                |
-|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Functional suitability | Capability of a product to provide functions that meet stated and implied needs of intended users when it is used under specified conditions                                                                                               |
-| Performance efficiency | Capability of a product to perform its functions within specified time and throughput parameters and be efficient in the use of resources under specified conditions                                                                       |  
-| Compatibility          | Capability of a product to exchange information with other products, and/or to perform its required functions while sharing the same common environment and resources                                                                      |
-| Interaction capability | Capability of a product to be interacted with by specified users to exchange information between a user and a system via the user interface to complete the intended task                                                                  |
-| Reliability            | Capability of a product to perform specified functions under specified conditions for a specified period of time without interruptions and failures                                                                                        | 
-| Security               | Capability of a product to protect information and data so that persons or other products have the degree of data access appropriate to their types and levels of authorization, and to defend against attack patterns by malicious actors |
-| Maintainability        | Capability of a product to be modified by the intended maintainers with effectiveness and efficiency                                                                                                                                       |
-| Flexibility            | Capability of a product to be adapted to changes in its requirements, contexts of use, or system environment                                                                                                                               |
-| Safety                 | Capability of a product under defined conditions to avoid a state in which human life, health, property, or the environment is endangered                                                                                                  |
+SR_XX_YY:
+SR -> System requirement
+XX -> Group/ Micro service
+YY -> sequential unique id
 
-
-Priorities
-
-| Prio | Description         | Explanation                                                          |
-|------|---------------------|----------------------------------------------------------------------|
-| 1    | Extremely important | Compromises only when higher priority features are strengthened.     |
-| 2    | Important           | Compromises are possible when core requirements are not compromised. |
-| 3    | Significant         | Compromises are possible when core requirements are not compromised. |
-| 4    | Insignificant       | This feature should only be taken into account to a limited extent.  |
-
-| ID  | Prio | Quality Goal           | Description                                   |
-|-----|------|------------------------|-----------------------------------------------|
-| Q-1 |      | Interaction capability | Project requires complete documentation       |
-| Q-2 |      | Interaction capability | Code should be modular and reusable           |
-| Q-3 |      | Usability              | Easy to use, intuitive interface              |
-| Q-4 |      | Security               | Authentification against a OAuth Server       |
+Groups
+UI -> User Interface
+UsM -> UserManagement
+Api -> ApiManagement
+Mcp -> McpManagement
+S2T -> Spec2Tool
+Arc -> Architecture
+Mai -> Maintainability
+Sec -> Security
 
 
-## 1.4.2 Functional Requirements
-| ID  | Requirement                                                   | Description                                                                                                 |
-|-----|---------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
-| M-1 | Parse OpenApi Specs to internal API-representation            | The Software MUST be able to convert any OpenApi specification to a more abstract, internal representation. |
-| M-2 | Create internal API-representation by using a WYSIWYG-editor  | The User MUST be able to add a new tool to the MCP Server by adding it\'s API within the UI.                 |
-| M-3 | Create MCP-Tools from internal API-representation             | The Software MUST be able to create MCP-Tools by using Spring Boot\'s MCP-Library                            |
-| M-4 | Serve MCP-Tools to MCP-Client                                 | Serving MCP-Tools by complying to MCP                                                                       |
-| M-5 | Authentification against THM oauth2 Server                    | The User of the Software MUST authenticate against the THM oauth2 Server using OpenID Connect.              |
-| O-1 | Support RAML Specs                                            | In addition to Open-Api specs, API specs as RAML should also be supported                                   |
-| O-2 | Support Authentication for MCP Tools                          | The software MAY provide sufficient OAuth2 based Authentication mechanisms for MCP-Tools.                   |
-| O-3 | REST-API secrets should be stored securely                    | The Software MAY store secrets (e.g. API-Keys) securely, e.g. in a vault or encrypted database.             |
+| ID        | Requirement                                                                                                                                                                                                                                                                                                                                                                                                                                   | Reference                                                                          | Dependency |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|------------|
+| SR_Arc_01 | The system SHALL be composed of multiple domain-specific microservices (McpManagement, ApiManagement, UserManagement, Spec2Tool).                                                                                                                                                                                                                                                                                                             |                                                                                    |            |
+| SR_Arc_02 | Microsservices SHALL be written in Java Spring and communicate with each other via internal RESTful APIs.                                                                                                                                                                                                                                                                                                                                     |                                                                                    |            |
+| SR_Arc_03 | The UI SHALL be a separate service build with React.                                                                                                                                                                                                                                                                                                                                                                                          |                                                                                    |            |
+| SR_Arc_04 | Each microservice except the UI SHALL be composed of a layered architecture (Controller, Service, Repository).                                                                                                                                                                                                                                                                                                                                |                                                                                    |            |
+| SR_Arc_05 | Each service SHALL be deployed on a THM server as a docker container.                                                                                                                                                                                                                                                                                                                                                                         |                                                                                    |            |
+| SR_Sec_01 | All passwords SHALL be stored in a hashed format.                                                                                                                                                                                                                                                                                                                                                                                             |                                                                                    |            |
+| SR_Sec_02 | All API tokens SHALL be stored in a base64 coded format.                                                                                                                                                                                                                                                                                                                                                                                      |                                                                                    |            |
+| SR_Sec_03 | The system SHALL use OAuth 2.0 access tokens to authorize access to protected resources based on the user's system role and group roles. The roles SHALL be stored inside the system itself.                                                                                                                                                                                                                                                  |                                                                                    |            |
+| SR_Sec_04 | The system SHALL delegate all authentication to a dedicated Keycloak server.                                                                                                                                                                                                                                                                                                                                                                  |                                                                                    |            |
+| SR_Mcp_01 | When a logged in user wants to add a new tool, the McpManagement service MUST allow to add a new tool by providing an id from the ApiManagement and a GroMoKoSo tool specification.                                                                                                                                                                                                                                                           |                                                                                    |            |
+| SR_Mcp_02 | When a logged in user wants to delete an existing tool, the McpManagement service MUST allow to delete a tool by providing its id.                                                                                                                                                                                                                                                                                                            |                                                                                    |            |
+| SR_Mcp_03 | When a new tool is added to the system, the tool id MUST be equal to the id from the ApiManagement.                                                                                                                                                                                                                                                                                                                                           |                                                                                    |            |
+| SR_Mcp_04 | When the tools list from a user has changed, the McpManagement service MUST allow other services to notify the McpManagement about these changes.                                                                                                                                                                                                                                                                                             |                                                                                    |            |
+| SR_Mcp_05 | The McpManagement MUST persist all tool specifications in a SQLite database.                                                                                                                                                                                                                                                                                                                                                                  |                                                                                    |            |
+| SR_Mcp_06 | When a user/ service calls an API endpoint, the requester MUST authorize each request using an Access Token provided by the Keycloak server.                                                                                                                                                                                                                                                                                                  |                                                                                    |            |
+| SR_Mcp_07 | The McpManagement MUST provide a single MCP server endpoint for AI agents to discover and use all tools associated with a specific user.                                                                                                                                                                                                                                                                                                      |                                                                                    |            |
+| SR_Mcp_08 | When an AI agent calls the MCP endpoint, the system MUST restrict a user's access to only their own personal tools and the group tools of the groups they are a member of.                                                                                                                                                                                                                                                                    |                                                                                    |            |
+| SR_Mcp_09 | When an AI agent without a valid access token calls any MCP endpoint, the system MUST return a 401 Unauthorized Http Error and return a www-authenticate bearer header with the corresponding resource_metadata property according to RFC 9728.                                                                                                                                                                                               |                                                                                    |            |
+| SR_Api_01 | The ApiManagement MUST represent APIs as an entity with the following attributes: id (Primary Key), name, description, version, dataFormat, spec, token (Base64 encoded).                                                                                                                                                                                                                                                                     | SR_Sec_02                                                                          |            |
+| SR_Api_02 | The ApiManagement MUST persist APIs inside a SQLite database.                                                                                                                                                                                                                                                                                                                                                                                 |                                                                                    |            |
+| SR_Api_03 | The ApiManagement MUST offer CRUD operations for APIs as a RESTful API.                                                                                                                                                                                                                                                                                                                                                                       |                                                                                    |            |
+| SR_Api_04 | The ApiManagement MUST use UserManagement to determine if CRUD operations should be allowed.                                                                                                                                                                                                                                                                                                                                                  |                                                                                    |            |
+| SR_Api_04 | The ApiManagement MUST update the tools inside MCPManagement whenever a tool is created or modified.                                                                                                                                                                                                                                                                                                                                          | SR_Mcp_03, SR_Mcp_01                                                               |            |
+| SR_Api_05 | The ApiManagement MUST use Spec2Tool to convert OpenAPI specifications to an internal TooDefinition.                                                                                                                                                                                                                                                                                                                                          |                                                                                    |            |
+| SR_Api_06 | A ToolDefinition SHALL consist of the following attributes: name: string, description: string, tools= [{ name: string, description: string, endpoint: string, parameter= [{ name: string, description: string, type: string }] }]                                                                                                                                                                                                             | SR_Api_05                                                                          |            |
+| SR_Api_06 | The ApiManagement MUST provide a way to invoke requests to present external APIs and return its response.                                                                                                                                                                                                                                                                                                                                     |                                                                                    |            |
+| SR_Api_07 | ApiManagement MUST be able to execute http requests with different http Methods (Post, Put, Get, Patch, Delete), a specified url with placeholders, a http header, a body as well as request params and values for placeholders inside the url.                                                                                                                                                                                               | SR_Api_06                                                                          |            |
+| SR_Api_08 | ApiManagement MUST return the response of external APIs in the following structure: responseCode (4xx, 2xx, etc.), header, body.                                                                                                                                                                                                                                                                                                              | SR_Api_06                                                                          |            |
+| SR_UsM_01 | When a logged in System Admin wants to edit user related data, the UserManagement MUST be able to create, edit and persist data of a User entity. This data consists of: Username, Firstname, Lastname, E-Mail, Active and Inactive API IDs, System Role, which can be: Member, SysAdmin.                                                                                                                                                     | UR_01, UR_03, UR_12                                                                |            |
+| SR_UsM_02 | When a logged in System Admin or Group Admin wants to edit group related data within the corresponding group, the UserManagement MUST be able to create, edit and persist data of a Group entity. This data consists of: Groupname, Description, Users which are part of the group, User roles within the group which can be: Group Member, Group Editor, Group Admin, Active and Inactive API IDs, Grouptype, which can be: Private, Public. | UR_01, UR_02, UR_04, UR_05, UR_07, UR_08, UR_09, UR_10, UR_11, UR_13, UR_15, UR_16 |            |
 
 # 2. Architecture Constraints
 Any requirement that constraints software architects in their freedom of
@@ -273,17 +296,6 @@ All diagrams in this chapter use the following legend.
 | ApiManagement         | UserManagement, Spec2Tool, McpManagement | Manage apis, specifications and tokens. This service is responsible for every external api call on behalf of the system.                                         |
 | McpManagement         | UserManagement, ApiManagement            | Manage and host mcp servers with tools. Routes mcp requests from users to its personal mcp servers and call apis using ApiManagement to fulfill client requests. |
 | Spec2Tool             | -                                        | Convert common api specifications formats to GroMoKoSos internal api/tool representation.                                                                        |
-
-template:
--   Purpose/Responsibility
--   Interface(s), when they are not extracted as separate paragraphs.
-    This interfaces may include qualities and performance
-    characteristics.
--   (Optional) Quality-/Performance characteristics of the black box,
-    e.g.availability, run time behavior, ....\n-   (Optional) directory/file location
--   (Optional) Fulfilled requirements (if you need traceability to
-    requirements).
--   (Optional) Open issues/problems/risks
 
 ## 5.2 Level 2: Container View
 
@@ -467,13 +479,19 @@ TODO: Add everything
 
 # 6. Runtime View {#section-runtime-view}
 
-TODO: Add Sequence Diagrams based on Use cases (Also link use cases from beginning)
-
-
 ## Add new MCP Tool
-< Which use case >
-< Diagram >
-< Add description >
+** Scenario**: A user wants to add a new MCP tool for his client.
+
+![Sequence diagram add new MCP tool](/docs/diagrams/runtime/add_mcp_tool.png)
+
+1. The User Interface send the entered data to the API Management.
+2. The API Management requests the User Management to save the new API to the corresponding user with the active status.
+3. The User Management signals that the data was saved.
+4. The API Management request Spec2Tool to convert the given API definition to an internal Tool definition.
+5. The Spec2Tool returns the requested data format.
+6. The API Management requests the MCP Management to add the new Tool to the toolset of the corresponding user.
+7. The MCP Management signals that the tool was registered.
+8. API Management signals the User Interface that the workflow was successfully performed. 
 
 ## List existing MCP Tools
 **Scenario**: A user wants to list the available tools of his MCP client.  
@@ -505,116 +523,14 @@ TODO: Add Sequence Diagrams based on Use cases (Also link use cases from beginni
 7. response forwarding
 8. response forwarding
 
-# 7. Deployment View {#section-deployment-view}
+# 7. Deployment View
 
-::: formalpara-title
-**Content**
-:::
 
-The deployment view describes:
+TODO: Justin
 
-1.  technical infrastructure used to execute your system, with
-    infrastructure elements like geographical locations, environments,
-    computers, processors, channels and net topologies as well as other
-    infrastructure elements and
+# 8. Cross-cutting Concepts
 
-2.  mapping of (software) building blocks to that infrastructure
-    elements.
-
-Often systems are executed in different environments, e.g. development
-environment, test environment, production environment. In such cases you
-should document all relevant environments.
-
-Especially document a deployment view if your software is executed as
-distributed system with more than one computer, processor, server or
-container or when you design and construct your own hardware processors
-and chips.
-
-From a software perspective it is sufficient to capture only those
-elements of an infrastructure that are needed to show a deployment of
-your building blocks. Hardware architects can go beyond that and
-describe an infrastructure to any level of detail they need to capture.
-
-::: formalpara-title
-**Motivation**
-:::
-
-Software does not run without hardware. This underlying infrastructure
-can and will influence a system and/or some cross-cutting concepts.
-Therefore, there is a need to know the infrastructure.
-
-Maybe a highest level deployment diagram is already contained in section
-3.2. as technical context with your own infrastructure as ONE black box.
-In this section one can zoom into this black box using additional
-deployment diagrams:
-
--   UML offers deployment diagrams to express that view. Use it,
-    probably with nested diagrams, when your infrastructure is more
-    complex.
-
--   When your (hardware) stakeholders prefer other kinds of diagrams
-    rather than a deployment diagram, let them use any kind that is able
-    to show nodes and channels of the infrastructure.
-
-See [Deployment View](https://docs.arc42.org/section-7/) in the arc42
-documentation.
-
-## Infrastructure Level 1 {#_infrastructure_level_1}
-
-Describe (usually in a combination of diagrams, tables, and text):
-
--   distribution of a system to multiple locations, environments,
-    computers, processors, .., as well as physical connections between
-    them
-
--   important justifications or motivations for this deployment
-    structure
-
--   quality and/or performance features of this infrastructure
-
--   mapping of software artifacts to elements of this infrastructure
-
-For multiple environments or alternative deployments please copy and
-adapt this section of arc42 for all relevant environments.
-
-***\<Overview Diagram>***
-
-Motivation
-
-:   *\<explanation in text form>*
-
-Quality and/or Performance Features
-
-:   *\<explanation in text form>*
-
-Mapping of Building Blocks to Infrastructure
-
-:   *\<description of the mapping>*
-
-## Infrastructure Level 2 {#_infrastructure_level_2}
-
-Here you can include the internal structure of (some) infrastructure
-elements from level 1.
-
-Please copy the structure from level 1 for each selected element.
-
-### *\<Infrastructure Element 1>* {#__emphasis_infrastructure_element_1_emphasis}
-
-*\<diagram + explanation>*
-
-### *\<Infrastructure Element 2>* {#__emphasis_infrastructure_element_2_emphasis}
-
-*\<diagram + explanation>*
-
-...
-
-### *\<Infrastructure Element n>* {#__emphasis_infrastructure_element_n_emphasis}
-
-*\<diagram + explanation>*
-
-# 8. Cross-cutting Concepts {#section-concepts}
-
-### 8.1 Multi-layered architecture
+## 8.1 Multi-layered architecture
 To achieve a sufficent separation of concerns, a common architecture which containers can implement is as follows.
 This separation improves maintainability by making each layer responsible for a single concern.
 ```
@@ -629,97 +545,8 @@ This separation improves maintainability by making each layer responsible for a 
 └──────────────────────────┘
 ```
 
+TODO: Keycloak as a central authentication provider
 
-
-::: formalpara-title
-**Content**
-:::
-
-This section describes overall, principal regulations and solution ideas
-that are relevant in multiple parts (= cross-cutting) of your system.
-Such concepts are often related to multiple building blocks. They can
-include many different topics, such as
-
--   models, especially domain models
-
--   architecture or design patterns
-
--   rules for using specific technology
-
--   principal, often technical decisions of an overarching (=
-    cross-cutting) nature
-
--   implementation rules
-
-::: formalpara-title
-**Motivation**
-:::
-
-Concepts form the basis for *conceptual integrity* (consistency,
-homogeneity) of the architecture. Thus, they are an important
-contribution to achieve inner qualities of your system.
-
-Some of these concepts cannot be assigned to individual building blocks,
-e.g. security or safety.
-
-::: formalpara-title
-**Form**
-:::
-
-The form can be varied:
-
--   concept papers with any kind of structure
-
--   cross-cutting model excerpts or scenarios using notations of the
-    architecture views
-
--   sample implementations, especially for technical concepts
-
--   reference to typical usage of standard frameworks (e.g. using
-    Hibernate for object/relational mapping)
-
-::: formalpara-title
-**Structure**
-:::
-
-A potential (but not mandatory) structure for this section could be:
-
--   Domain concepts
-
--   User Experience concepts (UX)
-
--   Safety and security concepts
-
--   Architecture and design patterns
-
--   \"Under-the-hood\"
-
--   development concepts
-
--   operational concepts
-
-Note: it might be difficult to assign individual concepts to one
-specific topic on this list.
-
-![Possible topics for crosscutting
-concepts](images/08-concepts-EN.drawio.png)
-
-See [Concepts](https://docs.arc42.org/section-8/) in the arc42
-documentation.
-
-## *\<Concept 1>* {#__emphasis_concept_1_emphasis}
-
-*\<explanation>*
-
-## *\<Concept 2>* {#__emphasis_concept_2_emphasis}
-
-*\<explanation>*
-
-...
-
-## *\<Concept n>* {#__emphasis_concept_n_emphasis}
-
-*\<explanation>*
 
 # 9. Architecture Decisions
 
@@ -731,148 +558,61 @@ Decisions that have been made during the design of the architecture
 | [ADR-02](./adr/adr_02_mcp_server.md)             | accepted | MCP Server Authorization and User Tool Mapping: Each user gets their own MCP server instance to handle authorization and tool mapping.                                     |
 | [ADR-03](./adr/adr_03_mcp_transport_protocol.md) | accepted | MCP Transport Protocol: Use the Streamable HTTP transport protocol instead of the deprecated SSE to avoid proxy issues with long-lasting connections.                      |
 
-# Quality Requirements {#section-quality-scenarios}
 
-::: formalpara-title
-**Content**
-:::
+# 10. Risks and Technical Debts
 
-This section contains all quality requirements as quality tree with
-scenarios. The most important ones have already been described in
-section 1.2. (quality goals)
+TODO: better architecture/ microservice separation
 
-Here you can also capture quality requirements with lesser priority,
-which will not create high risks when they are not fully achieved.
+## 10.1 Poorly Separated Microservices
+Our initial design, which aimed for a strict Domain-Driven Design (DDD) separation of microservices,
+has led to an unanticipated level of inter-service dependency. 
+This has resulted in a situation where a single user request often requires calls to all other microservices to complete.
+This chain of dependencies poses significant risks and is a source of technical debt.
 
-::: formalpara-title
-**Motivation**
-:::
+### Risks
+- High Latency and Performance Degradation: 
+  The numerous network calls required for a single request introduce significant latency.
+  This degrades the overall performance and user experience.
+- Increased Risk of Failure:
+  A single point of failure in any of the dependent services can cause the entire request to fail.
+  The high number of dependencies exponentially increases this risk, making the system less robust and reliable.
+- Complex Rollbacks:
+  To maintain data integrity, we must perform complex rollbacks and compensation logic when a request fails mid-transaction.
+  This is a significant operational burden and introduces complexity that could lead to further errors.
+- Tight Coupling:
+  The services are tightly coupled despite the microservice architecture's goal of loose coupling.
+  This makes it difficult to deploy, scale, and maintain services independently.
 
-Since quality requirements will have a lot of influence on architectural
-decisions you should know for every stakeholder what is really important
-to them, concrete and measurable.
+### Mitigating Technical Debt
+To address this technical debt, we have implemented a Command Pattern approach to manage transactional integrity. 
+This allows us to undo changes made by successfully completed requests if a subsequent request in the chain fails.
 
-See [Quality Requirements](https://docs.arc42.org/section-10/) in the
-arc42 documentation.
+> [!IMPORTANT]
+> This is a **temporary solution** to mitigate the immediate risk of data inconsistency.
 
-## Quality Tree {#_quality_tree}
+Additionally, we have developed a Proof of Concept (PoC) for a new architectural design.
+The new PoC aims to re-evaluate the service boundaries and create a more cohesive and loosely coupled architecture.
+We plan to refactor our services based on this new design, 
+which will involve grouping related functionalities to reduce the number of cross-service calls and eliminate tight coupling.
+This is our long-term strategy for addressing this critical technical debt.
 
-::: formalpara-title
-**Content**
-:::
+![Proof-of-Concept: New Architecture](/docs/diagrams/proof_of_concept_new_architecture.svg)
 
-The quality tree (as defined in ATAM -- Architecture Tradeoff Analysis
-Method) with quality/evaluation scenarios as leafs.
+TODO: better tool management
 
-::: formalpara-title
-**Motivation**
-:::
 
-The tree structure with priorities provides an overview for a sometimes
-large number of quality requirements.
+# 11. Glossary
 
-::: formalpara-title
-**Form**
-:::
-
-The quality tree is a high-level overview of the quality goals and
-requirements:
-
--   tree-like refinement of the term \"quality\". Use \"quality\" or
-    \"usefulness\" as a root
-
--   a mind map with quality categories as main branches
-
-In any case the tree should include links to the scenarios of the
-following section.
-
-## Quality Scenarios {#_quality_scenarios}
-
-::: formalpara-title
-**Contents**
-:::
-
-Concretization of (sometimes vague or implicit) quality requirements
-using (quality) scenarios.
-
-These scenarios describe what should happen when a stimulus arrives at
-the system.
-
-For architects, two kinds of scenarios are important:
-
--   Usage scenarios (also called application scenarios or use case
-    scenarios) describe the system\'s runtime reaction to a certain
-    stimulus. This also includes scenarios that describe the system\'s
-    efficiency or performance. Example: The system reacts to a user\'s
-    request within one second.
-
--   Change scenarios describe a modification of the system or of its
-    immediate environment. Example: Additional functionality is
-    implemented or requirements for a quality attribute change.
-
-::: formalpara-title
-**Motivation**
-:::
-
-Scenarios make quality requirements concrete and allow to more easily
-measure or decide whether they are fulfilled.
-
-Especially when you want to assess your architecture using methods like
-ATAM you need to describe your quality goals (from section 1.2) more
-precisely down to a level of scenarios that can be discussed and
-evaluated.
-
-::: formalpara-title
-**Form**
-:::
-
-Tabular or free form text.
-
-# 10. Risks and Technical Debts {#section-technical-risks}
-
-::: formalpara-title
-**Contents**
-:::
-
-A list of identified technical risks or technical debts, ordered by
-priority
-
-::: formalpara-title
-**Motivation**
-:::
-
-"Risk management is project management for grown-ups" (Tim Lister,
-Atlantic Systems Guild.)
-
-This should be your motto for systematic detection and evaluation of
-risks and technical debts in the architecture, which will be needed by
-management stakeholders (e.g. project managers, product owners) as part
-of the overall risk analysis and measurement planning.
-
-::: formalpara-title
-**Form**
-:::
-
-List of risks and/or technical debts, probably including suggested
-measures to minimize, mitigate or avoid risks or reduce technical debts.
-
-See [Risks and Technical Debt](https://docs.arc42.org/section-11/) in
-the arc42 documentation.
-
-# 11. Glossary {#section-glossary}
-
-::: formalpara-title
-**Contents**
-:::
-
-The most important domain and technical terms that your stakeholders use
-when discussing the system.
-
-::: formalpara-title
-**Motivation**
-:::
-
-| Term                  | Definition                                                                                          |
-|-----------------------|-----------------------------------------------------------------------------------------------------|
-| WYSIWYG               | What you see is what you get. Further information: [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG) |
-| MCP                   | Model Context Protocol. Further information: [MCP](https://modelcontextprotocol.io/introduction)    |
+| Term                         | Definition                                                                                                                                                                            |
+|------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| WYSIWYG                      | What you see is what you get. Further information: [WYSIWYG](https://en.wikipedia.org/wiki/WYSIWYG)                                                                                   |
+| MCP                          | Model Context Protocol. Further information: [MCP](https://modelcontextprotocol.io/introduction)                                                                                      |
+| tool                         | A set of MCP tools that combined represent the MCP equivalent of all endpoints from an API specification.                                                                             |
+| avatar                       | Profile picture.                                                                                                                                                                      |
+| group role                   | Role that gives a user special permissions only inside the group.                                                                                                                     |
+| system role                  | Role that gives a user special permissions system-wide.                                                                                                                               |
+| group member                 | A user that is part of a group. Not to be confused with the system role or group role “member.”                                                                                       |
+| personal tool                | Tool that belongs to a specific user. Only this user can use and manage this tool.                                                                                                    |
+| group tool                   | Tool that is associated with a group. A group tool does not belong to a specific user. Instead, it belongs to the group. Any user that is a member of the group can use a group tool. |
+| GroMoKoSo tool specification | Specification used internally to describe a tool. The system allows to transform the most common API specifications to this internal specification.                                   |
+| user                         | A person with any role that uses the GroMoKoSo system in any way.                                                                                                                     |
