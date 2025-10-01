@@ -353,7 +353,7 @@ In the following table is an overview which further describes the mentioned role
 | Public group  | Group is visible to all System members.                | -                                                                                                                                                                                                     |
 
 
-The interfaces to request or update the data of the user management are defined as a REST API in the [User management REST API documentation](/docs/interfaces/user_management.yml)
+The interfaces to request or update the data of the user management are defined as a REST API in the [User management REST API documentation](/docs/interfaces/user_management.yaml)
 
 ### 5.2.3 ApiManagement
 
@@ -408,15 +408,13 @@ The interfaces which Spec2Tool offers are defined as a REST API in the [Spec2Too
 The user interface implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
 to cleanly separate different concerns.
 
-![User management component view](/docs/diagrams/level_3_component/user_interface_container_component_view_excalidraw.svg)
+![User interface component view](/docs/diagrams/level_3_component/user_interface_container_component_view_excalidraw.svg)
 
 | Element     | Description                                         |
 |-------------|-----------------------------------------------------|
 | Router      | React component that handles routing                |
 | Page        | React component that can ge accessed throug a route |
 
-
-The corresponding class-diagram can be found [here](/docs/diagrams/level_4_class/user_interface_container_component_view_puml.svg).
 
 ### 5.3.2 UserManagement
 The UserManagement implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
@@ -458,24 +456,33 @@ to cleanly separate the different concerns.
 
 ![Mcp Server Components](/docs/diagrams/level_3_component/mcp_server_container_component_view.svg)
 
-| Element        | Description                                                                                                                |
-|----------------|----------------------------------------------------------------------------------------------------------------------------|
-| Mcp Client     | Mcp client that confirms to the [mcp specification](https://modelcontextprotocol.io/specification/2025-06-18/client/roots) |
-| ApiManagement  | see chapter [5.2.3](#523-apimanagement)                                                                                    |
-| UserManagement | see chapter [5.2.2](#522-usermanagement)                                                                                   |
-| ToolDb         | SQL Database storing tool definitions                                                                                      |
-| Controller     | (REST) Endpoints for external systems                                                                                      |
-| Service        | Business logic/ Mcp servers                                                                                                |
-| Entity         | Entities (ORM), value objects                                                                                              |
-| Repository     | Encapsulate persistence                                                                                                    |
-| Security       | Cross-cutting concern: OAuth2 authorization                                                                                |
-| Configuration  | Cross-cutting concern: Spring configuration classes                                                                        |
-| Client         | Cross-cutting concern: Communication with other subsystems (ApiManagement, UserManagement)                                 |
+| Element        | Description                                                                                                                 |
+|----------------|-----------------------------------------------------------------------------------------------------------------------------|
+| Mcp Client     | Mcp client that confirms to the [mcp specification](https://modelcontextprotocol.io/specification/2025-06-18/client/roots)  |
+| ApiManagement  | see chapter [5.2.3](#523-apimanagement)                                                                                     |
+| UserManagement | see chapter [5.2.2](#522-usermanagement)                                                                                    |
+| ToolDb         | SQL Database storing tool definitions                                                                                       |
+| Controller     | (REST) Endpoints for external systems                                                                                       |
+| Service        | Business logic/ Mcp servers                                                                                                 |
+| Entity         | Entities (ORM), value objects                                                                                               |
+| Repository     | Encapsulate persistence                                                                                                     |
+| Security       | Cross-cutting concern: OAuth2 authorization                                                                                 |
+| Configuration  | Cross-cutting concern: Spring configuration classes                                                                         |
+| Client         | Cross-cutting concern: Communication with other subsystems (ApiManagement, UserManagement)                                  |
 
 The class diagram can be found [here](/docs/diagrams/level_4_class/mcp_management_class_diagram.drawio)
 
 ### 5.3.5 Spec2Tool
-TODO: Add everything 
+The Spec2Tool Microservice implements a layer architecture to cleanly separate the different concerns.
+It does not contain any repository or entity classes since it does not persistent any data.
+
+![Spec 2 Tool Components](/docs/diagrams/level_3_component/spec2tool_container_component_view.svg)
+
+| Element    | Description                                                                             |
+|------------|-----------------------------------------------------------------------------------------|
+| Controller | (REST) Endpoints for external systems                                                   |
+| Service    | Business logic which will call the correct mapper class depending on given file format. |
+| Mapper     | Concrete classes which are responsible to convert specification to tool representation. |
 
 # 6. Runtime View {#section-runtime-view}
 
@@ -509,7 +516,6 @@ TODO: Add everything
 9. --
 
 ## Use MCP Tool
-
 **Scenario**: A user/ LLM wants to invoke a mcp tool using an MCP client.
 
 ![Sequenz diagram](/docs/diagrams/runtime/invoke_mcp_tool.png)
@@ -552,11 +558,11 @@ TODO: Keycloak as a central authentication provider
 
 Decisions that have been made during the design of the architecture
 
-| Decision                                         | Status   | Description                                                                                                                                                                |
-|--------------------------------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [ADR-01](./adr/adr_01_modularization.md)         | accepted | Modularization Strategy: The architecture is based on a Domain-Driven Design (DDD) approach, with the exception of the UI service, which is treated as a technology layer. |
-| [ADR-02](./adr/adr_02_mcp_server.md)             | accepted | MCP Server Authorization and User Tool Mapping: Each user gets their own MCP server instance to handle authorization and tool mapping.                                     |
-| [ADR-03](./adr/adr_03_mcp_transport_protocol.md) | accepted | MCP Transport Protocol: Use the Streamable HTTP transport protocol instead of the deprecated SSE to avoid proxy issues with long-lasting connections.                      |
+| Decision                                          | Status   | Description                                                                                                                                                                |
+|---------------------------------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [ADR-01](./adr/adr_01_modularization.md)          | accepted | Modularization Strategy: The architecture is based on a Domain-Driven Design (DDD) approach, with the exception of the UI service, which is treated as a technology layer. |
+| [ADR-02](./adr/adr_02_mcp_server.md)              | accepted | MCP Server Authorization and User Tool Mapping: Each user gets their own MCP server instance to handle authorization and tool mapping.                                     |
+| [ADR-03](./adr/adr_03_mcp_transport_protocol.md)  | accepted | MCP Transport Protocol: Use the Streamable HTTP transport protocol instead of the deprecated SSE to avoid proxy issues with long-lasting connections.                      |
 
 
 # 10. Risks and Technical Debts
