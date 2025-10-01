@@ -81,7 +81,6 @@ server client architecture:
 
 ![Use Case diagram](/docs/diagrams/use_case.svg)
 
-
 ### 1.4.1 User requirements
 
 | ID    | Requirements                                                                                                                                                                                                                                                                                                                                                                                     |
@@ -297,6 +296,17 @@ All diagrams in this chapter use the following legend.
 | McpManagement         | UserManagement, ApiManagement            | Manage and host mcp servers with tools. Routes mcp requests from users to its personal mcp servers and call apis using ApiManagement to fulfill client requests. |
 | Spec2Tool             | -                                        | Convert common api specifications formats to GroMoKoSos internal api/tool representation.                                                                        |
 
+template:
+-   Purpose/Responsibility
+-   Interface(s), when they are not extracted as separate paragraphs.
+    This interfaces may include qualities and performance
+    characteristics.
+-   (Optional) Quality-/Performance characteristics of the black box,
+    e.g.availability, run time behavior, ....\n-   (Optional) directory/file location
+-   (Optional) Fulfilled requirements (if you need traceability to
+    requirements).
+-   (Optional) Open issues/problems/risks
+
 ## 5.2 Level 2: Container View
 
 ### 5.2.1 UI
@@ -408,7 +418,7 @@ The interfaces which Spec2Tool offers are defined as a REST API in the [Spec2Too
 The user interface implements a layer architecture as described in [8.1](#81-multi-layered-architecture)
 to cleanly separate different concerns.
 
-![User interface component view](/docs/diagrams/level_3_component/user_interface_container_component_view_excalidraw.svg)
+![User management component view](/docs/diagrams/level_3_component/user_interface_container_component_view_excalidraw.svg)
 
 | Element     | Description                                         |
 |-------------|-----------------------------------------------------|
@@ -530,13 +540,42 @@ It does not contain any repository or entity classes since it does not persisten
 8. response forwarding
 
 # 7. Deployment View
+## 7.1 Deployment environments
+Deployment of the system is done in two ways:
+- Locally in a development environment, especially for testing purposes.
+- In a production environment, which is a server provided by the client.
 
+### 7.1.1 Development deployment
+When deploying the application locally, Docker compose should be used to run the system
+as a multi-container application.
 
-TODO: Justin
+### 7.1.2 Production deployment
+A Continuous Deployment (CD) process is established through GitLab CI/CD pipelines.
 
-# 8. Cross-cutting Concepts
+Each commit on the master branch triggers the automated build stage. After successful validation,
+Docker images for all subservices are built and pushed to the project’s container registry. The deployment stage
+then pulls these Docker images and redeploys the updated subservices into the client’s infrastructure.
 
-## 8.1 Multi-layered architecture
+This approach ensures that the application can be continuously delivered into the production environment,
+without manual intervention. Configuration for the deployment, such as secrets, is managed via GitLab.
+
+## 7.2 Deployment diagram
+The following deployment diagram shows how the application is deployed in the production environment.
+The Docker containers are run on the infrastructure provided by the client, as already explained.
+
+![deployment_diagram](/docs/diagrams/deployment/gromokoso-deployment-diagram.drawio.png)
+
+Note, that the following subservices need to use the identity provider KeyCloak as shown in the diagram to authenticate
+all incoming requests:
+- gromokoso-userinterface
+- gromokoso-spec2tool
+- gromokoso-usermanagent
+- gromokoso-mcpmanagement
+- gromokoso-apimanagement
+
+# 8. Cross-cutting Concepts {#section-concepts}
+
+### 8.1 Multi-layered architecture
 To achieve a sufficent separation of concerns, a common architecture which containers can implement is as follows.
 This separation improves maintainability by making each layer responsible for a single concern.
 ```
@@ -602,7 +641,9 @@ We plan to refactor our services based on this new design,
 which will involve grouping related functionalities to reduce the number of cross-service calls and eliminate tight coupling.
 This is our long-term strategy for addressing this critical technical debt.
 
+
 ![Proof-of-Concept: New Architecture](/docs/diagrams/proof_of_concept_new_architecture.svg)
+
 
 TODO: better tool management
 
