@@ -575,7 +575,7 @@ all incoming requests:
 
 # 8. Cross-cutting Concepts {#section-concepts}
 
-### 8.1 Multi-layered architecture
+## 8.1 Multi-layered architecture
 To achieve a sufficent separation of concerns, a common architecture which containers can implement is as follows.
 This separation improves maintainability by making each layer responsible for a single concern.
 ```
@@ -590,7 +590,32 @@ This separation improves maintainability by making each layer responsible for a 
 └──────────────────────────┘
 ```
 
-TODO: Keycloak as a central authentication provider
+## 8.2 Centralized Authentication and Dedicated Authorization Service
+Our architecture separates the concerns of authentication and authorization across two distinct, centralized services:
+Keycloak for authentication and our custom User Management microservice for authorization.
+This model ensures that all identity-related logic is handled by specialized services, making the system more secure and maintainable.
+
+### Authentication with Keycloak
+All user authentication is handled by a dedicated Keycloak server.
+This service is solely responsible for verifying a user's identity and issuing a JSON Web Token (JWT) upon successful login.
+Each of our microservices is configured to trust and validate these tokens.
+When a request arrives at a microservice, the first step is always to verify the authenticity and integrity of the JWT.
+This confirms that the user is who they claim to be.
+
+### Authorization with a Dedicated Microservice
+After a microservice authenticates a user via their JWT, it then performs an authorization check.
+This is not done locally. Instead, the microservice makes a specific request to the UserManagement to determine 
+if the user has the necessary permissions to access a particular resource or perform a specific action.
+This centralized authorization service holds all the logic for managing users, roles, and permissions.
+
+### This design has several benefits:
+
+- **Single Source of Truth**: The User Management microservice acts as the single source of truth for all user roles and access rights.
+  This prevents inconsistencies and simplifies management.
+- **Decoupled Logic**: Authorization logic is decoupled from the business logic of individual microservices.
+  Each service simply needs to know which user is making the request and then defer the authorization decision to the dedicated service.
+- **Enhanced Security**: Centralizing both authentication and authorization logic makes it easier to apply security policies consistently across the entire system.
+  Any changes to access rights are reflected system-wide by updating a single service.
 
 
 # 9. Architecture Decisions
@@ -605,8 +630,6 @@ Decisions that have been made during the design of the architecture
 
 
 # 10. Risks and Technical Debts
-
-TODO: better architecture/ microservice separation
 
 ## 10.1 Poorly Separated Microservices
 Our initial design, which aimed for a strict Domain-Driven Design (DDD) separation of microservices,
@@ -645,7 +668,41 @@ This is our long-term strategy for addressing this critical technical debt.
 ![Proof-of-Concept: New Architecture](/docs/diagrams/proof_of_concept_new_architecture.svg)
 
 
-TODO: better tool management
+## 10.2 LLM Context Window Limitations with a Large Toolset
+
+Our current system allows for a dynamically updated tool list based on user-provided OpenAPI specifications.
+While this provides flexibility, it introduces a significant risk and a major technical debt related to the fixed context window of the Large Language Model (LLM).
+As the number of available tools grows, we encounter several problems:
+
+### Risks
+- Context Window Overload:
+  Each tool definition consumes a portion of the LLM's fixed context window.
+  If the tool list becomes too large, it can fill or even exceed the available context,
+  leaving little to no space for the user's actual request and conversational history.
+  This severely limits the agent's ability to understand and respond effectively.
+- Poor Tool Selection:
+  An extensive list of tools makes it difficult for the LLM to efficiently and accurately decide which tool to invoke.
+  This can lead to incorrect tool usage, slower response times, and a higher risk of the agent failing to fulfill the user's request.
+  The agent's reasoning process is burdened by the sheer volume of choices.
+- Performance Degradation:
+  A larger context window, even if it fits, leads to increased computational costs and slower inference times for the LLM.
+  This directly impacts the system's performance and scalability.
+
+### Proposed Solution (Mitigating Technical Debt)
+To mitigate these risks and address this technical debt,
+we propose a new architectural approach centered on dynamic tool discovery.
+Instead of loading all available tools into the LLM's context at the start, we will introduce three meta-tools.
+These meta-tools will serve as the primary interface for the AI agent to interact with the full toolset.
+
+The proposed meta-tools are:
+
+**list_api_endpoints** lets the model search the catalog (“what can I do with counterparties?”)
+**get_api_endpoint_schema** pulls the JSON‑schema for any route it finds
+**invoke_api_endpoint** executes that route with user‑supplied params
+
+This design ensures that only the required tool is loaded into the LLM's context dynamically, when the agent has determined its necessity.
+This will significantly reduce the initial context size, improve the LLM's efficiency in tool selection,
+and provide plenty context space for the user's request.
 
 
 # 11. Glossary
