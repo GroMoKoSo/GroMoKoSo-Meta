@@ -5,7 +5,7 @@ actor client as "alice:McpClient"
 
 participant router as ":McpRouterConfig"
 participant handler as ":McpRequestHandler"
-participant manager as ":McpServerManager"
+participant manager as ":McpServerService"
 participant user as ":UserManagementClient"
 participant provider as ":GroMoSoKoMcpServerProvider"
 

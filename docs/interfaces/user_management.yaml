@@ -3,7 +3,7 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8081
     description: Generated server url
 tags:
   - name: Group Management
@@ -28,7 +28,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserDto"
+                $ref: "#/components/schemas/UserWithSystemRoleDto"
         "401":
           description: Not authorized to perform this request.
         "404":
@@ -55,7 +55,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserDto"
+                $ref: "#/components/schemas/UserWithSystemRoleDto"
         "401":
           description: Not authorized to perform this request.
         "404":
@@ -81,7 +81,7 @@ paths:
     put:
       tags:
         - User Management
-      operationId: updateApi
+      operationId: updateApiFromUser
       parameters:
         - name: username
           in: path
@@ -114,7 +114,7 @@ paths:
     delete:
       tags:
         - User Management
-      operationId: deleteApi
+      operationId: deleteApiFromUser
       parameters:
         - name: username
           in: path
@@ -325,7 +325,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/UserDto"
+                  $ref: "#/components/schemas/UserWithSystemRoleDto"
         "401":
           description: Not authorized to perform this request.
     post:
@@ -344,14 +344,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserDto"
+                $ref: "#/components/schemas/UserWithSystemRoleDto"
         "401":
           description: Not authorized to perform this request.
+        "422":
+          description: Invalid Data in Payload
   /users/{username}/apis:
     get:
       tags:
         - User Management
-      operationId: getApis
+      operationId: getApisFromUser
       parameters:
         - name: username
           in: path
@@ -380,7 +382,7 @@ paths:
     post:
       tags:
         - User Management
-      operationId: addApis
+      operationId: addApisToUser
       parameters:
         - name: username
           in: path
@@ -439,6 +441,8 @@ paths:
                 $ref: "#/components/schemas/GroupDto"
         "401":
           description: Not authorized to perform this request.
+        "422":
+          description: Invalid Data in Payload
   /groups/{name}/users:
     get:
       tags:
@@ -566,6 +570,22 @@ paths:
           description: Not authorized to perform this request.
         "404":
           description: Invalid Username
+  /users/apis:
+    get:
+      tags:
+        - User Management
+      operationId: getAllApis
+      responses:
+        "200":
+          description: Successfully returned all apis
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserToApiDto"
+        "401":
+          description: Not authorized to perform this request.
 components:
   schemas:
     UpdateUserDto:
@@ -586,7 +606,7 @@ components:
             - Member
             - Admin
           example: Member
-    UserDto:
+    UserWithSystemRoleDto:
       type: object
       properties:
         userName:
@@ -694,6 +714,21 @@ components:
         active:
           type: boolean
           example: true
+    UserDto:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: user123
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john.doe@example.com
     GroupWithGroupRoleDto:
       type: object
       properties:
