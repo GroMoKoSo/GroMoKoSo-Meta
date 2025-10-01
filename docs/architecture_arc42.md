@@ -505,112 +505,39 @@ TODO: Add Sequence Diagrams based on Use cases (Also link use cases from beginni
 7. response forwarding
 8. response forwarding
 
-# 7. Deployment View {#section-deployment-view}
+# 7. Deployment View
+## 7.1 Deployment environments
+Deployment of the system is done in two ways:
+- Locally in a development environment, especially for testing purposes.
+- In a production environment, which is a server provided by the client.
 
-::: formalpara-title
-**Content**
-:::
+### 7.1.1 Development deployment
+When deploying the application locally, Docker compose should be used to run the system
+as a multi-container application.
 
-The deployment view describes:
+### 7.1.2 Production deployment
+A Continuous Deployment (CD) process is established through GitLab CI/CD pipelines.
 
-1.  technical infrastructure used to execute your system, with
-    infrastructure elements like geographical locations, environments,
-    computers, processors, channels and net topologies as well as other
-    infrastructure elements and
+Each commit on the master branch triggers the automated build stage. After successful validation,
+Docker images for all subservices are built and pushed to the project’s container registry. The deployment stage
+then pulls these Docker images and redeploys the updated subservices into the client’s infrastructure.
 
-2.  mapping of (software) building blocks to that infrastructure
-    elements.
+This approach ensures that the application can be continuously delivered into the production environment,
+without manual intervention. Configuration for the deployment, such as secrets, is managed via GitLab.
 
-Often systems are executed in different environments, e.g. development
-environment, test environment, production environment. In such cases you
-should document all relevant environments.
+## 7.2 Deployment diagram
+The following deployment diagram shows how the application is deployed in the production environment.
+The Docker containers are run on the infrastructure provided by the client, as already explained.
 
-Especially document a deployment view if your software is executed as
-distributed system with more than one computer, processor, server or
-container or when you design and construct your own hardware processors
-and chips.
+![deployment_diagram](/docs/diagrams/deployment/gromokoso-deployment-diagram.drawio.png)
 
-From a software perspective it is sufficient to capture only those
-elements of an infrastructure that are needed to show a deployment of
-your building blocks. Hardware architects can go beyond that and
-describe an infrastructure to any level of detail they need to capture.
-
-::: formalpara-title
-**Motivation**
-:::
-
-Software does not run without hardware. This underlying infrastructure
-can and will influence a system and/or some cross-cutting concepts.
-Therefore, there is a need to know the infrastructure.
-
-Maybe a highest level deployment diagram is already contained in section
-3.2. as technical context with your own infrastructure as ONE black box.
-In this section one can zoom into this black box using additional
-deployment diagrams:
-
--   UML offers deployment diagrams to express that view. Use it,
-    probably with nested diagrams, when your infrastructure is more
-    complex.
-
--   When your (hardware) stakeholders prefer other kinds of diagrams
-    rather than a deployment diagram, let them use any kind that is able
-    to show nodes and channels of the infrastructure.
-
-See [Deployment View](https://docs.arc42.org/section-7/) in the arc42
-documentation.
-
-## Infrastructure Level 1 {#_infrastructure_level_1}
-
-Describe (usually in a combination of diagrams, tables, and text):
-
--   distribution of a system to multiple locations, environments,
-    computers, processors, .., as well as physical connections between
-    them
-
--   important justifications or motivations for this deployment
-    structure
-
--   quality and/or performance features of this infrastructure
-
--   mapping of software artifacts to elements of this infrastructure
-
-For multiple environments or alternative deployments please copy and
-adapt this section of arc42 for all relevant environments.
-
-***\<Overview Diagram>***
-
-Motivation
-
-:   *\<explanation in text form>*
-
-Quality and/or Performance Features
-
-:   *\<explanation in text form>*
-
-Mapping of Building Blocks to Infrastructure
-
-:   *\<description of the mapping>*
-
-## Infrastructure Level 2 {#_infrastructure_level_2}
-
-Here you can include the internal structure of (some) infrastructure
-elements from level 1.
-
-Please copy the structure from level 1 for each selected element.
-
-### *\<Infrastructure Element 1>* {#__emphasis_infrastructure_element_1_emphasis}
-
-*\<diagram + explanation>*
-
-### *\<Infrastructure Element 2>* {#__emphasis_infrastructure_element_2_emphasis}
-
-*\<diagram + explanation>*
-
-...
-
-### *\<Infrastructure Element n>* {#__emphasis_infrastructure_element_n_emphasis}
-
-*\<diagram + explanation>*
+Note, that the following subservices need to use the identity provider KeyCloak as shown in the diagram to authenticate
+all incoming requests:
+- gromokoso-userinterface
+- gromokoso-spec2tool
+- gromokoso-usermanagent
+- gromokoso-mcpmanagement
+- gromokoso-apimanagement
 
 # 8. Cross-cutting Concepts {#section-concepts}
 
