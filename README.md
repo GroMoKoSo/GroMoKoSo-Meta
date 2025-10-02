@@ -59,3 +59,12 @@ docker compose up -d
 ```bash
 docker compose down -v
 ```
+
+
+Admin Account
+Username: sysadmin
+Password: 123
+
+Client for mcp Server
+Clientname: gromokoso-mcp
+Clientsecret: qmvXUEaH9qxoO8PK5GdbZpfQLrWcO8hY 
